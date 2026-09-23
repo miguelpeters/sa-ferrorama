@@ -14,6 +14,8 @@
     <link rel="icon" href="../assets/imgs/LogoDeTrain.png" type="image/x-icon">
 </head>
 
+<script src="../assets/js/cadastro.js"></script>
+
 <body class="bodyCadastro">
 
 <div class="cadastro-detrain-topo">

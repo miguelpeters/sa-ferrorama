@@ -1,3 +1,64 @@
+<?php
+
+session_start();
+
+$servidor = "localhost";
+$usuario = "root";
+$senhaBanco = "";
+$banco = "ferrorama_db";
+
+$conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco: " . $conn->connect_error);
+}
+
+$erro = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = $_POST["email"];
+    $senha = $_POST["senha"];
+
+    $sql = "SELECT id, nome, email, senha
+            FROM gerentes
+            WHERE email = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows == 1) {
+
+        $gerente = $resultado->fetch_assoc();
+
+        if ($senha === $gerente["senha"]) {
+
+            $_SESSION["gerente_id"] = $gerente["id"];
+            $_SESSION["gerente_nome"] = $gerente["nome"];
+            $_SESSION["gerente_email"] = $gerente["email"];
+
+            header("Location: ../index.php");
+            exit();
+
+        } else {
+            $erro = "Email ou senha incorretos.";
+        }
+
+    } else {
+        $erro = "Email ou senha incorretos.";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+
+?>
+
+
 <html lang="pt-br">
 
 <head>
@@ -50,6 +111,6 @@
  </footer>
 
 
-  <script src="script.js"></script>
+  <script src="../assets/js/login.js"></script>
 </body>
 </html>

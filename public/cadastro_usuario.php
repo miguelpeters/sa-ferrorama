@@ -1,5 +1,39 @@
 <?php
 
+$servidor = "localhost";
+$usuario = "root";
+$senhaBanco = "";
+$banco = "Ferrorama_db"; 
+
+$conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco de dados: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+    $telefone = $_POST["numero_telefone"];
+    $senha = $_POST["senha"];
+
+    $sql = "INSERT INTO usuarios (nome, email, numero_telefone, senha)
+            VALUES (?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->bind_param("ssss", $nome, $email, $telefone, $senha);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Usuário cadastrado com sucesso!');</script>";
+    } else {
+        echo "<script>alert('Erro ao cadastrar usuário.');</script>";
+    }
+
+    $stmt->close();
+}
+
 
 ?>
 
@@ -13,8 +47,6 @@
 
     <link rel="icon" href="../assets/imgs/LogoDeTrain.png" type="image/x-icon">
 </head>
-
-<script src="../assets/js/cadastro.js"></script>
 
 <body class="bodyCadastro">
 
@@ -62,6 +94,9 @@
         </div>
 
     </main>
+
+    <script src="../assets/js/cadastro.js"></script>
+
 </body>
 
 </html>

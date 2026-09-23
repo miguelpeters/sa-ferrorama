@@ -1,5 +1,4 @@
 document.getElementById("FormsCadastro").addEventListener("submit", function (e) {
-    e.preventDefault();
 
     let nome = document.getElementById("cadastro-nome").value;
     let email = document.getElementById("cadastro-email").value;

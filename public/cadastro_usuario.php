@@ -3,7 +3,7 @@
 $servidor = "localhost";
 $usuario = "root";
 $senhaBanco = "";
-$banco = "Ferrorama_db"; 
+$banco = "ferrorama_db"; 
 
 $conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
 
@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <h2 id="CadastroTitulo">Cadastro de usuário</h2>
 
-                    <form id="FormsCadastro">
+                    <form id="FormsCadastro" method="POST">
                         <label for="nome" id="CadastroLabel">Nome</label>
                         <br>
                         <input type="text" id="cadastro-nome" name="nome" class="CadastroInput" placeholder="Seu nome">

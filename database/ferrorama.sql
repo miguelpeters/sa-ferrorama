@@ -47,3 +47,9 @@ CREATE TABLE sensores (
     trem_id INT,
     FOREIGN KEY (trem_id) REFERENCES trens(id)
 );
+
+INSERT INTO gerentes
+(nome, email, numero_telefone, senha)
+VALUES
+('Leonardo Aguiar', 'leonardo_aguiar@gerente.detrain.com', '47 98895-8589', 'leonardo.adm'),
+('Miguel Kormann', 'miguel_kormann@gerente.detrain.com', '47 99712-0771', 'miguel.adm');

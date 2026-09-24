@@ -40,15 +40,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["gerente_nome"] = $gerente["nome"];
             $_SESSION["gerente_email"] = $gerente["email"];
 
-            header("Location: ../index.php");
+            header("Location: home_gerente.php");
             exit();
 
         } else {
             $erro = "Email ou senha incorretos.";
         }
 
-    } else {
-        $erro = "Email ou senha incorretos.";
+     } else {
+
+        $sql = "SELECT id, nome, email, senha
+                FROM funcionarios
+                WHERE email = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        if ($resultado->num_rows == 1) {
+
+            $funcionario = $resultado->fetch_assoc();
+
+            if ($senha === $funcionario["senha"]) {
+
+                $_SESSION["tipo"] = "funcionario";
+                $_SESSION["id"] = $funcionario["id"];
+                $_SESSION["nome"] = $funcionario["nome"];
+                $_SESSION["email"] = $funcionario["email"];
+
+                header("Location: home_funcionario.php");
+                exit();
+
+            } else {
+                $erro = "Email ou senha incorretos.";
+            }
+
+        } else {
+
+            $sql = "SELECT id, nome, email, senha
+                    FROM usuarios
+                    WHERE email = ?";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+
+            $resultado = $stmt->get_result();
+
+            if ($resultado->num_rows == 1) {
+
+                $usuario = $resultado->fetch_assoc();
+
+                if ($senha === $usuario["senha"]) {
+
+                    $_SESSION["tipo"] = "usuario";
+                    $_SESSION["id"] = $usuario["id"];
+                    $_SESSION["nome"] = $usuario["nome"];
+                    $_SESSION["email"] = $usuario["email"];
+
+                    header("Location: home_logado.php");
+                    exit();
+
+                } else {
+                    $erro = "Email ou senha incorretos.";
+                }
+
+            } else {
+
+                $erro = "Email ou senha incorretos.";
+
+            }
+        }
     }
 
     $stmt->close();

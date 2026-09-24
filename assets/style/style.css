@@ -38,68 +38,66 @@ body {
 }
 
 #IndexImage {
-width: 2000px;
-    height: 500px;
-    object-fit: cover;
-    display: block;
-    margin: 0;
-    border: none;
-    border-radius: 0;
+   width: 2000px;
+   height: 500px;
+   object-fit: cover;
+   display: block;
+   margin: 0;
+   border: none;
+   border-radius: 0;
 }
 
 .hero {
-    position: relative;
-    height: 500px;
-    width: 100%;
-    overflow: hidden;
+   position: relative;
+   height: 500px;
+   width: 100%;
+   overflow: hidden;
 }
 
 .indexbutton {
    text-decoration: none;
    display: inline-block;
-    background-color: #d9ff82;
-    color: #00503f;
-    padding: 16px 28px;
-    border-radius: 30px;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
+   background-color: #d9ff82;
+   color: #00503f;
+   padding: 16px 28px;
+   border-radius: 30px;
+   font-size: 18px;
+   font-weight: bold;
+   text-decoration: none;
+   transition: 0.3s;
 }
 
 .indexbutton:hover {
-    transform: translateY(-3px);
-    background-color: #c5ed70;
+   transform: translateY(-3px);
+   background-color: #c5ed70;
 }
 
 .hero-text {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: 5%;
-    transform: translateY(-50%);
-    width: 550px;
-    color: white;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 20px;
+   position: absolute;
+   z-index: 2;
+   top: 50%;
+   left: 5%;
+   transform: translateY(-50%);
+   width: 550px;
+   color: white;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   font-size: 20px;
 }
 
 .hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
 }
 
 .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        90deg,
-        rgba(0, 80, 63, 0.95),
-        rgba(0, 80, 63, 0.35),
-        transparent
-    );
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(90deg,
+         rgba(0, 80, 63, 0.95),
+         rgba(0, 80, 63, 0.35),
+         transparent);
 }
 
 .FakeFooter {
@@ -129,60 +127,60 @@ width: 2000px;
 }
 
 .info-section {
-    width: 100%;
-    min-height: 190px;
-    background-color: #fdfdea;
+   width: 100%;
+   min-height: 190px;
+   background-color: #fdfdea;
 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
 
-    padding: 30px 60px;
-    box-sizing: border-box;
+   padding: 30px 60px;
+   box-sizing: border-box;
 
-    gap: 40px;
+   gap: 40px;
 }
 
 .info-card {
-    display: flex;
-    align-items: center;
-    gap: 22px;
+   display: flex;
+   align-items: center;
+   gap: 22px;
 
-    flex: 1;
-    max-width: 330px;
+   flex: 1;
+   max-width: 330px;
 }
 
 .info-icon {
-    width: 68px;
-    height: 68px;
+   width: 68px;
+   height: 68px;
 
-    background-color: #00503f;
-    color: white;
+   background-color: #00503f;
+   color: white;
 
-    border-radius: 50%;
+   border-radius: 50%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 
-    font-size: 32px;
-    flex-shrink: 0;
+   font-size: 32px;
+   flex-shrink: 0;
 }
 
 .info-card h3 {
-    margin: 0 0 12px 0;
+   margin: 0 0 12px 0;
    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #00503f;
-    font-size: 21px;
-    font-weight: bold;
+   color: #00503f;
+   font-size: 21px;
+   font-weight: bold;
 }
 
 .info-card p {
-    margin: 0;
+   margin: 0;
    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #00503f;
-    font-size: 16px;
-    line-height: 1.5;
+   color: #00503f;
+   font-size: 16px;
+   line-height: 1.5;
 }
 
 
@@ -196,11 +194,11 @@ width: 2000px;
 }
 
 .cadastro-detrain-topo {
-  background-color: rgb(2, 80, 63);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+   background-color: rgb(2, 80, 63);
+   padding: 20px 40px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 }
 
 #centrobloco {
@@ -232,7 +230,7 @@ width: 2000px;
 
 }
 
-#cadastro-nome{
+#cadastro-nome {
 
    padding: 10px;
    width: 400px;
@@ -240,7 +238,7 @@ width: 2000px;
 
 }
 
-#cadastro-senha{
+#cadastro-senha {
 
    padding: 10px;
    width: 400px;
@@ -248,15 +246,7 @@ width: 2000px;
 
 }
 
-#cadastro-id{
-   
-   padding: 10px;
-   width: 400px;
-   border-radius: 20px;
- 
-}
-
-#cadastro-email{
+#cadastro-id {
 
    padding: 10px;
    width: 400px;
@@ -264,7 +254,7 @@ width: 2000px;
 
 }
 
-#cadastro-telefone{
+#cadastro-email {
 
    padding: 10px;
    width: 400px;
@@ -272,7 +262,7 @@ width: 2000px;
 
 }
 
-#cadastro-tipo{
+#cadastro-telefone {
 
    padding: 10px;
    width: 400px;
@@ -280,7 +270,7 @@ width: 2000px;
 
 }
 
-#cadastro-modelo{
+#cadastro-tipo {
 
    padding: 10px;
    width: 400px;
@@ -288,7 +278,7 @@ width: 2000px;
 
 }
 
-#cadastro-estacao{
+#cadastro-modelo {
 
    padding: 10px;
    width: 400px;
@@ -296,7 +286,15 @@ width: 2000px;
 
 }
 
-#cadastro-sensor{
+#cadastro-estacao {
+
+   padding: 10px;
+   width: 400px;
+   border-radius: 20px;
+
+}
+
+#cadastro-sensor {
 
    padding: 10px;
    width: 400px;
@@ -313,7 +311,7 @@ width: 2000px;
    margin-bottom: 25px;
    text-align: center;
    font-weight: bold;
- 
+
 }
 
 
@@ -337,17 +335,17 @@ width: 2000px;
 
 .ButtonCadastro {
 
-  width: 400px;
-  padding: 14px;
-  background-color: #c6f24e;
-  color: #0c3527;
-  font-weight: bold;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 15px;
+   width: 400px;
+   padding: 14px;
+   background-color: #c6f24e;
+   color: #0c3527;
+   font-weight: bold;
+   border: none;
+   border-radius: 30px;
+   cursor: pointer;
+   font-size: 15px;
    margin-top: 20px;
-    margin-left: 0px;
+   margin-left: 0px;
 
 }
 
@@ -365,18 +363,18 @@ button:hover {
 
 
 
-.cabecalho{
-    background-color: rgb(2, 80, 63);
-    height: 75px;
+.cabecalho {
+   background-color: rgb(2, 80, 63);
+   height: 75px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 
-    padding: 0 15px;
+   padding: 0 15px;
 }
 
-.body_home{
+.body_home {
    background-color: #0c3527;
    margin: 0;
    min-height: 100vh;
@@ -384,46 +382,46 @@ button:hover {
    flex-direction: column;
 }
 
-.lado-esquerdo{
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.lado-esquerdo {
+   display: flex;
+   align-items: center;
+   gap: 20px;
 }
 
 .home-detrain-logo {
-  color: white;
-  font-size: 33px;
-  font-weight: bold;
-  margin: 0;
-  text-decoration: none;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   color: white;
+   font-size: 33px;
+   font-weight: bold;
+   margin: 0;
+   text-decoration: none;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.logo{
-    height: 70px;
+.logo {
+   height: 70px;
 }
 
-.menu{
-    display: flex;
-    gap: 25px;
-    margin-left: 20px
+.menu {
+   display: flex;
+   gap: 25px;
+   margin-left: 20px
 }
 
-.menu a{
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-   text-decoration:dotted;
+.menu a {
+   color: white;
+   font-size: 14px;
+   font-weight: bold;
+   text-decoration: dotted;
 }
 
-.lado-direito{
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.lado-direito {
+   display: flex;
+   align-items: center;
+   gap: 15px;
 
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
+   color: white;
+   font-weight: bold;
+   font-size: 14px;
    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
    font-size: x-large;
 }
@@ -435,10 +433,10 @@ button:hover {
 }
 
 
-.perfil{
-    height: 45px;
-    width: 70px;
-    border-radius: 50%;
+.perfil {
+   height: 45px;
+   width: 70px;
+   border-radius: 50%;
 }
 
 .DE-TRAIN2 {
@@ -462,19 +460,19 @@ button:hover {
    margin-left: 10px;
 }
 
-.main_home{
+.main_home {
    flex: 1;
    display: flex;
    justify-content: center;
    align-items: center;
 }
 
-.linhas_home{
+.linhas_home {
 
    width: 600px;
    display: block;
    margin: 30px auto;
-   
+
    border: 4px solid rgb(2, 80, 63);
    border-radius: 15px;
    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -484,120 +482,120 @@ button:hover {
 /* Login */
 
 .bodyLogin {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(2, 80, 63);
+   margin: 0;
+   padding: 0;
+   font-family: Arial, Helvetica, sans-serif;
+   background-color: rgb(2, 80, 63);
 }
 
 .login-detrain-topo {
-  background-color: rgb(2, 80, 63);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+   background-color: rgb(2, 80, 63);
+   padding: 20px 40px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 }
 
 .login-detrain-logo {
-  color: white;
-  font-size: 33px;
-  font-weight: bold;
-  margin: 0;
-  text-decoration: none;
+   color: white;
+   font-size: 33px;
+   font-weight: bold;
+   margin: 0;
+   text-decoration: none;
 }
 
 .login-detrain-container {
-  display: flex;
-  background-color: #0c3527;
+   display: flex;
+   background-color: #0c3527;
 }
 
 .login-detrain-caixa {
-  width: 45%;
-  height: 100px;
-  padding: 60px;
-  color: white;
+   width: 45%;
+   height: 100px;
+   padding: 60px;
+   color: white;
 
 }
 
 .login-detrain-titulo {
-  font-size: 40px;
-  font-weight: bold;
-  margin-bottom: 10px;
+   font-size: 40px;
+   font-weight: bold;
+   margin-bottom: 10px;
 }
 
 .login-detrain-verde {
-  color: #c6f24e;
+   color: #c6f24e;
 }
 
 .login-detrain-subtexto {
-  color: #cccccc;
-  font-size: 15px;
-  margin-bottom: 50px;
+   color: #cccccc;
+   font-size: 15px;
+   margin-bottom: 50px;
 }
 
 .login-detrain-label {
-  color: #cccccc;
-  font-size: 13px;
+   color: #cccccc;
+   font-size: 13px;
 }
 
 .login-detrain-input {
-  width: 100%;
-  padding: 30px;
-  margin-top: 10px;
-  border: 1px solid #555;
-  border-radius: 15px;
-  background-color: #123f2f;
-  color: white;
+   width: 100%;
+   padding: 30px;
+   margin-top: 10px;
+   border: 1px solid #555;
+   border-radius: 15px;
+   background-color: #123f2f;
+   color: white;
 }
 
 .login-detrain-input::placeholder {
-  color: #999;
+   color: #999;
 }
 
 .login-detrain-erro {
-  color: red;
-  font-size: 13px;
+   color: red;
+   font-size: 13px;
 }
 
 .login-detrain-botao {
-  width: 100%;
-  padding: 14px;
-  background-color: #c6f24e;
-  color: #0c3527;
-  font-weight: bold;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 15px;
+   width: 100%;
+   padding: 14px;
+   background-color: #c6f24e;
+   color: #0c3527;
+   font-weight: bold;
+   border: none;
+   border-radius: 30px;
+   cursor: pointer;
+   font-size: 15px;
 }
 
 .login-detrain-botao:hover {
-  background-color: #a9d93e;
+   background-color: #a9d93e;
 }
 
 .login-detrain-cadastro {
-  margin-top: 20px;
-  color: #cccccc;
-  font-size: 14px;
+   margin-top: 20px;
+   color: #cccccc;
+   font-size: 14px;
 }
 
 .login-detrain-cadastro a {
-  color: #c6f24e;
-  font-weight: bold;
-  text-decoration: none;
+   color: #c6f24e;
+   font-weight: bold;
+   text-decoration: none;
 }
 
 .login-detrain-imagem {
-  width: 100%;
-  border-radius: 0px;
-  overflow: hidden;
+   width: 100%;
+   border-radius: 0px;
+   overflow: hidden;
 }
 
 .login-detrain-imagem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  overflow: hidden;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   overflow: hidden;
 
 }
 
@@ -612,6 +610,7 @@ button:hover {
    width: 600px;
    border-radius: 20px;
 }
+
 #login-senha {
    padding: 10px;
    width: 600px;
@@ -619,34 +618,33 @@ button:hover {
 }
 
 .login-rodape {
-    min-height: calc(100vh - 120px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+   min-height: calc(100vh - 120px);
+   display: flex;
+   align-items: center;
+   justify-content: center;
    background-color: rgb(253, 252, 248);
    font-size: 14px;
-   
+
 }
 
 .verde {
-   color:#a9d93e;
+   color: #a9d93e;
 }
 
 /* usuarios */
 
-.container_tabela_usuarios{
+.container_tabela_usuarios {
    display: flex;
    justify-content: center;
    margin-top: 150px;
 }
 
-.tabela_usuarios{
+
+.tabela_usuarios {
    width: 50%;
    font-size: 20px;
-}
-
-.pagina_usuarios{
-   background-color: rgb(253, 253, 234);
+   background-color: white;
+   color: black;
 }
 
 .CadastrarText {
@@ -662,4 +660,21 @@ button:hover {
    padding: 0 20px;
    flex-direction: column;
    gap: 5px;
+}
+
+.buttonRetornar {
+   background: none;
+   border: none;
+   padding: 0;
+   font: inherit;
+   color: inherit;
+   cursor: pointer;
+   outline: none;
+
+   color: white;
+   font-size: 33px;
+   font-weight: bold;
+   margin: 0;
+   text-decoration: none;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }

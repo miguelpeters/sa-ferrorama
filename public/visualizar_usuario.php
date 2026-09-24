@@ -10,19 +10,13 @@
   <link rel="icon" href="../assets/imgs/LogoDeTrain.png" type="image/x-icon">
 </head>
 
-<body class="pagina_usuarios">
+<body class="body_home">
 
   <header class="cabecalho">
 
     <div class="lado-esquerdo">
-      <h1 class="DE-TRAIN2">DE-TRAIN</h1>
-      <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
-
-      <nav class="menu">
-
-        <a href="../public/cadastro.html">CADASTRAR FUNCIONÁRIO</a>
-        <br>
-        <a href="../public/usuarios.html">VISUALIZAR FUNCIONÁRIOS</a>
+        <button class="buttonRetornar" onclick="history.back()">DE-TRAIN</button>
+        <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
         <br>
 
       </nav>
@@ -35,10 +29,12 @@
 
   </header>
 
+
+
   <main>
 
     <div class="container_tabela_usuarios">
-      <table class="tabela_usuarios table-bordered">
+      <table class="tabela_usuarios table-bordered" class="tabela_usuarios2">
         <thead>
           <tr>
             <th scope="col">#</th>

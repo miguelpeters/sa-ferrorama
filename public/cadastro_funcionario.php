@@ -10,7 +10,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $sql = "INSERT INTO funcionarios (nome, email, numero_telefone, senha) values (?,?,?,?)";
     $stmt = $conn-> prepare($sql);
-    $stmt -> bind_param('sss', $nome,$email,$telefone,$senha);
+    $stmt -> bind_param('ssss', $nome,$email,$telefone,$senha);
 
     if($stmt->execute()){
         echo "Funcionario cadastrado ";

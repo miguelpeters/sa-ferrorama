@@ -19,7 +19,7 @@
 
 
         <nav class="menu">
-        <a class="home-detrain-logo" href="../index.php">CADASTRAR FUNCIONÁRIO</a>
+        <a class="home-detrain-logo" href="cadastro_funcionario.php">CADASTRAR FUNCIONÁRIO</a>
         <a class="home-detrain-logo" href="cadastro_trem.php">CADASTRAR TREM</a>
         <a class="home-detrain-logo" href="cadastro_estacao.php">CADASTRAR ESTAÇÃO</a>
         <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>

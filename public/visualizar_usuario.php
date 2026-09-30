@@ -1,3 +1,162 @@
+<?php
+
+$servidor = "localhost";
+$usuarioBanco = "root";
+$senhaBanco = "";
+$banco = "ferrorama_db";
+
+$conn = new mysqli(
+    $servidor,
+    $usuarioBanco,
+    $senhaBanco,
+    $banco
+);
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco: " . $conn->connect_error);
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
+
+    $id = $_POST["id"];
+    $tipo = $_POST["tipo"];
+
+    if ($tipo == "Gerente") {
+        $tabela = "gerentes";
+    } elseif ($tipo == "Funcionário") {
+        $tabela = "funcionarios";
+    } elseif ($tipo == "Usuário") {
+        $tabela = "usuarios";
+    } else {
+        die("Tipo de usuário inválido.");
+    }
+
+    $sql = "DELETE FROM $tabela WHERE id = ?";
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Erro ao preparar exclusão: " . $conn->error);
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if (!$stmt->execute()) {
+        die("Erro ao excluir usuário: " . $stmt->error);
+    }
+
+    $stmt->close();
+
+    header("Location: visualizacao_usuarios.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
+
+    $id = $_POST["id"];
+    $tipo = $_POST["tipo"];
+
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+    $telefone = $_POST["numero_telefone"];
+    $senha = $_POST["senha"];
+
+    if ($tipo == "Gerente") {
+        $tabela = "gerentes";
+    } elseif ($tipo == "Funcionário") {
+        $tabela = "funcionarios";
+    } elseif ($tipo == "Usuário") {
+        $tabela = "usuarios";
+    } else {
+        die("Tipo de usuário inválido.");
+    }
+
+
+    $sql = "UPDATE $tabela
+            SET nome = ?, email = ?, numero_telefone = ?, senha = ?
+            WHERE id = ?";
+
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Erro ao preparar atualização: " . $conn->error);
+    }
+
+
+    $stmt->bind_param(
+        "ssssi",
+        $nome,
+        $email,
+        $telefone,
+        $senha,
+        $id
+    );
+
+
+    if (!$stmt->execute()) {
+        die("Erro ao atualizar usuário: " . $stmt->error);
+    }
+
+
+    $stmt->close();
+
+    header("Location: visualizacao_usuarios.php");
+    exit();
+}
+
+$usuarioEditar = null;
+
+if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
+
+    $id = $_GET["editar"];
+    $tipo = $_GET["tipo"];
+
+
+    if ($tipo == "Gerente") {
+        $tabela = "gerentes";
+    } elseif ($tipo == "Funcionário") {
+        $tabela = "funcionarios";
+    } elseif ($tipo == "Usuário") {
+        $tabela = "usuarios";
+    } else {
+        die("Tipo de usuário inválido.");
+    }
+
+
+    $sql = "SELECT id, nome, email, numero_telefone, senha
+            FROM $tabela
+            WHERE id = ?";
+
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Erro ao preparar consulta: " . $conn->error);
+    }
+
+
+    $stmt->bind_param("i", $id);
+
+    $stmt->execute();
+
+    $resultadoEditar = $stmt->get_result();
+
+
+    if ($resultadoEditar->num_rows == 1) {
+
+        $usuarioEditar = $resultadoEditar->fetch_assoc();
+        $usuarioEditar["tipo"] = $tipo;
+    }
+
+
+    $stmt->close();
+}
+
+?>
+
+
 <html lang="en">
 
 <head>
@@ -18,8 +177,6 @@
         <button class="buttonRetornar" onclick="history.back()">DE-TRAIN</button>
         <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
         <br>
-
-      </nav>
     </div>
 
     <div class="lado-direito">
@@ -33,74 +190,344 @@
 
   <main>
 
+   <?php if ($usuarioEditar != null) { ?>
+
+        <div class="container_editar_usuario">
+
+            <h2>Editar <?php echo $usuarioEditar["tipo"]; ?></h2>
+
+
+            <form method="POST">
+
+                <input
+                    type="hidden"
+                    name="id"
+                    value="<?php echo $usuarioEditar["id"]; ?>"
+                >
+
+                <input
+                    type="hidden"
+                    name="tipo"
+                    value="<?php echo htmlspecialchars($usuarioEditar["tipo"]); ?>"
+                >
+
+                <label for="nome">
+                    Nome
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="<?php echo htmlspecialchars($usuarioEditar["nome"]); ?>"
+                    required
+                >
+
+                <br><br>
+
+                <label for="email">
+                    Email
+                </label>
+
+                <br>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="<?php echo htmlspecialchars($usuarioEditar["email"]); ?>"
+                    required
+                >
+
+                <br><br>
+
+                <label for="numero_telefone">
+                    Telefone
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="numero_telefone"
+                    name="numero_telefone"
+                    value="<?php echo htmlspecialchars($usuarioEditar["numero_telefone"]); ?>"
+                    required
+                >
+
+                <br><br>
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="senha"
+                    name="senha"
+                    value="<?php echo htmlspecialchars($usuarioEditar["senha"]); ?>"
+                    required
+                >
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    name="atualizar"
+                >
+                    ATUALIZAR
+                </button>
+
+
+                <a href="visualizar_usuario.php">
+                    CANCELAR
+                </a>
+
+
+            </form>
+
+        </div>
+
+        <hr>
+
+    <?php } ?>
+
     <div class="container_tabela_usuarios">
-      <table class="tabela_usuarios table-bordered" class="tabela_usuarios2">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Email</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Tipo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Miguel</td>
-            <td>miguel@gmail.com</td>
-            <td>12345678</td>
-            <td>Funcionário</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Leonardo</td>
-            <td>leonardo@gmail.com</td>
-            <td>12345678</td>
-            <td>Visitante</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Theo</td>
-            <td>theo@gmail.com</td>
-            <td>12345678</td>
-            <td>Funcionário</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>Tiago</td>
-            <td>tiago@gmail.com</td>
-            <td>12345678</td>
-            <td>Visitante</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>Marcos</td>
-            <td>marcos@gmail.com</td>
-            <td>12345678</td>
-            <td>Visitante</td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>Luiz</td>
-            <td>luiz@gmail.com</td>
-            <td>12345678</td>
-            <td>Funcionário</td>
-          </tr>
-          <tr>
-            <th scope="row">7</th>
-            <td>Ramon</td>
-            <td>ramon@gmail.com</td>
-            <td>12345678</td>
-            <td>Visitante</td>
-          </tr>
-        </tbody>
-      </table>
+
+
+        <table class="tabela_usuarios table-bordered">
+
+
+            <thead>
+
+                <tr>
+
+                    <th scope="col">
+                        #
+                    </th>
+
+                    <th scope="col">
+                        Nome
+                    </th>
+
+                    <th scope="col">
+                        Email
+                    </th>
+
+                    <th scope="col">
+                        Telefone
+                    </th>
+
+                    <th scope="col">
+                        Tipo
+                    </th>
+
+                    <th scope="col">
+                        Ações
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                <?php
+
+                $sql = "
+
+                    SELECT
+                        id,
+                        nome,
+                        email,
+                        numero_telefone,
+                        'Gerente' AS tipo
+                    FROM gerentes
+
+                    UNION ALL
+
+                    SELECT
+                        id,
+                        nome,
+                        email,
+                        numero_telefone,
+                        'Funcionário' AS tipo
+                    FROM funcionarios
+
+                    UNION ALL
+
+                    SELECT
+                        id,
+                        nome,
+                        email,
+                        numero_telefone,
+                        'Usuário' AS tipo
+                    FROM usuarios
+
+                    ORDER BY nome
+
+                ";
+
+
+                $resultado = $conn->query($sql);
+
+
+                if (!$resultado) {
+
+                    die(
+                        "Erro ao buscar usuários: "
+                        . $conn->error
+                    );
+
+                }
+
+                while ($pessoa = $resultado->fetch_assoc()) {
+
+                ?>
+
+                    <tr>
+
+                        <th scope="row">
+
+                            <?php
+
+                            echo htmlspecialchars(
+                                $pessoa["id"]
+                            );
+
+                            ?>
+
+                        </th>
+
+                        <td>
+
+                            <?php
+
+                            echo htmlspecialchars(
+                                $pessoa["nome"]
+                            );
+
+                            ?>
+
+                        </td>
+
+                        <td>
+
+                            <?php
+
+                            echo htmlspecialchars(
+                                $pessoa["email"]
+                            );
+
+                            ?>
+
+                        </td>
+
+                        <td>
+
+                            <?php
+
+                            echo htmlspecialchars(
+                                $pessoa["numero_telefone"]
+                            );
+
+                            ?>
+
+                        </td>
+
+                        <td>
+
+                            <?php
+
+                            echo htmlspecialchars(
+                                $pessoa["tipo"]
+                            );
+
+                            ?>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="visualizar_usuario.php?editar=<?php echo $pessoa["id"]; ?>&tipo=<?php echo urlencode($pessoa["tipo"]); ?>"
+                            >
+                                EDITAR
+                            </a>
+
+                            <form
+                                method="POST"
+                                style="display:inline;"
+                            >
+
+
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value="<?php echo $pessoa["id"]; ?>"
+                                >
+
+
+                                <input
+                                    type="hidden"
+                                    name="tipo"
+                                    value="<?php echo htmlspecialchars($pessoa["tipo"]); ?>"
+                                >
+
+
+                                <button
+                                    type="submit"
+                                    name="excluir"
+                                    onclick="return confirm('Tem certeza que deseja excluir este usuário?');"
+                                >
+
+                                    EXCLUIR
+
+                                </button>
+
+
+                            </form>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                <?php
+
+                }
+
+                ?>
+
+
+            </tbody>
+
+
+        </table>
+
+
     </div>
 
-  </main>
 
+</main>
+
+
+<?php
+
+$conn->close();
+
+?>
 
 </body>
 
 </html>
+
+   

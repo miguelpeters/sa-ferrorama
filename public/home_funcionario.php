@@ -23,7 +23,6 @@
         <a class="home-detrain-logo" href="cadastro_estacao.php">CADASTRAR ESTAÇÃO</a>
         <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
-        <a class="home-detrain-logo" href="visualizar_usuario.php">VISUALIZAR USUÁRIO</a>
         </nav>
     </div>
 

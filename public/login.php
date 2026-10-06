@@ -2,16 +2,7 @@
 
 session_start();
 
-$servidor = "localhost";
-$usuario = "root";
-$senhaBanco = "";
-$banco = "ferrorama_db";
-
-$conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
-
-if ($conn->connect_error) {
-    die("Erro na conexão com o banco: " . $conn->connect_error);
-}
+include_once("../infra/conexao.php");
 
 $erro = "";
 
@@ -24,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             FROM gerentes
             WHERE email = ?";
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexao->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
 
@@ -53,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 FROM funcionarios
                 WHERE email = ?";
 
-        $stmt = $conn->prepare($sql);
+        $stmt = $conexao->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
 
@@ -83,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     FROM usuarios
                     WHERE email = ?";
 
-            $stmt = $conn->prepare($sql);
+            $stmt = $conexao->prepare($sql);
             $stmt->bind_param("s", $email);
             $stmt->execute();
 
@@ -118,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 
-$conn->close();
+$conexao->close();
 
 ?>
 

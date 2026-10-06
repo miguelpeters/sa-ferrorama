@@ -5,6 +5,8 @@ $usuario = "root";
 $senhaBanco = "";
 $banco = "ferrorama_db"; 
 
+$hash = password_hash($senha, PASSWORD_DEFAULT);
+
 $conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
 
 if ($conn->connect_error) {
@@ -23,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare($sql);
 
-    $stmt->bind_param("ssss", $nome, $email, $telefone, $senha);
+    $stmt->bind_param("ssss", $nome, $email, $telefone, $hash);
 
     if ($stmt->execute()) {
         echo "<script>alert('Usuário cadastrado com sucesso!');</script>";
@@ -33,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 }
-
 
 ?>
 

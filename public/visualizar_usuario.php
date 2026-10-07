@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
 
     $stmt->close();
 
-    header("Location: visualizar_usuarios.php");
+    header("Location: visualizar_usuario.php");
     exit();
 }
 
@@ -394,7 +394,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 ?>
 
-                    <tr class="visualizar_usuarios_gerente">
+                    <tr class="visualizar_usuario_gerente">
 
                         <th scope="row">
 

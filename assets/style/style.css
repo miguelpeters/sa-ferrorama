@@ -689,7 +689,6 @@ button:hover {
 
 .form-editar-usuario {
    margin-left: 850px;
-   
 }
 
 .input-editar-usuario {
@@ -701,6 +700,7 @@ button:hover {
 
 .editar-usuario {
    color: white;
+   margin-left: 70px;
 }
 
 .button-atualizar {
@@ -714,3 +714,4 @@ button:hover {
    text-decoration: none;
    color: red;
 }
+

@@ -5,15 +5,15 @@ $usuarioBanco = "root";
 $senhaBanco = "";
 $banco = "ferrorama_db";
 
-$conn = new mysqli(
+$conexao = new mysqli(
     $servidor,
     $usuarioBanco,
     $senhaBanco,
     $banco
 );
 
-if ($conn->connect_error) {
-    die("Erro na conexão com o banco: " . $conn->connect_error);
+if ($conexao->connect_error) {
+    die("Erro na conexão com o banco: " . $conexao->connect_error);
 }
 
 
@@ -34,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
 
     $sql = "DELETE FROM $tabela WHERE id = ?";
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexao->prepare($sql);
 
     if (!$stmt) {
-        die("Erro ao preparar exclusão: " . $conn->error);
+        die("Erro ao preparar exclusão: " . $conexao->error);
     }
 
     $stmt->bind_param("i", $id);
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
 
     $stmt->close();
 
-    header("Location: visualizacao_usuarios.php");
+    header("Location: visualizar_usuario.php");
     exit();
 }
 
@@ -78,10 +78,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
             WHERE id = ?";
 
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexao->prepare($sql);
 
     if (!$stmt) {
-        die("Erro ao preparar atualização: " . $conn->error);
+        die("Erro ao preparar atualização: " . $conexao->error);
     }
 
 
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
 
     $stmt->close();
 
-    header("Location: visualizacao_usuarios.php");
+    header("Location: visualizar_usuarios.php");
     exit();
 }
 
@@ -130,10 +130,10 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
             WHERE id = ?";
 
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexao->prepare($sql);
 
     if (!$stmt) {
-        die("Erro ao preparar consulta: " . $conn->error);
+        die("Erro ao preparar consulta: " . $conexao->error);
     }
 
 
@@ -194,10 +194,12 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
         <div class="container_editar_usuario">
 
+        <div class="texto-editar-usuario">
             <h2>Editar <?php echo $usuarioEditar["tipo"]; ?></h2>
-
+        </div>
 
             <form method="POST">
+                <div class="form-editar-usuario">
 
                 <input
                     type="hidden"
@@ -211,13 +213,13 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
                     value="<?php echo htmlspecialchars($usuarioEditar["tipo"]); ?>"
                 >
 
-                <label for="nome">
+                <label for="nome" class="editar-usuario">
                     Nome
                 </label>
 
                 <br>
 
-                <input
+                <input class="input-editar-usuario"
                     type="text"
                     id="nome"
                     name="nome"
@@ -227,13 +229,13 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 <br><br>
 
-                <label for="email">
+                <label for="email" class="editar-usuario">
                     Email
                 </label>
 
                 <br>
 
-                <input
+                <input class="input-editar-usuario"
                     type="email"
                     id="email"
                     name="email"
@@ -243,13 +245,13 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 <br><br>
 
-                <label for="numero_telefone">
+                <label for="numero_telefone" class="editar-usuario">
                     Telefone
                 </label>
 
                 <br>
 
-                <input
+                <input class="input-editar-usuario"
                     type="text"
                     id="numero_telefone"
                     name="numero_telefone"
@@ -259,13 +261,13 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 <br><br>
 
-                <label for="senha">
+                <label for="senha" class="editar-usuario">
                     Senha
                 </label>
 
                 <br>
 
-                <input
+                <input class="input-editar-usuario"
                     type="text"
                     id="senha"
                     name="senha"
@@ -275,7 +277,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 <br><br>
 
-                <button
+                <button class="button-atualizar"
                     type="submit"
                     name="atualizar"
                 >
@@ -283,13 +285,14 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
                 </button>
 
 
-                <a href="visualizar_usuario.php">
+                <a href="visualizar_usuario.php" class="button-cancelar">
                     CANCELAR
                 </a>
 
 
             </form>
 
+        </div>
         </div>
 
         <hr>
@@ -375,14 +378,14 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
                 ";
 
 
-                $resultado = $conn->query($sql);
+                $resultado = $conexao->query($sql);
 
 
                 if (!$resultado) {
 
                     die(
                         "Erro ao buscar usuários: "
-                        . $conn->error
+                        . $conexao->error
                     );
 
                 }
@@ -391,7 +394,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 ?>
 
-                    <tr>
+                    <tr class="visualizar_usuarios_gerente">
 
                         <th scope="row">
 
@@ -458,6 +461,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
                             <a
                                 href="visualizar_usuario.php?editar=<?php echo $pessoa["id"]; ?>&tipo=<?php echo urlencode($pessoa["tipo"]); ?>"
                             >
+                            
                                 EDITAR
                             </a>
 
@@ -522,7 +526,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
 <?php
 
-$conn->close();
+$conexao->close();
 
 ?>
 

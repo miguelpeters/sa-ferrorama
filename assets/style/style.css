@@ -645,6 +645,7 @@ button:hover {
    font-size: 20px;
    background-color: white;
    color: black;
+   border-radius: 5px;
 }
 
 .CadastrarText {
@@ -677,4 +678,39 @@ button:hover {
    margin: 0;
    text-decoration: none;
    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.texto-editar-usuario {
+   color:white;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   margin-left: 850px;
+   margin-top: 50px;
+}
+
+.form-editar-usuario {
+   margin-left: 850px;
+   
+}
+
+.input-editar-usuario {
+   border-radius: 5px;
+   outline: none;
+   border: 1px solid #ccc;
+   padding: 5px;
+}
+
+.editar-usuario {
+   color: white;
+}
+
+.button-atualizar {
+   border-radius: 5px;
+   color: #00503f;
+   outline: none;
+
+}
+
+.button-cancelar {
+   text-decoration: none;
+   color: red;
 }

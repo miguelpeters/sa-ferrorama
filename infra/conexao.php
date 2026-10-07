@@ -5,7 +5,7 @@ $usuario = "root";
 $senha = "";
 $banco = "Ferrorama_db";
 
-$conexao = new mysqli($host, $usuario, $senha, $banco,6608);
+$conexao = new mysqli($host, $usuario, $senha, $banco);
 
 if ($conexao->connect_error) {
     die("Erro na conexão com o banco: " . $conexao->connect_error);

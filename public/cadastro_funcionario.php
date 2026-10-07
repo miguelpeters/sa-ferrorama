@@ -2,6 +2,8 @@
 
 include '../infra/conexao.php';
 
+$hash = password_hash($senha, PASSWORD_DEFAULT);
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $nome = $_POST['nome'];
     $email = $_POST['email'];

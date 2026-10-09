@@ -49,14 +49,14 @@ if (!isset($_SESSION["gerente_id"])) {
         <h1>
             Olá, <?= htmlspecialchars($_SESSION["gerente_nome"]) ?>
         </h1>
-        <a href="logout.php">SAIR</a>
+        <a class="sair-link" href="logout.php">SAIR</a>
 
     <?php elseif (isset($_SESSION["id"])): ?>
 
         <h1>
             Olá, <?= htmlspecialchars($_SESSION["nome"]) ?>
         </h1>
-        <a href="logout.php">SAIR</a>
+        <a class="sair-link" href="logout.php">SAIR</a>
 
     <?php else: ?>
 

@@ -48,6 +48,15 @@ CREATE TABLE sensores (
     FOREIGN KEY (trem_id) REFERENCES trens(id)
 );
 
+CREATE TABLE sessoes_persistentes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tipo_usuario VARCHAR(20) NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expira_em DATETIME NOT NULL,
+    INDEX idx_usuario (usuario_id, tipo_usuario)
+);
+
 INSERT INTO gerentes
 (nome, email, numero_telefone, senha)
 VALUES

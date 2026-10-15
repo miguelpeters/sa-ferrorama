@@ -62,3 +62,23 @@ INSERT INTO gerentes
 VALUES
 ('Leonardo Aguiar', 'leonardo_aguiar@gerente.detrain.com', '47 98895-8589', 'leonardo.adm'),
 ('Miguel Kormann', 'miguel_kormann@gerente.detrain.com', '47 99712-0771', 'miguel.adm');
+
+INSERT INTO usuarios
+(nome, email, numero_telefone, senha)
+VALUES
+('Leonardo Aguiar', 'leonardo_aguiar@usuario.detrain.com', '11 11111-1111', 'leonardo.usuario'),
+('Miguel Kormann', 'miguel_kormann@usuario.detrain.com', '11 11111-1112', 'miguel.usuario'),
+('Tiago Sbeghen', 'sbeghen@usuario.detrain.com', '11 11111-1113', 'tiago.usuario'),
+('Theo Maccari', 'maccari@usuario.detrain.com', '11 11111-1114', 'theo.usuario'),
+('Thuany Moretti', 'moretti@usuario.detrain.com', '11 11111-1115', 'thuany.usuario'),
+('Arthur Gomes', 'gomes@usuario.detrain.com', '11 11111-1116', 'arthur.usuario'),
+('Eduardo Lopes', 'lopes@usuario.detrain.com', '11 11111-1117', 'eduardo.usuario'),
+('Julia Mueller', 'mueller@usuario.detrain.com', '11 11111-1118', 'julia.usuario'),
+('Luiz Felipe', 'felipe@usuario.detrain.com', '11 11111-1119', 'luiz.usuario'),
+('Rafael Tironi', 'tironi@usuario.detrain.com', '11 11111-1110', 'rafael.usuario'),
+('Juana Oliveira', 'oliveira@usuario.detrain.com', '11 11111-2111', 'juana.usuario'),
+('Nicole Jordan', 'jordan@usuario.detrain.com', '11 11111-3111', 'nicole.usuario'),
+('Francisco Goulart', 'goulart@usuario.detrain.com', '11 41111-1111', 'chico.usuario'),
+('Davi Zilz', 'zilz@usuario.detrain.com', '11 11171-1111', 'davi.usuario'),
+('Hugo Grama', 'grama@usuario.detrain.com', '11 11151-1111', 'hugo.usuario'),
+('Guilherme Floriano', 'floriano@usuario.detrain.com', '11 15111-1111', 'guilherme.usuario'),

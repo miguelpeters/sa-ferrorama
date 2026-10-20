@@ -37,7 +37,7 @@ if (
 
         <nav class="menu">
         <a class="home-detrain-logo" href="cadastro_trem.php">CADASTRAR TREM</a>
-        <a class="home-detrain-logo" href="cadastro_estacao.php">CADASTRAR ESTAÇÃO</a>
+        <a class="home-detrain-logo" href="cadastro_rota.php">CADASTRAR ROTA</a>
         <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
         </nav>

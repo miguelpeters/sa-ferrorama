@@ -4,10 +4,10 @@ include '../infra/conexao.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $modelo = $_POST['modelo'];
-    $estacao_id = $_POST['estacao_id'];
+    $estacao_id = $_POST['rota_id'];
     $sensor_id = $_POST['sensor_id'];
 
-    $sql = "INSERT INTO trem (modelo, estacao_id, sensor_id) values (?,?,?)";
+    $sql = "INSERT INTO trem (modelo, rota_id, sensor_id) values (?,?,?)";
     $stmt = $conn-> prepare($sql);
     $stmt -> bind_param('ss', $modelo,$estacao_id,$sensor_id);
 
@@ -55,8 +55,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <input type="text" id="cadastro-modelo" name="modelo" class="CadastroInput" placeholder="Modelo do trem">
                         <br>
 
-                        <label for="estacao_id">Estação</label>
-                        <input type="text" id="cadastro-estacao" name="estacao_id" class="CadastroInput" placeholder="ID da estação">
+                        <label for="estacao_id">Rota</label>
+                        <input type="text" id="cadastro-estacao" name="estacao_id" class="CadastroInput" placeholder="Nome da rota">
                         <br>
 
                         <label for="sensor_id">Sensor</label>

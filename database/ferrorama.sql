@@ -26,7 +26,7 @@ CREATE TABLE gerentes (
 );
 
 
-CREATE TABLE estacoes (
+CREATE TABLE rotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );
@@ -34,18 +34,16 @@ CREATE TABLE estacoes (
 CREATE TABLE trens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
-    estacao_id INT,
-    sensor_id INT,
-    FOREIGN KEY (estacao_id) REFERENCES estacoes(id)
+    rota_id INT,
+    FOREIGN KEY (rota_id) REFERENCES rotas(id)
 );
 
 
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
     tipo VARCHAR(50) NOT NULL,
-    trem_id INT,
-    FOREIGN KEY (trem_id) REFERENCES trens(id)
+    rota_id INT,
+    FOREIGN KEY (rota_id) REFERENCES rotas(id)
 );
 
 CREATE TABLE sessoes_persistentes (
@@ -62,6 +60,22 @@ INSERT INTO gerentes
 VALUES
 ('Leonardo Aguiar', 'leonardo_aguiar@gerente.detrain.com', '47 98895-8589', 'leonardo.adm'),
 ('Miguel Kormann', 'miguel_kormann@gerente.detrain.com', '47 99712-0771', 'miguel.adm');
+
+
+INSERT INTO rotas
+(nome)
+VALUES
+('Itaum');
+
+INSERT INTO trens
+(modelo, rota_id)
+VALUES
+('Thomas', '1');
+
+INSERT INTO sensores
+(tipo, rota_id)
+VALUES
+('Ultrassônico', '1');
 
 INSERT INTO usuarios
 (nome, email, numero_telefone, senha)
@@ -81,4 +95,4 @@ VALUES
 ('Francisco Goulart', 'goulart@usuario.detrain.com', '11 41111-1111', 'chico.usuario'),
 ('Davi Zilz', 'zilz@usuario.detrain.com', '11 11171-1111', 'davi.usuario'),
 ('Hugo Grama', 'grama@usuario.detrain.com', '11 11151-1111', 'hugo.usuario'),
-('Guilherme Floriano', 'floriano@usuario.detrain.com', '11 15111-1111', 'guilherme.usuario'),
+('Guilherme Floriano', 'floriano@usuario.detrain.com', '11 15111-1111', 'guilherme.usuario');

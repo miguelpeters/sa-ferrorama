@@ -17,7 +17,7 @@
         <br>
         <a href="cadastro_sensor.php">CADASTRO_SENSOR</a>
         <br>
-        <a href="cadastro_estacao.php">CADASTRO_ESTACAO</a>
+        <a href="cadastro_rota.php">CADASTRO_ROTA</a>
         <br>
         <a href="cadastro_trem.php">CADASTRO_TREM</a>
         <br>
@@ -26,8 +26,6 @@
         <a href="login.php">LOGIN</a>
         <br>
         <a href="recuperarSenha.php">RECUPERAR SENHA</a>
-        <br>
-        <a href="usuarios.php">USUARIOS</a>
         <br>
         <a href="visualizar_sensor.php">VISUALIZAR_SENSOR</a>
         <br>

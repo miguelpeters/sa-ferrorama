@@ -1,3 +1,19 @@
+<?php
+
+$servidor = localhost;
+$usuarioBanco = "root";
+$senhaBanco = "";
+$banco = "ferrorama_db";
+
+$conexao = new mysqli(
+    $servidor,
+    $usuarioBanco,
+    $senhaBanco,
+    $banco
+);
+
+?>
+
 <html lang="pt-br">
 
 <head>

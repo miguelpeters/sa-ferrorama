@@ -2,18 +2,19 @@
 
 include '../infra/conexao.php';
 
+$sqlRotas = "SELECT id, nome FROM rotas";
+$resultadoRotas = $conexao->query($sqlRotas);
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $modelo = $_POST['modelo'];
-    $estacao_id = $_POST['rota_id'];
-    $sensor_id = $_POST['sensor_id'];
+    $rota_id = $_POST['rota_id'];
 
-    $sql = "INSERT INTO trem (modelo, rota_id, sensor_id) values (?,?,?)";
-    $stmt = $conn-> prepare($sql);
-    $stmt -> bind_param('ss', $modelo,$estacao_id,$sensor_id);
-
+    $sql = "INSERT INTO trens (modelo, rota_id) values (?,?)";
+    $stmt = $conexao->prepare($sql);
+    $stmt -> bind_param('si', $modelo,$rota_id);
     if($stmt->execute()){
         echo "Trem cadastrado ";
-        echo '<a href="../index.php">voltar</a>';
+        echo '<a href="cadastro_trem.php">voltar</a>';
     }else{
         echo "Erro ao cadastrar" . $stmt->error;
     }
@@ -50,14 +51,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <h2 id="CadastroTitulo">Cadastrar Trem</h2>
 
-                    <form id="FormsCadastro">
+                    <form id="FormsCadastro" method="POST">
                         <label for="modelo">Modelo</label>
                         <input type="text" id="cadastro-modelo" name="modelo" class="CadastroInput" placeholder="Modelo do trem">
                         <br>
 
-                        <label for="estacao_id">Rota</label>
-                        <input type="text" id="cadastro-estacao" name="estacao_id" class="CadastroInput" placeholder="Nome da rota">
-                        <br>
+                        <label for="rota_id">Rota</label>
+                            <select id="rota_id" name="rota_id" class="CadastroInput" required>
+                                <option value="">Selecione uma rota</option>
+                                <?php while ($rota = $resultadoRotas->fetch_assoc()) { ?>
+                                    <option value="<?= $rota['id'] ?>">
+                                        <?= htmlspecialchars($rota['nome']) ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <br>
 
                         <label for="sensor_id">Sensor</label>
                         <input type="text" id="cadastro-sensor" name="sensor_id" class="CadastroInput" placeholder="ID do sensor">

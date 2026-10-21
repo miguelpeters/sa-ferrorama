@@ -11,17 +11,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $sql = "INSERT INTO rotas (nome) VALUES (?)";
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexao->prepare($sql);
 
     if (!$stmt) {
-        exit("Erro ao conectar com o banco: " . $conn->error);
+        exit("Erro ao conectar com o banco: " . $conexao->error);
     }
 
     $stmt->bind_param('s', $nome);
 
     if ($stmt->execute()) {
         echo "Rota cadastrada com sucesso! ";
-        echo '<a href="../index.php">Voltar</a>';
+        echo '<a href="cadastro_rota.php">Voltar</a>';
     } else {
         echo "Erro ao cadastrar: " . $stmt->error;
     }

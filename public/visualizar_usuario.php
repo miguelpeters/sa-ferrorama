@@ -190,6 +190,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
   <main>
 
+  
    <?php if ($usuarioEditar != null) { ?>
 
         <div class="container_editar_usuario">
@@ -198,6 +199,7 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
             <h2>Editar <?php echo $usuarioEditar["tipo"]; ?></h2>
         </div>
 
+        <img src="../assets/imgs/VoltarIcon.png">
             <form method="POST">
                 <div class="form-editar-usuario">
 

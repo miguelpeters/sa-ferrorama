@@ -700,14 +700,12 @@ button:hover {
 
 .editar-usuario {
    color: white;
-   margin-left: 70px;
 }
 
 .button-atualizar {
    border-radius: 5px;
    color: #00503f;
    outline: none;
-
 }
 
 .button-cancelar {

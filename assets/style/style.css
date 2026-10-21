@@ -361,6 +361,12 @@ button:hover {
 
 /* Home */
 
+.sair-link {
+   color: white;
+   text-decoration: none;
+   font-size: 44px;
+   font-weight: bold;
+}
 
 
 .cabecalho {

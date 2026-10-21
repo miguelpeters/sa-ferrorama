@@ -1,3 +1,16 @@
+<?php
+session_start();
+include_once("../infra/conexao.php");
+include_once("../infra/lembrar_login.php");
+
+restaurarLogin($conexao);
+
+if (!isset($_SESSION["gerente_id"])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <html lang="en">
 
 <head>
@@ -21,16 +34,40 @@
         <nav class="menu">
         <a class="home-detrain-logo" href="cadastro_funcionario.php">CADASTRAR FUNCIONÁRIO</a>
         <a class="home-detrain-logo" href="cadastro_trem.php">CADASTRAR TREM</a>
-        <a class="home-detrain-logo" href="cadastro_estacao.php">CADASTRAR ESTAÇÃO</a>
+        <a class="home-detrain-logo" href="cadastro_rota.php">CADASTRAR ROTA</a>
         <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_usuario.php">VISUALIZAR USUÁRIO</a>
         </nav>
     </div>
 
+
     <div class="lado-direito">
-        <h1><a class="EntrarText_home" href="login.php">ENTRAR</a></h1>
-        <img src="../assets/imgs/LoginIcon.png" class="perfil">
+
+    <?php if (isset($_SESSION["gerente_id"])): ?>
+
+        <h1>
+            Olá, <?= htmlspecialchars($_SESSION["gerente_nome"]) ?>
+        </h1>
+        <a class="sair-link" href="logout.php">SAIR</a>
+
+    <?php elseif (isset($_SESSION["id"])): ?>
+
+        <h1>
+            Olá, <?= htmlspecialchars($_SESSION["nome"]) ?>
+        </h1>
+        <a class="sair-link" href="logout.php">SAIR</a>
+
+    <?php else: ?>
+
+        <h1>
+            <a class="EntrarText_home" href="login.php">ENTRAR</a>
+        </h1>
+
+    <?php endif; ?>
+
+    <img src="../assets/imgs/LoginIcon.png" class="perfil">
+
     </div>
 
 </header>

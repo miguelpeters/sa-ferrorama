@@ -3,6 +3,7 @@
 session_start();
 
 include_once("../infra/conexao.php");
+include_once("../infra/lembrar_login.php");
 
 $erro = "";
 
@@ -26,6 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $gerente = $resultado->fetch_assoc();
 
         if ($senha === $gerente["senha"]) {
+
+            session_regenerate_id(true);
+            lembrarLogin($conexao, "gerente", $gerente["id"]);
 
             $_SESSION["gerente_id"] = $gerente["id"];
             $_SESSION["gerente_nome"] = $gerente["nome"];
@@ -56,6 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($senha === $funcionario["senha"]) {
 
+            session_regenerate_id(true);
+            lembrarLogin($conexao, "funcionario", $funcionario["id"]);
+
                 $_SESSION["tipo"] = "funcionario";
                 $_SESSION["id"] = $funcionario["id"];
                 $_SESSION["nome"] = $funcionario["nome"];
@@ -85,6 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $usuario = $resultado->fetch_assoc();
 
                 if ($senha === $usuario["senha"]) {
+
+                    session_regenerate_id(true);
+                    lembrarLogin($conexao, "usuario", $usuario["id"]);
 
                     $_SESSION["tipo"] = "usuario";
                     $_SESSION["id"] = $usuario["id"];

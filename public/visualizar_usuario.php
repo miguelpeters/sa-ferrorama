@@ -198,8 +198,6 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
         <div class="texto-editar-usuario">
             <h2>Editar <?php echo $usuarioEditar["tipo"]; ?></h2>
         </div>
-
-        <img src="../assets/imgs/VoltarIcon.png">
             <form method="POST">
                 <div class="form-editar-usuario">
 

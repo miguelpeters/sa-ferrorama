@@ -1,79 +1,103 @@
+
 <?php
+require_once __DIR__ . '/../infra/conexao.php';
 
-include '../infra/conexao.php';
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nome = trim($_POST["nome"] ?? "");
+    $tipo = trim($_POST["tipo"] ?? "");
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $id = $_POST['id'];
-    $nome = $_POST['nome'];
-    $tipo = $_POST['tipo'];
-    $trem_id = $_POST['trem_id'];
+    if ($nome === "" || $tipo === "") {
+        $erro = "Preencha o nome e o tipo do sensor.";
+    } else {
+        $sql = "INSERT INTO sensores (nome, tipo) VALUES (?, ?)";
+        $stmt = $conexao->prepare($sql);
 
-    $sql = "INSERT INTO sensores (id, nome, tipo, trem_id) values (?,?,?,?)";
-    $stmt = $conn-> prepare($sql);
-    $stmt -> bind_param('ssss', $id, $nome, $tipo, $trem_id);
+        if (!$stmt) {
+            $erro = "Erro ao preparar cadastro.";
+        } else {
+            $stmt->bind_param("ss", $nome, $tipo);
 
-    if($stmt->execute()){
-        echo "Sensor cadastrado ";
-        echo '<a href="../index.php">voltar</a>';
-    }else{
-        echo "Erro ao cadastrar" . $stmt->error;
+            if ($stmt->execute()) {
+                $sucesso = "Sensor cadastrado com sucesso! ID: "
+                    . $conexao->insert_id;
+            } else {
+                $erro = "Erro ao cadastrar sensor.";
+            }
+
+            $stmt->close();
+        }
     }
-   $stmt->close();
-   exit; 
-
 }
-
 ?>
 
+<!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Sensor</title>
     <link rel="stylesheet" href="../assets/style/style.css">
-
-    <link rel="icon" href="../assets/imgs/LogoDeTrain.png" type="image/x-icon">
 </head>
-
 <body class="bodyCadastro">
 
-<div class="cadastro-detrain-topo">
-    <a class="login-detrain-logo" href="../index.php">DE-TRAIN</a>
-    <img id="icon-login" src="../assets/imgs/LogoDeTrain.png">
-  </div>
     <main>
-
         <div id="centrobloco">
             <div id="BlocoCadastro">
-
                 <div class="Cadastro">
-
                     <h2 id="CadastroTitulo">Cadastrar Sensor</h2>
 
-                    <form id="FormsCadastro">
-                        <label for="nome">Nome</label>
-                        <input type="text" id="cadastro-nome" class="CadastroInput" placeholder="Nome do sensor">
+                    <?php if (isset($sucesso)): ?>
+                        <p><?= htmlspecialchars($sucesso) ?></p>
+                    <?php endif; ?>
+
+                    <?php if (isset($erro)): ?>
+                        <p><?= htmlspecialchars($erro) ?></p>
+                    <?php endif; ?>
+
+                    <form id="FormsCadastro"
+                          action="cadastro_sensor.php"
+                          method="POST">
+
+                        <label class="label-sensor" for="cadastro-nome">
+                            Nome
+                        </label>
+                        <input
+                            type="text"
+                            id="cadastro-nome"
+                            name="nome"
+                            class="CadastroInput"
+                            placeholder="Nome do sensor"
+                            maxlength="50"
+                            required
+                        >
+
                         <br>
 
-                        <label for="ID">ID</label>
-                        <input type="text" id="cadastro-id" class="CadastroInput" placeholder="ID do sensor">
-                        <br>
+                        <label class="label-sensor" for="cadastro-tipo">
+                            Tipo
+                        </label>
+                        <input
+                            type="text"
+                            id="cadastro-tipo"
+                            name="tipo"
+                            class="CadastroInput"
+                            placeholder="Tipo do sensor"
+                            maxlength="50"
+                            required
+                        >
 
-                        <label for="tipo">Tipo</label>
-                        <input type="text" id="cadastro-tipo" class="CadastroInput" placeholder="Tipo do sensor">
-                        <br>
-                        <br>
-                        <button class="ButtonCadastro">CADASTRAR SENSOR</button>
+                        <br><br>
 
+                        <button type="submit" class="ButtonCadastro">
+                            CADASTRAR SENSOR
+                        </button>
                     </form>
 
+                    <p><a href="home_gerente.php">Voltar</a></p>
                 </div>
-
             </div>
         </div>
-
     </main>
-</body>
 
+</body>
 </html>

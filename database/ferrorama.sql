@@ -42,6 +42,7 @@ CREATE TABLE trens (
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(50) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
     rota_id INT,
     FOREIGN KEY (rota_id) REFERENCES rotas(id)
 );

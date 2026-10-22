@@ -39,6 +39,7 @@ if (!isset($_SESSION["gerente_id"])) {
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_usuario.php">VISUALIZAR USUÁRIO</a>
         <a class="home-detrain-logo" href="visualizar_rota.php">VISUALIZAR ROTA</a>
+        <a class="home-detrain-logo" href="visualizar_trem.php">VISUALIZAR TRENS</a>
         </nav>
     </div>
 

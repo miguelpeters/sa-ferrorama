@@ -41,6 +41,7 @@ if (
         <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_rota.php">VISUALIZAR ROTA</a>
+        <a class="home-detrain-logo" href="visualizar_trem.php">VISUALIZAR TRENS</a>
         </nav>
     </div>
 

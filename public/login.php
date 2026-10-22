@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["gerente_id"] = $gerente["id"];
             $_SESSION["gerente_nome"] = $gerente["nome"];
             $_SESSION["gerente_email"] = $gerente["email"];
+            $_SESSION["tipo"] = "gerente";
 
             header("Location: home_gerente.php");
             exit();
@@ -95,6 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     session_regenerate_id(true);
                     lembrarLogin($conexao, "usuario", $usuario["id"]);
+
+                    session_regenerate_id(true);
+
+                    $_SESSION = [];
 
                     $_SESSION["tipo"] = "usuario";
                     $_SESSION["id"] = $usuario["id"];

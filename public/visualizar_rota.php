@@ -1,9 +1,24 @@
 <?php
 
+session_start();
+
 include '../infra/conexao.php';
+
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+$podeGerenciarRotas = in_array(
+    $tipoUsuario,
+    ['gerente', 'funcionario'],
+    true
+);
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
+
+    if (!$podeGerenciarRotas) {
+        http_response_code(403);
+        exit("Você não tem permissão para excluir rotas.");
+    }
 
     $id = (int) $_POST["id"];
 
@@ -27,9 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
     exit();
 }
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
+
+    if (!$podeGerenciarRotas) {
+        http_response_code(403);
+        exit("Você não tem permissão para editar rotas.");
+    }
 
     $id = (int) $_POST["id"];
     $nome = trim($_POST["nome"]);
@@ -54,10 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
     exit();
 }
 
-
 $rotaEditar = null;
 
-if (isset($_GET["editar"])) {
+if ($podeGerenciarRotas && isset($_GET["editar"])) {
 
     $id = (int) $_GET["editar"];
 
@@ -122,7 +139,7 @@ if (isset($_GET["editar"])) {
 
 <main>
 
-    <?php if ($rotaEditar != null) { ?>
+    <?php if ($podeGerenciarRotas && $rotaEditar != null) { ?>
 
         <div class="container_editar_usuario">
 
@@ -182,8 +199,6 @@ if (isset($_GET["editar"])) {
     <?php } ?>
 
 
-    <!-- LISTAGEM DE ROTAS -->
-
     <div class="container_tabela_usuarios">
 
         <table class="tabela_usuarios table-bordered">
@@ -222,28 +237,29 @@ if (isset($_GET["editar"])) {
                         </td>
 
                         <td>
+                            <?php if ($podeGerenciarRotas) { ?>
 
-                            <a href="visualizar_rota.php?editar=<?php echo $rota["id"]; ?>">
-                                EDITAR
-                            </a>
+                                <a href="visualizar_rota.php?editar=<?php echo $rota['id']; ?>">
+                                    EDITAR
+                                </a>
 
-                            <form method="POST" style="display:inline;">
+                                <form method="POST" style="display:inline;">
+                                    <input
+                                        type="hidden"
+                                        name="id"
+                                        value="<?php echo $rota['id']; ?>"
+                                    >
 
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    value="<?php echo $rota["id"]; ?>"
-                                >
+                                    <button
+                                        type="submit"
+                                        name="excluir"
+                                        onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
+                                    >
+                                        EXCLUIR
+                                    </button>
+                                </form>
 
-                                <button
-                                    type="submit"
-                                    name="excluir"
-                                    onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
-                                >
-                                    EXCLUIR
-                                </button>
-
-                            </form>
+                            <?php } ?>
 
                         </td>
 

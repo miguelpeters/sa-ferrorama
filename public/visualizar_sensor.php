@@ -1,3 +1,4 @@
+
 <?php
 
 $servidor = "localhost";
@@ -16,25 +17,14 @@ if ($conexao->connect_error) {
     die("Erro na conexão com o banco: " . $conexao->connect_error);
 }
 
-
+// EXCLUIR SENSOR
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
 
-    $id = $_POST["id"];
-    $tipo = $_POST["tipo"];
+    $id = (int) $_POST["id"];
 
-    if ($tipo == "Gerente") {
-        $tabela = "gerentes";
-    } elseif ($tipo == "Funcionário") {
-        $tabela = "funcionarios";
-    } elseif ($tipo == "Usuário") {
-        $tabela = "usuarios";
-    } else {
-        die("Tipo de usuário inválido.");
-    }
-
-    $sql = "DELETE FROM $tabela WHERE id = ?";
-
-    $stmt = $conexao->prepare($sql);
+    $stmt = $conexao->prepare(
+        "DELETE FROM sensores WHERE id = ?"
+    );
 
     if (!$stmt) {
         die("Erro ao preparar exclusão: " . $conexao->error);
@@ -52,51 +42,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
     exit();
 }
 
+// ATUALIZAR SENSOR
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
 
-    $id = $_POST["id"];
-    $tipo = $_POST["tipo"];
+    $id = (int) $_POST["id"];
+    $nome = trim($_POST["nome"]);
+    $tipo = trim($_POST["tipo"]);
 
-    $nome = $_POST["nome"];
-    $email = $_POST["email"];
-    $telefone = $_POST["numero_telefone"];
-    $senha = $_POST["senha"];
+    $rota_id = ($_POST["rota_id"] === "")
+        ? null
+        : (int) $_POST["rota_id"];
 
-    if ($tipo == "Gerente") {
-        $tabela = "gerentes";
-    } elseif ($tipo == "Funcionário") {
-        $tabela = "funcionarios";
-    } elseif ($tipo == "Usuário") {
-        $tabela = "usuarios";
+    if ($rota_id === null) {
+
+        $stmt = $conexao->prepare(
+            "UPDATE sensores
+             SET nome = ?, tipo = ?, rota_id = NULL
+             WHERE id = ?"
+        );
+
+        if (!$stmt) {
+            die("Erro ao preparar atualização: " . $conexao->error);
+        }
+
+        $stmt->bind_param("ssi", $nome, $tipo, $id);
+
     } else {
-        die("Tipo de usuário inválido.");
+
+        $stmt = $conexao->prepare(
+            "UPDATE sensores
+             SET nome = ?, tipo = ?, rota_id = ?
+             WHERE id = ?"
+        );
+
+        if (!$stmt) {
+            die("Erro ao preparar atualização: " . $conexao->error);
+        }
+
+        $stmt->bind_param("ssii", $nome, $tipo, $rota_id, $id);
     }
-
-
-    $sql = "UPDATE $tabela
-            SET nome = ?, email = ?, numero_telefone = ?, senha = ?
-            WHERE id = ?";
-
-
-    $stmt = $conexao->prepare($sql);
-
-    if (!$stmt) {
-        die("Erro ao preparar atualização: " . $conexao->error);
-    }
-
-
-    $stmt->bind_param(
-        "ssssi",
-        $tipo,
-        $id_rota,
-        $id,
-    );
-
 
     if (!$stmt->execute()) {
         die("Erro ao atualizar sensor: " . $stmt->error);
     }
-
 
     $stmt->close();
 
@@ -104,58 +92,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
     exit();
 }
 
+// BUSCAR SENSOR PARA EDITAR
 $sensorEditar = null;
 
-if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
+if (isset($_GET["editar"])) {
 
-    $id = $_GET["editar"];
-    $tipo = $_GET["tipo"];
+    $id = (int) $_GET["editar"];
 
-
-    if ($tipo == "Gerente") {
-        $tabela = "gerentes";
-    } elseif ($tipo == "Funcionário") {
-        $tabela = "funcionarios";
-    } elseif ($tipo == "Usuário") {
-        $tabela = "usuarios";
-    } else {
-        die("Tipo de usuário inválido.");
-    }
-
-
-    $sql = "SELECT tipo, rota_id, id
-            FROM $tabela
-            WHERE id = ?";
-
-
-    $stmt = $conexao->prepare($sql);
+    $stmt = $conexao->prepare(
+        "SELECT id, nome, tipo, rota_id
+         FROM sensores
+         WHERE id = ?"
+    );
 
     if (!$stmt) {
         die("Erro ao preparar consulta: " . $conexao->error);
     }
 
-
     $stmt->bind_param("i", $id);
-
     $stmt->execute();
 
     $resultadoEditar = $stmt->get_result();
 
-
     if ($resultadoEditar->num_rows == 1) {
-
         $sensorEditar = $resultadoEditar->fetch_assoc();
-        $sensorEditar["tipo"] = $tipo;
     }
-
 
     $stmt->close();
 }
 
 ?>
 
-
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
@@ -172,9 +140,9 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
   <header class="cabecalho">
 
     <div class="lado-esquerdo">
-        <button class="buttonRetornar" onclick="history.back()">DE-TRAIN</button>
-        <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
-        <br>
+      <button class="buttonRetornar" onclick="history.back()">DE-TRAIN</button>
+      <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
+      <br>
     </div>
 
     <div class="lado-direito">
@@ -184,20 +152,19 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
   </header>
 
-
-
   <main>
 
-  
-   <?php if ($sensorEditar != null) { ?>
+    <?php if ($sensorEditar != null) { ?>
 
-        <div class="container_editar_usuario">
+    <div class="container_editar_usuario">
 
         <div class="texto-editar-usuario">
-            <h2>Editar <?php echo $sensorEditar["tipo"]; ?></h2>
+            <h2>Editar <?php echo htmlspecialchars($sensorEditar["tipo"]); ?></h2>
         </div>
-            <form method="POST">
-                <div class="form-editar-usuario">
+
+        <form method="POST">
+
+            <div class="form-editar-sensor">
 
                 <input
                     type="hidden"
@@ -205,19 +172,11 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
                     value="<?php echo $sensorEditar["id"]; ?>"
                 >
 
-                <input
-                    type="hidden"
-                    name="tipo"
-                    value="<?php echo htmlspecialchars($sensorEditar["tipo"]); ?>"
-                >
-
-                <label for="nome" class="editar-usuario">
-                    Nome
-                </label>
-
+                <label for="nome" class="editar-sensor">Nome</label>
                 <br>
 
-                <input class="input-editar-usuario"
+                <input
+                    class="input-editar-sensor"
                     type="text"
                     id="nome"
                     name="nome"
@@ -227,309 +186,153 @@ if (isset($_GET["editar"]) && isset($_GET["tipo"])) {
 
                 <br><br>
 
-                <label for="email" class="editar-usuario">
-                    Email
-                </label>
-
+                <label for="tipo" class="editar-sensor">Tipo</label>
                 <br>
 
-                <input class="input-editar-usuario"
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="<?php echo htmlspecialchars($sensorEditar["email"]); ?>"
-                    required
-                >
-
-                <br><br>
-
-                <label for="numero_telefone" class="editar-usuario">
-                    Telefone
-                </label>
-
-                <br>
-
-                <input class="input-editar-usuario"
+                <input
+                    class="input-editar-sensor"
                     type="text"
-                    id="numero_telefone"
-                    name="numero_telefone"
-                    value="<?php echo htmlspecialchars($sensorEditar["numero_telefone"]); ?>"
+                    id="tipo"
+                    name="tipo"
+                    value="<?php echo htmlspecialchars($sensorEditar["tipo"]); ?>"
                     required
                 >
 
                 <br><br>
 
-                <label for="senha" class="editar-usuario">
-                    Senha
-                </label>
-
+                <label for="rota_id" class="editar-sensor">ID da rota</label>
                 <br>
 
-                <input class="input-editar-usuario"
-                    type="text"
-                    id="senha"
-                    name="senha"
-                    value="<?php echo htmlspecialchars($sensorEditar["senha"]); ?>"
-                    required
+                <input
+                    class="input-editar-sensor"
+                    type="number"
+                    id="rota_id"
+                    name="rota_id"
+                    value="<?php echo htmlspecialchars((string)($sensorEditar["rota_id"] ?? "")); ?>"
                 >
 
                 <br><br>
 
-                <button class="button-atualizar"
+                <button
+                    class="button-atualizar"
                     type="submit"
                     name="atualizar"
                 >
                     ATUALIZAR
                 </button>
 
-
-                <a href="visualizar_usuario.php" class="button-cancelar">
+                <a href="visualizar_sensor.php" class="button-cancelar">
                     CANCELAR
                 </a>
 
+            </div>
 
-            </form>
-
-        </div>
-        </div>
-
-        <hr>
-
-    <?php } ?>
-
-    <div class="container_tabela_usuarios">
-
-
-        <table class="tabela_usuarios table-bordered">
-
-
-            <thead>
-
-                <tr>
-
-                    <th scope="col">
-                        #
-                    </th>
-
-                    <th scope="col">
-                        Nome
-                    </th>
-
-                    <th scope="col">
-                        Email
-                    </th>
-
-                    <th scope="col">
-                        Telefone
-                    </th>
-
-                    <th scope="col">
-                        Tipo
-                    </th>
-
-                    <th scope="col">
-                        Ações
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-
-                <?php
-
-                $sql = "
-
-                    SELECT
-                        id,
-                        nome,
-                        email,
-                        numero_telefone,
-                        'Gerente' AS tipo
-                    FROM gerentes
-
-                    UNION ALL
-
-                    SELECT
-                        id,
-                        nome,
-                        email,
-                        numero_telefone,
-                        'Funcionário' AS tipo
-                    FROM funcionarios
-
-                    UNION ALL
-
-                    SELECT
-                        id,
-                        nome,
-                        email,
-                        numero_telefone,
-                        'Usuário' AS tipo
-                    FROM usuarios
-
-                    ORDER BY nome
-
-                ";
-
-
-                $resultado = $conexao->query($sql);
-
-
-                if (!$resultado) {
-
-                    die(
-                        "Erro ao buscar usuários: "
-                        . $conexao->error
-                    );
-
-                }
-
-                while ($pessoa = $resultado->fetch_assoc()) {
-
-                ?>
-
-                    <tr class="visualizar_usuario_gerente">
-
-                        <th scope="row">
-
-                            <?php
-
-                            echo htmlspecialchars(
-                                $pessoa["id"]
-                            );
-
-                            ?>
-
-                        </th>
-
-                        <td>
-
-                            <?php
-
-                            echo htmlspecialchars(
-                                $pessoa["nome"]
-                            );
-
-                            ?>
-
-                        </td>
-
-                        <td>
-
-                            <?php
-
-                            echo htmlspecialchars(
-                                $pessoa["email"]
-                            );
-
-                            ?>
-
-                        </td>
-
-                        <td>
-
-                            <?php
-
-                            echo htmlspecialchars(
-                                $pessoa["numero_telefone"]
-                            );
-
-                            ?>
-
-                        </td>
-
-                        <td>
-
-                            <?php
-
-                            echo htmlspecialchars(
-                                $pessoa["tipo"]
-                            );
-
-                            ?>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="visualizar_usuario.php?editar=<?php echo $pessoa["id"]; ?>&tipo=<?php echo urlencode($pessoa["tipo"]); ?>"
-                            >
-                            
-                                EDITAR
-                            </a>
-
-                            <form
-                                method="POST"
-                                style="display:inline;"
-                            >
-
-
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    value="<?php echo $pessoa["id"]; ?>"
-                                >
-
-
-                                <input
-                                    type="hidden"
-                                    name="tipo"
-                                    value="<?php echo htmlspecialchars($pessoa["tipo"]); ?>"
-                                >
-
-
-                                <button
-                                    type="submit"
-                                    name="excluir"
-                                    onclick="return confirm('Tem certeza que deseja excluir este usuário?');"
-                                >
-
-                                    EXCLUIR
-
-                                </button>
-
-
-                            </form>
-
-
-                        </td>
-
-
-                    </tr>
-
-
-                <?php
-
-                }
-
-                ?>
-
-
-            </tbody>
-
-
-        </table>
-
+        </form>
 
     </div>
 
+    <hr>
+
+<?php } ?>
+
+<div class="container_tabela_usuarios">
+
+    <table class="tabela_usuarios table-bordered">
+
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">ID do sensor</th>
+                <th scope="col">ID da rota</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <?php
+
+            $sql = "
+                SELECT nome, tipo, id, rota_id
+                FROM sensores
+                ORDER BY nome
+            ";
+
+            $resultado = $conexao->query($sql);
+
+            if (!$resultado) {
+                die("Erro ao buscar sensores: " . $conexao->error);
+            }
+
+            while ($sensor = $resultado->fetch_assoc()) {
+
+            ?>
+
+                <tr class="visualizar_usuario_gerente">
+
+                    <th scope="row">
+                        <?php echo htmlspecialchars($sensor["id"]); ?>
+                    </th>
+
+                    <td>
+                        <?php echo htmlspecialchars($sensor["nome"]); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($sensor["tipo"]); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($sensor["id"]); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars((string)($sensor["rota_id"] ?? "")); ?>
+                    </td>
+
+                    <td>
+
+                        <a href="visualizar_sensor.php?editar=<?php echo $sensor["id"]; ?>">
+                            EDITAR
+                        </a>
+
+                        <form method="POST" style="display:inline;">
+
+                            <input
+                                type="hidden"
+                                name="id"
+                                value="<?php echo $sensor["id"]; ?>"
+                            >
+
+                            <button
+                                type="submit"
+                                name="excluir"
+                                onclick="return confirm('Tem certeza que deseja excluir este sensor?');"
+                            >
+                                EXCLUIR
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            <?php } ?>
+
+        </tbody>
+
+    </table>
+
+</div>
 
 </main>
 
-
 <?php
-
 $conexao->close();
-
 ?>
 
 </body>
-
 </html>
-
-   

@@ -74,9 +74,9 @@ VALUES
 ('Thomas', '1');
 
 INSERT INTO sensores
-(tipo, rota_id)
+(tipo, nome, rota_id)
 VALUES
-('Ultrassônico', '1');
+('Ultrassônico', 'Sensor da estação', 1);
 
 INSERT INTO usuarios
 (nome, email, numero_telefone, senha)

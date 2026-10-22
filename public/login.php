@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $gerente = $resultado->fetch_assoc();
 
-        if ($senha === $gerente["senha"]) {
+        if (password_verify($senha, $gerente["senha"])) {
 
             session_regenerate_id(true);
             lembrarLogin($conexao, "gerente", $gerente["id"]);
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $funcionario = $resultado->fetch_assoc();
 
-            if ($senha === $funcionario["senha"]) {
+            if (password_verify($senha, $funcionario["senha"])) {
 
             session_regenerate_id(true);
             lembrarLogin($conexao, "funcionario", $funcionario["id"]);
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $usuario = $resultado->fetch_assoc();
 
-                if ($senha === $usuario["senha"]) {
+                if (password_verify($senha, $usuario["senha"])) {
 
                     session_regenerate_id(true);
                     lembrarLogin($conexao, "usuario", $usuario["id"]);

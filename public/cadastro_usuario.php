@@ -3,9 +3,7 @@
 $servidor = "localhost";
 $usuario = "root";
 $senhaBanco = "";
-$banco = "ferrorama_db"; 
-
-$hash = password_hash($senha, PASSWORD_DEFAULT);
+$banco = "ferrorama_db";
 
 $conn = new mysqli($servidor, $usuario, $senhaBanco, $banco);
 
@@ -19,6 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $telefone = $_POST["numero_telefone"];
     $senha = $_POST["senha"];
+
+    // Gerar o hash depois de receber a senha do formulário
+    $hash = password_hash($senha, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO usuarios (nome, email, numero_telefone, senha)
             VALUES (?, ?, ?, ?)";
@@ -35,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 }
+
+$conn->close();
 
 ?>
 

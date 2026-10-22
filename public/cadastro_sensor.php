@@ -5,7 +5,7 @@ require_once __DIR__ . '/../infra/conexao.php';
 $erro = "";
 $sucesso = "";
 
-// Busca as rotas cadastradas no banco
+
 $sqlRotas = "SELECT id, nome FROM rotas ORDER BY nome";
 $resultadoRotas = $conexao->query($sqlRotas);
 
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($nome === "" || $tipo === "" || !$rota_id) {
         $erro = "Preencha todos os campos e selecione uma rota.";
     } else {
-        // Confirma que a rota selecionada existe
+        
         $verifica = $conexao->prepare(
             "SELECT id FROM rotas WHERE id = ?"
         );
@@ -156,8 +156,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </button>
 
                     </form>
-
-                    <p><a href="../home_gerente.php">Voltar ao início</a></p>
 
                 </div>
             </div>

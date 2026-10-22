@@ -2,7 +2,6 @@
 
 include '../infra/conexao.php';
 
-$hash = password_hash($senha, PASSWORD_DEFAULT);
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $nome = $_POST['nome'];
@@ -10,13 +9,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $telefone = $_POST['numero_telefone'];
     $senha = $_POST['senha'];
 
+    $hash = password_hash($senha, PASSWORD_DEFAULT);
+
     $sql = "INSERT INTO funcionarios (nome, email, numero_telefone, senha) values (?,?,?,?)";
-    $stmt = $conn-> prepare($sql);
+    $stmt = $conexao-> prepare($sql);
     $stmt -> bind_param('ssss', $nome,$email,$telefone,$senha);
 
     if($stmt->execute()){
         echo "Funcionario cadastrado ";
-        echo '<a href="../index.php">voltar</a>';
+        echo '<a href="cadastro_funcionario">voltar</a>';
     }else{
         echo "Erro ao cadastrar" . $stmt->error;
     }
@@ -52,7 +53,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <h2 id="CadastroTitulo">Cadastrar Funcionário</h2>
 
-                    <form id="FormsCadastro">
+                    <form id="FormsCadastro" method="POST">
                         <label for="nome" id="CadastroLabel">Nome</label>
                         <input type="text" id="cadastro-nome" name="nome" class="CadastroInput" placeholder="Nome do funcionário">
                         <br>

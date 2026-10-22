@@ -36,12 +36,8 @@ if (
 
 
         <nav class="menu">
-        <a class="home-detrain-logo" href="../index.php">CADASTRAR FUNCIONÁRIO</a>
-        <a class="home-detrain-logo" href="cadastro_trem.php">CADASTRAR TREM</a>
-        <a class="home-detrain-logo" href="cadastro_rota.php">CADASTRAR ROTA</a>
-        <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
         <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
-        <a class="home-detrain-logo" href="visualizar_usuario.php">VISUALIZAR USUÁRIO</a>
+        <a class="home-detrain-logo" href="visualizar_rota.php">VISUALIZAR ROTA</a>
         </nav>
     </div>
 

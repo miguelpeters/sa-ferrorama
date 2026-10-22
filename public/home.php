@@ -18,8 +18,7 @@
         <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
 
         <nav class="menu">
-           
-            
+            <a class="home-detrain-logo" href="visualizar_rota.php">VISUALIZAR ROTA</a>
         </nav>
     </div>
 

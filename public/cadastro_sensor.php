@@ -51,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // Atualiza a lista de rotas após o envio
     $resultadoRotas = $conexao->query($sqlRotas);
 }
 ?>
@@ -69,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body class="bodyCadastro">
 
     <div class="cadastro-detrain-topo">
-        <a class="login-detrain-logo" href="../index.php">DE-TRAIN</a>
+        <a class="login-detrain-logo" href="home_gerente.php">DE-TRAIN</a>
         <img id="icon-login" src="../assets/imgs/LogoDeTrain.png" alt="Logo DE-TRAIN">
     </div>
 

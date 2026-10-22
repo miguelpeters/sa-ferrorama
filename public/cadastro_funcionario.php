@@ -17,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if($stmt->execute()){
         echo "Funcionario cadastrado ";
-        echo '<a href="cadastro_funcionario">voltar</a>';
+        echo '<a href="cadastro_funcionario.php">voltar</a>';
     }else{
         echo "Erro ao cadastrar" . $stmt->error;
     }
@@ -41,7 +41,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <body class="bodyCadastro">
 
 <div class="cadastro-detrain-topo">
-    <a class="login-detrain-logo" href="../index.php">DE-TRAIN</a>
+    <a class="login-detrain-logo" href="home_gerente.php">DE-TRAIN</a>
     <img id="icon-login" src="../assets/imgs/LogoDeTrain.png">
   </div>
     <main>

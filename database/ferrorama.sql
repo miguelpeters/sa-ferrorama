@@ -62,22 +62,6 @@ VALUES
 ('Leonardo Aguiar', 'leonardo_aguiar@gerente.detrain.com', '47 98895-8589', 'leonardo.adm'),
 ('Miguel Kormann', 'miguel_kormann@gerente.detrain.com', '47 99712-0771', 'miguel.adm');
 
-
-INSERT INTO rotas
-(nome)
-VALUES
-('Itaum');
-
-INSERT INTO trens
-(modelo, rota_id)
-VALUES
-('Thomas', '1');
-
-INSERT INTO sensores
-(tipo, nome, rota_id)
-VALUES
-('Ultrassônico', 'Sensor da estação', 1);
-
 INSERT INTO usuarios
 (nome, email, numero_telefone, senha)
 VALUES
@@ -97,3 +81,57 @@ VALUES
 ('Davi Zilz', 'zilz@usuario.detrain.com', '11 11171-1111', 'davi.usuario'),
 ('Hugo Grama', 'grama@usuario.detrain.com', '11 11151-1111', 'hugo.usuario'),
 ('Guilherme Floriano', 'floriano@usuario.detrain.com', '11 15111-1111', 'guilherme.usuario');
+
+INSERT INTO rotas (nome)
+VALUES
+('Itaum'),
+('Centro'),
+('Norte'),
+('Sul'),
+('Leste'),
+('Oeste'),
+('Serra'),
+('Vale'),
+('Industrial'),
+('Turística'),
+('Intermunicipal'),
+('Litorânea'),
+('Montanha'),
+('Expresso'),
+('Metropolitana');
+
+INSERT INTO sensores (tipo, nome, rota_id)
+VALUES
+('Ultrassônico', 'Sensor Itaum', 1),
+('Infravermelho', 'Sensor Centro', 2),
+('Magnético', 'Sensor Norte', 3),
+('Óptico', 'Sensor Sul', 4),
+('Ultrassônico', 'Sensor Leste', 5),
+('Infravermelho', 'Sensor Oeste', 6),
+('Magnético', 'Sensor Serra', 7),
+('Óptico', 'Sensor Vale', 8),
+('Ultrassônico', 'Sensor Industrial', 9),
+('Infravermelho', 'Sensor Turístico', 10),
+('Magnético', 'Sensor Intermunicipal', 11),
+('Óptico', 'Sensor Litorâneo', 12),
+('Ultrassônico', 'Sensor Montanha', 13),
+('Infravermelho', 'Sensor Expresso', 14),
+('Magnético', 'Sensor Metropolitano', 15);
+
+INSERT INTO trens (modelo, rota_id)
+VALUES
+('Thomas', 1),
+('Maria Fumaça', 2),
+('Expresso Vermelho', 3),
+('Locomotiva Azul', 4),
+('Trem de Carga', 5),
+('Trem de Passageiros', 6),
+('Locomotiva Elétrica', 7),
+('Trem Regional', 8),
+('Expresso do Norte', 9),
+('Locomotiva Diesel', 10),
+('Trem Turístico', 11),
+('Trem Intermunicipal', 12),
+('Locomotiva Verde', 13),
+('Expresso da Serra', 14),
+('Trem Metropolitano', 15);

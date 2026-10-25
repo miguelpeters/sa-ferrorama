@@ -15,8 +15,6 @@
         <nav class="bodyindex">
             <h1 class="DE-TRAIN">DE-TRAIN</h1>
             <img id="icon" src="assets/imgs/LogoDeTrain.png">
-            <h1><a class="EntrarText" href="public/login.php">ENTRAR</a></h1>
-            <img id="LoginIcon" src="assets/imgs/LoginIcon.png">
         </nav>
     </header>
 
@@ -42,7 +40,7 @@
         <br>
     
         <div class="indexbutton">   
-        <a href="public/home.php" class="indexbutton">
+        <a href="public/login.php" class="indexbutton">
             Acessar o sistema
         </a>
         </div>

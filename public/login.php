@@ -126,8 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conexao->close();
 
+
 ?>
 
+<?php if (!empty($erro)): ?>
+    <script>
+        alert(<?php echo json_encode($erro); ?>);
+    </script>
+<?php endif; ?>
 
 <html lang="pt-br">
 
@@ -168,7 +174,7 @@ $conexao->close();
       </form>
 
       <p class="login-detrain-cadastro">
-        Não tem uma conta? <a href="cadastro_usuario.php">Cadastre-se.</a>
+      
       </p>
     </div>
 

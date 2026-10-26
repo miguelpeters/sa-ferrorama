@@ -2,28 +2,39 @@
 
 include '../infra/conexao.php';
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $telefone = $_POST['numero_telefone'];
     $senha = $_POST['senha'];
-
+    
     $hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO funcionarios (nome, email, numero_telefone, senha) values (?,?,?,?)";
-    $stmt = $conexao-> prepare($sql);
-    $stmt -> bind_param('ssss', $nome,$email,$telefone,$senha);
+    $sql = "INSERT INTO funcionarios
+            (nome, email, numero_telefone, senha)
+            VALUES (?, ?, ?, ?)";
 
-    if($stmt->execute()){
-        echo "Funcionario cadastrado ";
-        echo '<a href="cadastro_funcionario.php">voltar</a>';
-    }else{
-        echo "Erro ao cadastrar" . $stmt->error;
+    $stmt = $conexao->prepare($sql);
+
+    $stmt->bind_param(
+        'ssss',
+        $nome,
+        $email,
+        $telefone,
+        $hash
+    );
+
+    if ($stmt->execute()) {
+        echo "Funcionário cadastrado com sucesso!";
+        echo '<br><a href="cadastro_funcionario.php">Voltar</a>';
+    } else {
+        echo "Erro ao cadastrar: " . $stmt->error;
     }
-   $stmt->close();
-   exit; 
 
+    $stmt->close();
+    $conexao->close();
+    exit;
 }
 
 ?>

@@ -1,5 +1,5 @@
-<?php
 
+<?php
 session_start();
 
 include_once("../infra/conexao.php");
@@ -7,131 +7,147 @@ include_once("../infra/lembrar_login.php");
 
 $erro = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $email = $_POST["email"];
-    $senha = $_POST["senha"];
+    $email = trim($_POST["email"] ?? "");
+    $senha = $_POST["senha"] ?? "";
 
-    $sql = "SELECT id, nome, email, senha
-            FROM gerentes
-            WHERE email = ?";
+    if ($email === "" || $senha === "") {
+        $erro = "Preencha o email e a senha.";
+    } else {
 
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+        $tabelas = [
+            "gerentes" => "gerente",
+            "funcionarios" => "funcionario"
+        ];
 
-    $resultado = $stmt->get_result();
+        $loginRealizado = false;
 
-    if ($resultado->num_rows == 1) {
-
-        $gerente = $resultado->fetch_assoc();
-
-        if (password_verify($senha, $gerente["senha"])) {
-
-            session_regenerate_id(true);
-            lembrarLogin($conexao, "gerente", $gerente["id"]);
-
-            $_SESSION["gerente_id"] = $gerente["id"];
-            $_SESSION["gerente_nome"] = $gerente["nome"];
-            $_SESSION["gerente_email"] = $gerente["email"];
-            $_SESSION["tipo"] = "gerente";
-
-            header("Location: home_gerente.php");
-            exit();
-
-        } else {
-            $erro = "Email ou senha incorretos.";
-        }
-
-     } else {
-
-        $sql = "SELECT id, nome, email, senha
-                FROM funcionarios
-                WHERE email = ?";
-
-        $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-
-        $resultado = $stmt->get_result();
-
-        if ($resultado->num_rows == 1) {
-
-            $funcionario = $resultado->fetch_assoc();
-
-            if (password_verify($senha, $funcionario["senha"])) {
-
-            session_regenerate_id(true);
-            lembrarLogin($conexao, "funcionario", $funcionario["id"]);
-
-                $_SESSION["tipo"] = "funcionario";
-                $_SESSION["id"] = $funcionario["id"];
-                $_SESSION["nome"] = $funcionario["nome"];
-                $_SESSION["email"] = $funcionario["email"];
-
-                header("Location: home_funcionario.php");
-                exit();
-
-            } else {
-                $erro = "Email ou senha incorretos.";
-            }
-
-        } else {
+        foreach ($tabelas as $tabela => $tipo) {
 
             $sql = "SELECT id, nome, email, senha
-                    FROM usuarios
+                    FROM $tabela
                     WHERE email = ?";
 
             $stmt = $conexao->prepare($sql);
+
+            if (!$stmt) {
+                error_log("Erro SQL em $tabela: " . $conexao->error);
+                $erro = "Erro ao consultar as contas.";
+                break;
+            }
+
             $stmt->bind_param("s", $email);
             $stmt->execute();
 
             $resultado = $stmt->get_result();
 
-            if ($resultado->num_rows == 1) {
+            while ($conta = $resultado->fetch_assoc()) {
 
-                $usuario = $resultado->fetch_assoc();
+                $senhaBanco = $conta["senha"];
 
-                if (password_verify($senha, $usuario["senha"])) {
+                // Verifica senhas que já estão em hash.
+                $senhaValida = password_verify(
+                    $senha,
+                    $senhaBanco
+                );
 
-                    session_regenerate_id(true);
-                    lembrarLogin($conexao, "usuario", $usuario["id"]);
+                // Compatibilidade com senhas antigas em texto puro.
+                if (
+                    !$senhaValida &&
+                    hash_equals($senhaBanco, $senha)
+                ) {
+                    $novoHash = password_hash(
+                        $senha,
+                        PASSWORD_DEFAULT
+                    );
 
-                    session_regenerate_id(true);
+                    $sqlAtualizar = "UPDATE $tabela
+                                     SET senha = ?
+                                     WHERE id = ?";
 
-                    $_SESSION = [];
+                    $stmtAtualizar = $conexao->prepare(
+                        $sqlAtualizar
+                    );
 
-                    $_SESSION["tipo"] = "usuario";
-                    $_SESSION["id"] = $usuario["id"];
-                    $_SESSION["nome"] = $usuario["nome"];
-                    $_SESSION["email"] = $usuario["email"];
+                    if ($stmtAtualizar) {
 
-                    header("Location: home_logado.php");
-                    exit();
+                        $stmtAtualizar->bind_param(
+                            "si",
+                            $novoHash,
+                            $conta["id"]
+                        );
 
-                } else {
-                    $erro = "Email ou senha incorretos.";
+                        if ($stmtAtualizar->execute()) {
+                            $senhaValida = true;
+                        }
+
+                        $stmtAtualizar->close();
+                    }
                 }
 
-            } else {
+                if (!$senhaValida) {
+                    continue;
+                }
 
-                $erro = "Email ou senha incorretos.";
+                $loginRealizado = true;
 
+                // Cria uma nova sessão após autenticar.
+                $_SESSION = [];
+                session_regenerate_id(true);
+
+                $_SESSION["tipo"] = $tipo;
+
+                if ($tipo === "gerente") {
+
+                    $_SESSION["gerente_id"] = $conta["id"];
+                    $_SESSION["gerente_nome"] = $conta["nome"];
+                    $_SESSION["gerente_email"] = $conta["email"];
+
+                } else {
+
+                    $_SESSION["id"] = $conta["id"];
+                    $_SESSION["nome"] = $conta["nome"];
+                    $_SESSION["email"] = $conta["email"];
+
+                }
+
+                // Mantém a funcionalidade de login persistente.
+                lembrarLogin(
+                    $conexao,
+                    $tipo,
+                    $conta["id"]
+                );
+
+                $stmt->close();
+                $conexao->close();
+
+                if ($tipo === "gerente") {
+                    header("Location: home_gerente.php");
+                } else {
+                    header("Location: home_funcionario.php");
+                }
+
+                exit();
+            }
+
+            $stmt->close();
+
+            if ($loginRealizado) {
+                break;
             }
         }
+
+        if (!$loginRealizado && $erro === "") {
+            $erro = "Email ou senha incorretos.";
+        }
     }
-
-    $stmt->close();
 }
-
-$conexao->close();
-
-
 ?>
 
-<?php if (!empty($erro)): ?>
+<?php if ($erro !== ""): ?>
     <script>
-        alert(<?php echo json_encode($erro); ?>);
+        alert(<?= json_encode($erro) ?>);
     </script>
 <?php endif; ?>
 
@@ -161,12 +177,23 @@ $conexao->close();
 
       <form action="login.php" method="post">
 
-        <label for="email">Email</label><br>
-        <input type="text" id="login-email" name="email" placeholder="seuemail@exemplo.com"><br><br>
+        <label for="login-email">Email</label><br>
+<input
+    type="email"
+    id="login-email"
+    name="email"
+    placeholder="seuemail@exemplo.com"
+    required
+><br><br>
 
-        <label for="senha">Senha</label><br>
-        <input type="password" id="login-senha" name="senha" placeholder="Sua Senha"><br><br>
-
+<label for="login-senha">Senha</label><br>
+<input
+    type="password"
+    id="login-senha"
+    name="senha"
+    placeholder="Sua senha"
+    required
+><br><br>
         <p class="login-detrain-erro" id="mensagem-erro"></p>
 
         <button type="submit" class="login-detrain-botao">ENTRAR</button>

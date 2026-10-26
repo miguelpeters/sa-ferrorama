@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include_once("../infra/conexao.php");
 include_once("../infra/lembrar_login.php");
 

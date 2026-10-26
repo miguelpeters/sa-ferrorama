@@ -1,11 +1,16 @@
 <?php
 session_start();
+
 include_once("../infra/conexao.php");
 include_once("../infra/lembrar_login.php");
 
 restaurarLogin($conexao);
 
-if (!isset($_SESSION["gerente_id"])) {
+if (
+    !isset($_SESSION["gerente_id"]) ||
+    !isset($_SESSION["tipo"]) ||
+    $_SESSION["tipo"] !== "gerente"
+) {
     header("Location: login.php");
     exit();
 }

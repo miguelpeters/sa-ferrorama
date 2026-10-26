@@ -1,14 +1,6 @@
 CREATE DATABASE IF NOT EXISTS Ferrorama_db;
 USE Ferrorama_db;
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    numero_telefone VARCHAR(15) NOT NULL,
-    senha VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE funcionarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -28,14 +20,17 @@ CREATE TABLE gerentes (
 
 CREATE TABLE rotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL
+    nome VARCHAR(100) NOT NULL,
+    descrição TEXT
 );
 
 CREATE TABLE trens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
+    funcionario_id INT,
     rota_id INT,
-    FOREIGN KEY (rota_id) REFERENCES rotas(id)
+    FOREIGN KEY (rota_id) REFERENCES rotas(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 );
 
 

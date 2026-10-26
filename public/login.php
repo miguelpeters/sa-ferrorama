@@ -46,13 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $senhaBanco = $conta["senha"];
 
-                // Verifica senhas que já estão em hash.
+               
                 $senhaValida = password_verify(
                     $senha,
                     $senhaBanco
                 );
 
-                // Compatibilidade com senhas antigas em texto puro.
+               
                 if (
                     !$senhaValida &&
                     hash_equals($senhaBanco, $senha)
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $loginRealizado = true;
 
-                // Cria uma nova sessão após autenticar.
+               
                 $_SESSION = [];
                 session_regenerate_id(true);
 
@@ -112,7 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 }
 
-                // Mantém a funcionalidade de login persistente.
                 lembrarLogin(
                     $conexao,
                     $tipo,

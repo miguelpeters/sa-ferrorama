@@ -21,15 +21,20 @@ CREATE TABLE gerentes (
 CREATE TABLE rotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    descrição TEXT
+    descrição TEXT,
+    distancia DECIMAL(6,2) NOT NULL,
+    duração DECIMAL(6,2) NOT NULL,
+    data_criacao DATE NOT NULL,
+    trem_id INT NOT NULL
+    FOREIGN KEY (trem_id) REFERENCES trens(id)
 );
 
 CREATE TABLE trens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
-    funcionario_id INT,
-    rota_id INT,
-    FOREIGN KEY (rota_id) REFERENCES rotas(id),
+    serie VARCHAR(100) NOT NULL,
+    estado ENUM('operante', 'inativo') NOT NULL,
+    funcionario_id INT
     FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 );
 

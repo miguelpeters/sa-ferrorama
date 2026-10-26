@@ -17,27 +17,25 @@ CREATE TABLE gerentes (
     senha VARCHAR(50) NOT NULL
 );
 
-
-CREATE TABLE rotas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    descrição TEXT,
-    distancia DECIMAL(6,2) NOT NULL,
-    duração DECIMAL(6,2) NOT NULL,
-    data_criacao DATE NOT NULL,
-    trem_id INT NOT NULL
-    FOREIGN KEY (trem_id) REFERENCES trens(id)
-);
-
 CREATE TABLE trens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
     serie VARCHAR(100) NOT NULL,
     estado ENUM('operante', 'inativo') NOT NULL,
-    funcionario_id INT
+    funcionario_id INT NOT NULL,
     FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 );
 
+CREATE TABLE rotas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    distancia DECIMAL(6,2) NOT NULL,
+    duracao DECIMAL(6,2) NOT NULL,
+    data_criacao DATE NOT NULL,
+    trem_id INT NOT NULL,
+    FOREIGN KEY (trem_id) REFERENCES trens(id)
+);
 
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,7 +60,7 @@ VALUES
 ('Leonardo Aguiar', 'leonardo_aguiar@gerente.detrain.com', '47 98895-8589', 'leonardo.adm'),
 ('Miguel Kormann', 'miguel_kormann@gerente.detrain.com', '47 99712-0771', 'miguel.adm');
 
-INSERT INTO usuarios
+INSERT INTO funcionarios
 (nome, email, numero_telefone, senha)
 VALUES
 ('Leonardo Aguiar', 'leonardo_aguiar@usuario.detrain.com', '11 11111-1111', 'leonardo.usuario'),
@@ -82,23 +80,42 @@ VALUES
 ('Hugo Grama', 'grama@usuario.detrain.com', '11 11151-1111', 'hugo.usuario'),
 ('Guilherme Floriano', 'floriano@usuario.detrain.com', '11 15111-1111', 'guilherme.usuario');
 
-INSERT INTO rotas (nome)
+INSERT INTO trens (modelo, serie, estado, funcionario_id)
 VALUES
-('Itaum'),
-('Centro'),
-('Norte'),
-('Sul'),
-('Leste'),
-('Oeste'),
-('Serra'),
-('Vale'),
-('Industrial'),
-('Turística'),
-('Intermunicipal'),
-('Litorânea'),
-('Montanha'),
-('Expresso'),
-('Metropolitana');
+('Thomas', 'TR-001', 'operante', 1),
+('Maria Fumaça', 'TR-002', 'operante', 2),
+('Expresso Vermelho', 'TR-003', 'operante', 3),
+('Locomotiva Azul', 'TR-004', 'inativo', 4),
+('Trem de Carga', 'TR-005', 'operante', 5),
+('Trem de Passageiros', 'TR-006', 'operante', 6),
+('Locomotiva Elétrica', 'TR-007', 'operante', 7),
+('Trem Regional', 'TR-008', 'inativo', 8),
+('Expresso do Norte', 'TR-009', 'operante', 9),
+('Locomotiva Diesel', 'TR-010', 'operante', 10),
+('Trem Turístico', 'TR-011', 'operante', 11),
+('Trem Intermunicipal', 'TR-012', 'operante', 12),
+('Locomotiva Verde', 'TR-013', 'inativo', 13),
+('Expresso da Serra', 'TR-014', 'operante', 14),
+('Trem Metropolitano', 'TR-015', 'operante', 15);
+
+INSERT INTO rotas
+(nome, descricao, distancia, duracao, data_criacao, trem_id)
+VALUES
+('Itaum', 'Rota ferroviária de Itaum', 12.50, 0.45, '2026-10-26', 1),
+('Centro', 'Rota ferroviária do Centro', 8.20, 0.30, '2026-10-26', 2),
+('Norte', 'Rota ferroviária da região Norte', 15.00, 0.60, '2026-10-26', 3),
+('Sul', 'Rota ferroviária da região Sul', 18.50, 0.75, '2026-10-26', 4),
+('Leste', 'Rota ferroviária da região Leste', 10.00, 0.40, '2026-10-26', 5),
+('Oeste', 'Rota ferroviária da região Oeste', 14.30, 0.55, '2026-10-26', 6),
+('Serra', 'Rota ferroviária da Serra', 25.00, 1.20, '2026-10-26', 7),
+('Vale', 'Rota ferroviária do Vale', 20.00, 0.90, '2026-10-26', 8),
+('Industrial', 'Rota ferroviária industrial', 11.50, 0.45, '2026-10-26', 9),
+('Turística', 'Rota ferroviária turística', 16.00, 0.70, '2026-10-26', 10),
+('Intermunicipal', 'Rota ferroviária intermunicipal', 35.00, 1.50, '2026-10-26', 11),
+('Litorânea', 'Rota ferroviária litorânea', 28.00, 1.10, '2026-10-26', 12),
+('Montanha', 'Rota ferroviária da Montanha', 22.00, 1.00, '2026-10-26', 13),
+('Expresso', 'Rota ferroviária expressa', 40.00, 1.30, '2026-10-26', 14),
+('Metropolitana', 'Rota ferroviária metropolitana', 30.00, 1.15, '2026-10-26', 15);
 
 INSERT INTO sensores (tipo, nome, rota_id)
 VALUES
@@ -117,21 +134,3 @@ VALUES
 ('Ultrassônico', 'Sensor Montanha', 13),
 ('Infravermelho', 'Sensor Expresso', 14),
 ('Magnético', 'Sensor Metropolitano', 15);
-
-INSERT INTO trens (modelo, rota_id)
-VALUES
-('Thomas', 1),
-('Maria Fumaça', 2),
-('Expresso Vermelho', 3),
-('Locomotiva Azul', 4),
-('Trem de Carga', 5),
-('Trem de Passageiros', 6),
-('Locomotiva Elétrica', 7),
-('Trem Regional', 8),
-('Expresso do Norte', 9),
-('Locomotiva Diesel', 10),
-('Trem Turístico', 11),
-('Trem Intermunicipal', 12),
-('Locomotiva Verde', 13),
-('Expresso da Serra', 14),
-('Trem Metropolitano', 15);

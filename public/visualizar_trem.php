@@ -1,128 +1,355 @@
-
 <?php
 
-$servidor = "localhost";
-$usuarioBanco = "root";
-$senhaBanco = "";
-$banco = "ferrorama_db";
+session_start();
 
-$conexao = new mysqli(
-    $servidor,
-    $usuarioBanco,
-    $senhaBanco,
-    $banco
-);
+include_once("../infra/conexao.php");
 
-if ($conexao->connect_error) {
-    die("Erro na conexão com o banco: " . $conexao->connect_error);
-}
+// ==========================================
+// VERIFICAR AUTENTICAÇÃO E PERMISSÕES
+// ==========================================
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
+$tipoUsuario = $_SESSION["tipo"] ?? "";
 
-    $id = (int) $_POST["id"];
-
-    $stmt = $conexao->prepare(
-        "DELETE FROM trens WHERE id = ?"
-    );
-
-    if (!$stmt) {
-        die("Erro ao preparar exclusão: " . $conexao->error);
-    }
-
-    $stmt->bind_param("i", $id);
-
-    if (!$stmt->execute()) {
-        die("Erro ao excluir trem: " . $stmt->error);
-    }
-
-    $stmt->close();
-
-    header("Location: visualizar_trem.php");
+if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
+    header("Location: login.php");
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
+// ==========================================
+// VARIÁVEIS DE MENSAGEM
+// ==========================================
 
-    $id = (int) $_POST["id"];
-    $modelo = trim($_POST["modelo"]);
+$mensagemAlerta = "";
 
-    $rota_id = ($_POST["rota_id"] === "")
-        ? null
-        : (int) $_POST["rota_id"];
+// ==========================================
+// EXCLUIR TREM
+// ==========================================
 
-    if ($rota_id === null) {
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["excluir"])
+) {
 
-        $stmt = $conexao->prepare(
-            "UPDATE trens
-             SET modelo = ?, rota_id = NULL
-             WHERE id = ?"
-        );
+    $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
 
-        if (!$stmt) {
-            die("Erro ao preparar atualização: " . $conexao->error);
-        }
+    if (!$id || $id <= 0) {
 
-        $stmt->bind_param("si", $modelo, $id);
+        $mensagemAlerta = "ID do trem inválido!";
 
     } else {
 
         $stmt = $conexao->prepare(
-            "UPDATE trens
-             SET modelo = ?, rota_id = ?
-             WHERE id = ?"
+            "DELETE FROM trens WHERE id = ?"
         );
 
         if (!$stmt) {
-            die("Erro ao preparar atualização: " . $conexao->error);
+            die("Erro ao preparar exclusão: " . $conexao->error);
         }
 
-        $stmt->bind_param("sii", $modelo, $rota_id, $id);
+        $stmt->bind_param("i", $id);
+
+        try {
+
+            if ($stmt->execute()) {
+
+                if ($stmt->affected_rows > 0) {
+
+                    $stmt->close();
+
+                    header("Location: visualizar_trem.php?sucesso=excluir");
+                    exit();
+
+                } else {
+
+                    $mensagemAlerta = "Trem não encontrado!";
+
+                }
+
+            } else {
+
+                $mensagemAlerta = "Erro ao excluir o trem!";
+
+            }
+
+       } catch (mysqli_sql_exception $e) {
+
+    if ($e->getCode() == 1451) {
+
+        // Buscar as rotas vinculadas ao trem.
+
+        $stmtRotas = $conexao->prepare(
+            "SELECT id, nome
+             FROM rotas
+             WHERE trem_id = ?"
+        );
+
+        if (!$stmtRotas) {
+            die("Erro ao consultar rotas: " . $conexao->error);
+        }
+
+        $stmtRotas->bind_param("i", $id);
+        $stmtRotas->execute();
+
+        $resultadoRotas = $stmtRotas->get_result();
+
+        $rotasEncontradas = [];
+
+        while ($rota = $resultadoRotas->fetch_assoc()) {
+
+            $rotasEncontradas[] =
+                "ID " . $rota["id"] . " - " . $rota["nome"];
+
+        }
+
+        $stmtRotas->close();
+
+        if (!empty($rotasEncontradas)) {
+
+            $mensagemAlerta =
+                "Não foi possível excluir este trem!\n\n" .
+                "Ele está vinculado às seguintes rotas:\n\n" .
+                implode("\n", $rotasEncontradas);
+
+        } else {
+
+            $mensagemAlerta =
+                "Não foi possível excluir este trem, pois existem registros vinculados a ele.";
+
+        }
+
+    } else {
+
+        $mensagemAlerta = "Erro ao excluir o trem!";
+
     }
 
-    if (!$stmt->execute()) {
-        die("Erro ao atualizar trem: " . $stmt->error);
-    }
-
-    $stmt->close();
-
-    header("Location: visualizar_trem.php");
-    exit();
 }
+
+        $stmt->close();
+    }
+}
+
+// ==========================================
+// ATUALIZAR TREM
+// ==========================================
+
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["atualizar"])
+) {
+
+    $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+
+    $modelo = trim($_POST["modelo"] ?? "");
+    $serie = trim($_POST["serie"] ?? "");
+    $estado = $_POST["estado"] ?? "";
+
+    $funcionarioId = filter_input(
+        INPUT_POST,
+        "funcionario_id",
+        FILTER_VALIDATE_INT
+    );
+
+    // Validar campos obrigatórios.
+
+    if (
+        !$id ||
+        $id <= 0 ||
+        $modelo === "" ||
+        $serie === "" ||
+        !in_array($estado, ["operante", "inativo"], true) ||
+        !$funcionarioId ||
+        $funcionarioId <= 0
+    ) {
+
+        $mensagemAlerta = "Preencha todos os campos corretamente!";
+
+    } elseif (
+        strlen($modelo) > 100 ||
+        strlen($serie) > 100
+    ) {
+
+        $mensagemAlerta = "O modelo e a série devem ter no máximo 100 caracteres!";
+
+    } else {
+
+        // Verificar se o funcionário existe.
+
+        $stmtFuncionario = $conexao->prepare(
+            "SELECT id FROM funcionarios WHERE id = ?"
+        );
+
+        if (!$stmtFuncionario) {
+            die("Erro ao consultar funcionário: " . $conexao->error);
+        }
+
+        $stmtFuncionario->bind_param("i", $funcionarioId);
+        $stmtFuncionario->execute();
+
+        $resultadoFuncionario = $stmtFuncionario->get_result();
+
+        if ($resultadoFuncionario->num_rows === 0) {
+
+            $mensagemAlerta = "O funcionário selecionado não existe!";
+
+        } else {
+
+            // Atualizar os dados do trem.
+
+            $stmt = $conexao->prepare(
+                "UPDATE trens
+                 SET modelo = ?,
+                     serie = ?,
+                     estado = ?,
+                     funcionario_id = ?
+                 WHERE id = ?"
+            );
+
+            if (!$stmt) {
+                die("Erro ao preparar atualização: " . $conexao->error);
+            }
+
+            $stmt->bind_param(
+                "sssii",
+                $modelo,
+                $serie,
+                $estado,
+                $funcionarioId,
+                $id
+            );
+
+            if ($stmt->execute()) {
+
+                $stmt->close();
+                $stmtFuncionario->close();
+
+                header("Location: visualizar_trem.php?sucesso=atualizar");
+                exit();
+
+            } else {
+
+                $mensagemAlerta = "Erro ao atualizar o trem!";
+
+            }
+
+            $stmt->close();
+        }
+
+        $stmtFuncionario->close();
+    }
+}
+
+// ==========================================
+// MENSAGENS DE SUCESSO
+// ==========================================
+
+if (isset($_GET["sucesso"])) {
+
+    if ($_GET["sucesso"] === "excluir") {
+
+        $mensagemAlerta = "Trem excluído com sucesso!";
+
+    } elseif ($_GET["sucesso"] === "atualizar") {
+
+        $mensagemAlerta = "Trem atualizado com sucesso!";
+
+    }
+}
+
+// ==========================================
+// BUSCAR TREM PARA EDIÇÃO
+// ==========================================
 
 $tremEditar = null;
 
 if (isset($_GET["editar"])) {
 
-    $id = (int) $_GET["editar"];
-
-    $stmt = $conexao->prepare(
-        "SELECT id, modelo, rota_id
-         FROM trens
-         WHERE id = ?"
+    $idEditar = filter_input(
+        INPUT_GET,
+        "editar",
+        FILTER_VALIDATE_INT
     );
 
-    if (!$stmt) {
-        die("Erro ao preparar consulta: " . $conexao->error);
+    if ($idEditar && $idEditar > 0) {
+
+        $stmt = $conexao->prepare(
+            "SELECT id, modelo, serie, estado, funcionario_id
+             FROM trens
+             WHERE id = ?"
+        );
+
+        if (!$stmt) {
+            die("Erro ao preparar consulta: " . $conexao->error);
+        }
+
+        $stmt->bind_param("i", $idEditar);
+        $stmt->execute();
+
+        $resultadoEditar = $stmt->get_result();
+
+        if ($resultadoEditar->num_rows === 1) {
+            $tremEditar = $resultadoEditar->fetch_assoc();
+        }
+
+        $stmt->close();
     }
+}
 
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+// ==========================================
+// BUSCAR FUNCIONÁRIOS PARA O SELECT
+// ==========================================
 
-    $resultadoEditar = $stmt->get_result();
+$sqlFuncionarios = "
+    SELECT id, nome
+    FROM funcionarios
+    ORDER BY nome
+";
 
-    if ($resultadoEditar->num_rows == 1) {
-        $tremEditar = $resultadoEditar->fetch_assoc();
-    }
+$resultadoFuncionarios = $conexao->query($sqlFuncionarios);
 
-    $stmt->close();
+if (!$resultadoFuncionarios) {
+    die("Erro ao buscar funcionários: " . $conexao->error);
+}
+
+$funcionarios = [];
+
+while ($funcionario = $resultadoFuncionarios->fetch_assoc()) {
+    $funcionarios[] = $funcionario;
+}
+
+// ==========================================
+// BUSCAR TRENS CADASTRADOS
+// ==========================================
+
+$sql = "
+    SELECT
+        trens.id,
+        trens.modelo,
+        trens.serie,
+        trens.estado,
+        trens.funcionario_id,
+        funcionarios.nome AS nome_funcionario
+    FROM trens
+    INNER JOIN funcionarios
+        ON trens.funcionario_id = funcionarios.id
+    ORDER BY trens.modelo
+";
+
+$resultado = $conexao->query($sql);
+
+if (!$resultado) {
+    die("Erro ao buscar trens: " . $conexao->error);
 }
 
 ?>
 
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../assets/style/style.css">
@@ -139,9 +366,31 @@ if (isset($_GET["editar"])) {
         href="../assets/imgs/LogoDeTrain.png"
         type="image/x-icon"
     >
+
 </head>
 
 <body class="body_home">
+
+    <?php if ($mensagemAlerta !== "") { ?>
+
+        <script>
+            alert(<?php echo json_encode($mensagemAlerta); ?>);
+
+            // Remove o parâmetro de sucesso da URL para evitar
+            // que o alerta apareça novamente ao apertar F5.
+
+            <?php if (isset($_GET["sucesso"])) { ?>
+
+                window.history.replaceState(
+                    null,
+                    "",
+                    window.location.pathname
+                );
+
+            <?php } ?>
+        </script>
+
+    <?php } ?>
 
     <header class="cabecalho">
 
@@ -158,6 +407,7 @@ if (isset($_GET["editar"])) {
                 id="icon"
                 src="../assets/imgs/LogoDeTrain.png"
                 class="logo"
+                alt="Logo DE-TRAIN"
             >
 
             <br>
@@ -166,11 +416,31 @@ if (isset($_GET["editar"])) {
 
         <div class="lado-direito">
 
-            <span>FULANO DE TAL - FUNCIONÁRIO</span>
+            <span>
+
+                <?php
+
+                echo htmlspecialchars(
+                    $_SESSION["gerente_nome"]
+                    ?? $_SESSION["funcionario_nome"]
+                    ?? $_SESSION["nome"]
+                    ?? "USUÁRIO"
+                );
+
+                if ($tipoUsuario === "gerente") {
+                    echo " - GERENTE";
+                } else {
+                    echo " - FUNCIONÁRIO";
+                }
+
+                ?>
+
+            </span>
 
             <img
                 src="../assets/imgs/LoginIcon.png"
                 class="perfil"
+                alt="Perfil"
             >
 
         </div>
@@ -179,14 +449,18 @@ if (isset($_GET["editar"])) {
 
     <main>
 
-        <?php if ($tremEditar != null) { ?>
+        <!-- FORMULÁRIO DE EDIÇÃO -->
+
+        <?php if ($tremEditar !== null) { ?>
 
             <div class="container_editar_usuario">
 
                 <div class="texto-editar-usuario">
+
                     <h2>
                         Editar trem
                     </h2>
+
                 </div>
 
                 <form method="POST">
@@ -196,7 +470,7 @@ if (isset($_GET["editar"])) {
                         <input
                             type="hidden"
                             name="id"
-                            value="<?php echo $tremEditar["id"]; ?>"
+                            value="<?php echo (int) $tremEditar["id"]; ?>"
                         >
 
                         <label for="modelo" class="editar-sensor">
@@ -211,25 +485,97 @@ if (isset($_GET["editar"])) {
                             id="modelo"
                             name="modelo"
                             value="<?php echo htmlspecialchars($tremEditar["modelo"]); ?>"
+                            maxlength="100"
                             required
                         >
 
                         <br><br>
 
-                        <label for="rota_id" class="editar-sensor">
-                            ID da rota
+                        <label for="serie" class="editar-sensor">
+                            Série
                         </label>
 
                         <br>
 
                         <input
                             class="input-editar-sensor"
-                            type="number"
-                            id="rota_id"
-                            name="rota_id"
-                            min="1"
-                            value="<?php echo htmlspecialchars((string)($tremEditar["rota_id"] ?? "")); ?>"
+                            type="text"
+                            id="serie"
+                            name="serie"
+                            value="<?php echo htmlspecialchars($tremEditar["serie"]); ?>"
+                            maxlength="100"
+                            required
                         >
+
+                        <br><br>
+
+                        <label for="estado" class="editar-sensor">
+                            Estado
+                        </label>
+
+                        <br>
+
+                        <select
+                            class="input-editar-sensor"
+                            id="estado"
+                            name="estado"
+                            required
+                        >
+
+                            <option
+                                value="operante"
+                                <?php echo $tremEditar["estado"] === "operante" ? "selected" : ""; ?>
+                            >
+                                Operante
+                            </option>
+
+                            <option
+                                value="inativo"
+                                <?php echo $tremEditar["estado"] === "inativo" ? "selected" : ""; ?>
+                            >
+                                Inativo
+                            </option>
+
+                        </select>
+
+                        <br><br>
+
+                        <label for="funcionario_id" class="editar-sensor">
+                            Funcionário responsável
+                        </label>
+
+                        <br>
+
+                        <select
+                            class="input-editar-sensor"
+                            id="funcionario_id"
+                            name="funcionario_id"
+                            required
+                        >
+
+                            <option value="">
+                                Selecione um funcionário
+                            </option>
+
+                            <?php foreach ($funcionarios as $funcionario) { ?>
+
+                                <option
+                                    value="<?php echo (int) $funcionario["id"]; ?>"
+                                    <?php
+                                    echo (
+                                        (int) $tremEditar["funcionario_id"]
+                                        === (int) $funcionario["id"]
+                                    ) ? "selected" : "";
+                                    ?>
+                                >
+
+                                    <?php echo htmlspecialchars($funcionario["nome"]); ?>
+
+                                </option>
+
+                            <?php } ?>
+
+                        </select>
 
                         <br><br>
 
@@ -258,6 +604,8 @@ if (isset($_GET["editar"])) {
 
         <?php } ?>
 
+        <!-- TABELA DE TRENS -->
+
         <div class="container_tabela_usuarios">
 
             <table class="tabela_usuarios table-bordered">
@@ -265,65 +613,74 @@ if (isset($_GET["editar"])) {
                 <thead>
 
                     <tr>
-                        <th scope="col">#</th>
+
+                        <th scope="col">ID</th>
+
                         <th scope="col">Modelo</th>
-                        <th scope="col">ID do trem</th>
-                        <th scope="col">ID da rota</th>
+
+                        <th scope="col">Série</th>
+
+                        <th scope="col">Estado</th>
+
+                        <th scope="col">Funcionário responsável</th>
+
                         <th scope="col">Ações</th>
+
                     </tr>
 
                 </thead>
 
                 <tbody>
 
-                    <?php
-
-                    $sql = "
-                        SELECT modelo, id, rota_id
-                        FROM trens
-                        ORDER BY modelo
-                    ";
-
-                    $resultado = $conexao->query($sql);
-
-                    if (!$resultado) {
-                        die("Erro ao buscar trens: " . $conexao->error);
-                    }
-
-                    while ($trem = $resultado->fetch_assoc()) {
-
-                    ?>
+                    <?php while ($trem = $resultado->fetch_assoc()) { ?>
 
                         <tr class="visualizar_usuario_gerente">
 
                             <th scope="row">
-                                <?php echo htmlspecialchars($trem["id"]); ?>
+
+                                <?php echo (int) $trem["id"]; ?>
+
                             </th>
 
                             <td>
+
                                 <?php echo htmlspecialchars($trem["modelo"]); ?>
-                            </td>
 
-                            <td>
-                                <?php echo htmlspecialchars($trem["id"]); ?>
-                            </td>
-
-                            <td>
-                                <?php echo htmlspecialchars((string)($trem["rota_id"] ?? "")); ?>
                             </td>
 
                             <td>
 
-                                <a href="visualizar_trem.php?editar=<?php echo $trem["id"]; ?>">
+                                <?php echo htmlspecialchars($trem["serie"]); ?>
+
+                            </td>
+
+                            <td>
+
+                                <?php echo htmlspecialchars($trem["estado"]); ?>
+
+                            </td>
+
+                            <td>
+
+                                <?php echo htmlspecialchars($trem["nome_funcionario"]); ?>
+
+                            </td>
+
+                            <td>
+
+                                <a href="visualizar_trem.php?editar=<?php echo (int) $trem["id"]; ?>">
                                     EDITAR
                                 </a>
 
-                                <form method="POST" style="display:inline;">
+                                <form
+                                    method="POST"
+                                    style="display:inline;"
+                                >
 
                                     <input
                                         type="hidden"
                                         name="id"
-                                        value="<?php echo $trem["id"]; ?>"
+                                        value="<?php echo (int) $trem["id"]; ?>"
                                     >
 
                                     <button
@@ -351,7 +708,12 @@ if (isset($_GET["editar"])) {
     </main>
 
     <?php
+
+    $resultado->free();
+    $resultadoFuncionarios->free();
+
     $conexao->close();
+
     ?>
 
 </body>

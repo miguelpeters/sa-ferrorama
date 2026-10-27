@@ -5,19 +5,42 @@ include '../infra/conexao.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $nome = trim($_POST['nome'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+    $distancia = $_POST['distancia'] ?? '';
+    $duracao = $_POST['duracao'] ?? '';
+    $data_criacao = $_POST['data_criacao'] ?? '';
+    $trem_id = $_POST['trem_id'] ?? '';
 
-    if ($nome === '') {
-        exit("Informe o nome da rota.");
+    if (
+        $nome === '' ||
+        $descricao === '' ||
+        $distancia === '' ||
+        $duracao === '' ||
+        $data_criacao === '' ||
+        $trem_id === ''
+    ) {
+        exit("Preencha todos os campos.");
     }
 
-    $sql = "INSERT INTO rotas (nome) VALUES (?)";
+    $sql = "INSERT INTO rotas
+            (nome, descricao, distancia, duracao, data_criacao, trem_id)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
     $stmt = $conexao->prepare($sql);
 
     if (!$stmt) {
         exit("Erro ao conectar com o banco: " . $conexao->error);
     }
 
-    $stmt->bind_param('s', $nome);
+    $stmt->bind_param(
+        'ssddsi',
+        $nome,
+        $descricao,
+        $distancia,
+        $duracao,
+        $data_criacao,
+        $trem_id
+    );
 
     if ($stmt->execute()) {
         echo "Rota cadastrada com sucesso! ";
@@ -59,23 +82,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <form id="FormsCadastro" method="POST">
 
-                        <label for="cadastro-nome" id="CadastroLabel">Nome</label>
+<label for="cadastro-nome" id="CadastroLabel">Nome</label>
+<input
+    type="text"
+    id="cadastro-nome"
+    name="nome"
+    class="CadastroInput"
+    placeholder="Nome da rota"
+    required
+>
+<br><br>
 
-                            <input
-                                type="text"
-                                id="cadastro-nome"
-                                name="nome"
-                                class="CadastroInput"
-                                placeholder="Nome da rota"
-                                required    
-                            >
-    <br><br>
+<label for="cadastro-descricao" id="CadastroLabel">Descrição</label>
+<input
+    type="text"
+    id="cadastro-descricao"
+    name="descricao"
+    class="CadastroInput"
+    placeholder="Descrição da rota"
+    required
+>
+<br><br>
 
-    <button type="submit" class="ButtonCadastro">
-        CADASTRAR ROTA
-    </button>
+<label for="cadastro-distancia" id="CadastroLabel">Distância (km)</label>
+<input
+    type="number"
+    id="cadastro-distancia"
+    name="distancia"
+    class="CadastroInput"
+    placeholder="Distância da rota"
+    step="0.01"
+    min="0"
+    required
+>
+<br><br>
 
-</form>
+<label for="cadastro-duracao" id="CadastroLabel">Duração (horas)</label>
+<input
+    type="number"
+    id="cadastro-duracao"
+    name="duracao"
+    class="CadastroInput"
+    placeholder="Duração da rota"
+    step="0.01"
+    min="0"
+    required
+>
+<br><br>
+
+<label for="cadastro-data" id="CadastroLabel">Data de criação</label>
+<input
+    type="date"
+    id="cadastro-data"
+    name="data_criacao"
+    class="CadastroInput"
+    required
+>
+<br><br>
+
+<label for="cadastro-trem" id="CadastroLabel">ID do trem</label>
+<input
+    type="number"
+    id="cadastro-trem"
+    name="trem_id"
+    class="CadastroInput"
+    placeholder="ID do trem associado"
+    min="1"
+    required
+>
+<br><br>
+
+<button type="submit" class="ButtonCadastro">
+    CADASTRAR ROTA
+</button>
+
+                    </form>
 
                 </div>
 
@@ -83,6 +164,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
     </main>
-</body>
-
-</html>

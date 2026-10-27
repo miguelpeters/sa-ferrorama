@@ -2,27 +2,41 @@
 
 include '../infra/conexao.php';
 
-$sqlRotas = "SELECT id, nome FROM rotas";
-$resultadoRotas = $conexao->query($sqlRotas);
+$sqlFuncionarios = "SELECT id, nome FROM funcionarios";
+$resultadoFuncionarios = $conexao->query($sqlFuncionarios);
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $modelo = $_POST['modelo'];
-    $rota_id = $_POST['rota_id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $sql = "INSERT INTO trens (modelo, rota_id) values (?,?)";
-    $stmt = $conexao->prepare($sql);
-    $stmt -> bind_param('si', $modelo,$rota_id);
-    if($stmt->execute()){
-        echo "Trem cadastrado ";
-        echo '<a href="cadastro_trem.php">voltar</a>';
-    }else{
-        echo "Erro ao cadastrar" . $stmt->error;
+    $modelo = trim($_POST['modelo'] ?? '');
+    $serie = trim($_POST['serie'] ?? '');
+    $estado = $_POST['estado'] ?? '';
+    $funcionario_id = $_POST['funcionario_id'] ?? '';
+
+    if ($modelo === '' || $serie === '' || $estado === '' || $funcionario_id === '') {
+        exit("Preencha todos os campos.");
     }
-   $stmt->close();
-   exit;
 
+    $sql = "INSERT INTO trens (modelo, serie, estado, funcionario_id)
+            VALUES (?, ?, ?, ?)";
+
+    $stmt = $conexao->prepare($sql);
+
+    if (!$stmt) {
+        exit("Erro ao conectar com o banco: " . $conexao->error);
+    }
+
+    $stmt->bind_param('sssi', $modelo, $serie, $estado, $funcionario_id);
+
+    if ($stmt->execute()) {
+        echo "Trem cadastrado com sucesso! ";
+        echo '<a href="cadastro_trem.php">Voltar</a>';
+    } else {
+        echo "Erro ao cadastrar: " . $stmt->error;
+    }
+
+    $stmt->close();
+    exit;
 }
-
 ?>
 
 <html lang="pt-br">
@@ -52,26 +66,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <h2 id="CadastroTitulo">Cadastrar Trem</h2>
 
                     <form id="FormsCadastro" method="POST">
-                        <label for="modelo">Modelo</label>
-                        <input type="text" id="cadastro-modelo" name="modelo" class="CadastroInput" placeholder="Modelo do trem">
-                        <br>
+                    <label for="cadastro-modelo">Modelo</label>
+                    <input type="text" id="cadastro-modelo" name="modelo"
+                    class="CadastroInput" placeholder="Modelo do trem" required>
+                    <br><br>
 
-                        <label for="rota_id">Rota</label>
-                            <select id="rota_id" name="rota_id" class="CadastroInput" required>
-                                <option value="">Selecione uma rota</option>
-                                <?php while ($rota = $resultadoRotas->fetch_assoc()) { ?>
-                                    <option value="<?= $rota['id'] ?>">
-                                        <?= htmlspecialchars($rota['nome']) ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                            <br>
+                    <label for="cadastro-serie">Série</label>
+                    <input type="text" id="cadastro-serie" name="serie"
+                    class="CadastroInput" placeholder="Série do trem" required>
+                    <br><br>
 
-                        <label for="sensor_id">Sensor</label>
-                        <input type="text" id="cadastro-sensor" name="sensor_id" class="CadastroInput" placeholder="ID do sensor">
-                        <br>
-                        <br>
-                        <button class="ButtonCadastro">CADASTRAR TREM</button>
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado" class="CadastroInput" required>
+                    <option value="">Selecione o estado</option>
+                    <option value="operante">Operante</option>
+                    <option value="inativo">Inativo</option>
+                    </select>
+                    <br><br>
+
+                   <label for="funcionario_id">ID do Funcionário</label>
+                    <input type="number" id="funcionario_id" name="funcionario_id"
+                    class="CadastroInput" placeholder="ID do funcionário" min="1" required>
+                    <br><br>
+
+        <button type="submit" class="ButtonCadastro">
+          CADASTRAR TREM
+        </button>           
 
                     </form>
 

@@ -82,9 +82,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <form id="FormsCadastro" method="POST">
 
-<label for="cadastro-nome" id="CadastroLabel">Nome</label>
-<input
-    type="text"
+        <label for="cadastro-nome" id="CadastroLabel">Nome</label>
+            <input
+     type="text"
     id="cadastro-nome"
     name="nome"
     class="CadastroInput"
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     name="descricao"
     class="CadastroInput"
     placeholder="Descrição da rota"
-    required
+ required
 >
 <br><br>
 

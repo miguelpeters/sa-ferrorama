@@ -50,3 +50,22 @@ A proposta do nosso sistema é criar um site que permita visualizar informaçõe
 - O site deve possuir alta escalabilidade
 - As funções e ferramentas do site devem ser intuitivas
 
+## Segurança e controle de acesso
+
+O sistema possui autenticação e controle de permissões de acordo com o tipo de usuário.
+
+- Administrador: pode cadastrar, editar e excluir usuários, definir perfis e redefinir senhas.
+- Funcionário: pode acessar o painel e as áreas operacionais, mas não pode administrar contas.
+As senhas são armazenadas utilizando password_hash(), garantindo maior segurança. As operações de alteração de usuários utilizam requisições POST e tokens CSRF para ajudar a proteger o sistema.
+
+O cadastro inicial do administrador é realizado pelo terminal, não ficando disponível como formulário público.
+
+## Objetivo Acadêmico
+Projeto desenvolvido para fins acadêmicos na disciplina de Programação de Aplicativos, 
+com o objetivo de colocar em prática conhecimentos de desenvolvimento web, 
+programação em PHP, banco de dados e segurança da informação.
+
+## Status do projeto
+Em desenvolvimento.
+
+O projeto está em processo de desenvolvimento e poderá receber novas funcionalidades, melhorias e correções.

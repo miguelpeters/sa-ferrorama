@@ -1,6 +1,19 @@
 
 <?php
 
+session_start();
+
+$tipoUsuario = $_SESSION["tipo"] ?? "";
+
+if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
+    header("Location: login.php");
+    exit();
+}
+
+$paginaHome = ($tipoUsuario === "gerente")
+    ? "home_gerente.php"
+    : "home_funcionario.php";
+
 $servidor = "localhost";
 $usuarioBanco = "root";
 $senhaBanco = "";
@@ -17,7 +30,6 @@ if ($conexao->connect_error) {
     die("Erro na conexão com o banco: " . $conexao->connect_error);
 }
 
-// EXCLUIR SENSOR
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
 
     $id = (int) $_POST["id"];
@@ -140,10 +152,20 @@ if (isset($_GET["editar"])) {
   <header class="cabecalho">
 
     <div class="lado-esquerdo">
-      <button class="buttonRetornar" onclick="history.back()">DE-TRAIN</button>
-      <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
-      <br>
-    </div>
+
+    <a
+        class="login-detrain-logo"
+        href="<?= htmlspecialchars($paginaHome) ?>"
+    >DE-TRAIN</a>
+
+    <img
+        id="icon"
+        src="../assets/imgs/LogoDeTrain.png"
+        class="logo"
+        alt="Logo DE-TRAIN"
+    >
+
+</div>
 
     <div class="lado-direito">
       <span>FULANO DE TAL - FUNCIONÁRIO</span>

@@ -4,26 +4,23 @@ session_start();
 
 include_once("../infra/conexao.php");
 
-// ==========================================
-// VERIFICAR AUTENTICAÇÃO E PERMISSÕES
-// ==========================================
+
 
 $tipoUsuario = $_SESSION["tipo"] ?? "";
+
+
+$paginaHome = ($tipoUsuario === "gerente")
+    ? "home_gerente.php"
+    : "home_funcionario.php";
 
 if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
     header("Location: login.php");
     exit();
 }
 
-// ==========================================
-// VARIÁVEIS DE MENSAGEM
-// ==========================================
 
 $mensagemAlerta = "";
 
-// ==========================================
-// EXCLUIR TREM
-// ==========================================
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -75,7 +72,6 @@ if (
 
     if ($e->getCode() == 1451) {
 
-        // Buscar as rotas vinculadas ao trem.
 
         $stmtRotas = $conexao->prepare(
             "SELECT id, nome
@@ -129,9 +125,6 @@ if (
     }
 }
 
-// ==========================================
-// ATUALIZAR TREM
-// ==========================================
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -150,7 +143,6 @@ if (
         FILTER_VALIDATE_INT
     );
 
-    // Validar campos obrigatórios.
 
     if (
         !$id ||
@@ -173,7 +165,6 @@ if (
 
     } else {
 
-        // Verificar se o funcionário existe.
 
         $stmtFuncionario = $conexao->prepare(
             "SELECT id FROM funcionarios WHERE id = ?"
@@ -194,7 +185,6 @@ if (
 
         } else {
 
-            // Atualizar os dados do trem.
 
             $stmt = $conexao->prepare(
                 "UPDATE trens
@@ -239,9 +229,6 @@ if (
     }
 }
 
-// ==========================================
-// MENSAGENS DE SUCESSO
-// ==========================================
 
 if (isset($_GET["sucesso"])) {
 
@@ -256,9 +243,6 @@ if (isset($_GET["sucesso"])) {
     }
 }
 
-// ==========================================
-// BUSCAR TREM PARA EDIÇÃO
-// ==========================================
 
 $tremEditar = null;
 
@@ -295,9 +279,6 @@ if (isset($_GET["editar"])) {
     }
 }
 
-// ==========================================
-// BUSCAR FUNCIONÁRIOS PARA O SELECT
-// ==========================================
 
 $sqlFuncionarios = "
     SELECT id, nome
@@ -317,9 +298,6 @@ while ($funcionario = $resultadoFuncionarios->fetch_assoc()) {
     $funcionarios[] = $funcionario;
 }
 
-// ==========================================
-// BUSCAR TRENS CADASTRADOS
-// ==========================================
 
 $sql = "
     SELECT
@@ -376,8 +354,6 @@ if (!$resultado) {
         <script>
             alert(<?php echo json_encode($mensagemAlerta); ?>);
 
-            // Remove o parâmetro de sucesso da URL para evitar
-            // que o alerta apareça novamente ao apertar F5.
 
             <?php if (isset($_GET["sucesso"])) { ?>
 
@@ -396,19 +372,19 @@ if (!$resultado) {
 
         <div class="lado-esquerdo">
 
-            <button
-                class="buttonRetornar"
-                onclick="history.back()"
-            >
-                DE-TRAIN
-            </button>
+    <a
+        class="login-detrain-logo"
+        href="<?= htmlspecialchars($paginaHome) ?>"
+    >DE-TRAIN</a>
 
-            <img
-                id="icon"
-                src="../assets/imgs/LogoDeTrain.png"
-                class="logo"
-                alt="Logo DE-TRAIN"
-            >
+    <img
+        id="icon"
+        src="../assets/imgs/LogoDeTrain.png"
+        class="logo"
+        alt="Logo DE-TRAIN"
+    >
+
+</div>
 
             <br>
 

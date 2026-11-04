@@ -4,6 +4,10 @@ session_start();
 
 $tipoUsuario = $_SESSION["tipo"] ?? "";
 
+$paginaHome = ($tipoUsuario === "gerente")
+    ? "home_gerente.php"
+    : "home_funcionario.php";
+
 if ($tipoUsuario !== "gerente") {
     header("Location: login.php");
     exit();
@@ -14,9 +18,6 @@ include_once("../infra/conexao.php");
 $mensagem = "";
 $mensagemSucesso = "";
 
-// ==========================================
-// DEFINIR TABELA PELO TIPO DE USUÁRIO
-// ==========================================
 
 function obterTabelaUsuario($tipo)
 {
@@ -31,9 +32,7 @@ function obterTabelaUsuario($tipo)
     return null;
 }
 
-// ==========================================
-// EXCLUIR USUÁRIO
-// ==========================================
+
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -140,9 +139,6 @@ if (
     }
 }
 
-// ==========================================
-// ATUALIZAR USUÁRIO
-// ==========================================
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -181,7 +177,6 @@ if (
 
     } else {
 
-        // Verificar se o e-mail já pertence a outra conta.
 
         $stmtEmail = $conexao->prepare(
             "SELECT id FROM $tabela
@@ -208,8 +203,6 @@ if (
             $stmtEmail->close();
 
             if ($senha !== "") {
-
-                // Atualizar os dados e a senha.
 
                 $senhaHash = password_hash(
                     $senha,
@@ -240,7 +233,6 @@ if (
 
             } else {
 
-                // Manter a senha atual.
 
                 $stmt = $conexao->prepare(
                     "UPDATE $tabela
@@ -289,10 +281,6 @@ if (
     }
 }
 
-// ==========================================
-// MENSAGENS DE SUCESSO
-// ==========================================
-
 if (isset($_GET["sucesso"])) {
 
     if ($_GET["sucesso"] === "excluir") {
@@ -306,9 +294,6 @@ if (isset($_GET["sucesso"])) {
     }
 }
 
-// ==========================================
-// BUSCAR USUÁRIO PARA EDIÇÃO
-// ==========================================
 
 $usuarioEditar = null;
 
@@ -351,9 +336,6 @@ if (isset($_GET["editar"], $_GET["tipo"])) {
     }
 }
 
-// ==========================================
-// LISTAR GERENTES E FUNCIONÁRIOS
-// ==========================================
 
 $sql = "
     SELECT
@@ -436,20 +418,21 @@ if (!$resultado) {
 
     <header class="cabecalho">
 
-        <div class="lado-esquerdo">
+       <div class="lado-esquerdo">
 
-            <button
-                class="buttonRetornar"
-                onclick="history.back()"
-            >
-                DE-TRAIN
-            </button>
+    <a
+        class="login-detrain-logo"
+        href="<?= htmlspecialchars($paginaHome) ?>"
+    >DE-TRAIN</a>
 
-            <img
-                id="icon"
-                src="../assets/imgs/LogoDeTrain.png"
-                class="logo"
-            >
+    <img
+        id="icon"
+        src="../assets/imgs/LogoDeTrain.png"
+        class="logo"
+        alt="Logo DE-TRAIN"
+    >
+
+</div>
 
             <br>
 

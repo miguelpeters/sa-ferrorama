@@ -2,7 +2,14 @@
 
 session_start();
 
+
+
 $tipoUsuario = $_SESSION["tipo"] ?? "";
+
+$paginaHome = ($tipoUsuario === "gerente")
+    ? "home_gerente.php"
+    : "home_funcionario.php";
+
 
 if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
     header("Location: login.php");
@@ -15,10 +22,6 @@ $podeGerenciarRotas = true;
 
 $mensagem = "";
 $tipoMensagem = "";
-
-// ==========================================
-// EXCLUIR ROTA
-// ==========================================
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -66,7 +69,6 @@ if (
 
             if ($e->getCode() == 1451) {
 
-                // Buscar os sensores associados à rota.
 
                 $stmtSensores = $conexao->prepare(
                     "SELECT id, nome, tipo
@@ -396,21 +398,21 @@ if (!$resultado) {
 
     <div class="lado-esquerdo">
 
-        <button
-            class="buttonRetornar"
-            onclick="history.back()"
-        >
-            DE-TRAIN
-        </button>
+    <a
+        class="login-detrain-logo"
+        href="<?= htmlspecialchars($paginaHome) ?>"
+    >DE-TRAIN</a>
 
-        <img
-            id="icon"
-            src="../assets/imgs/LogoDeTrain.png"
-            class="logo"
-            alt="Logo DE-TRAIN"
-        >
+    <img
+        id="icon"
+        src="../assets/imgs/LogoDeTrain.png"
+        class="logo"
+        alt="Logo DE-TRAIN"
+    >
 
-    </div>
+</div>
+
+</div>
 
     <div class="lado-direito">
 

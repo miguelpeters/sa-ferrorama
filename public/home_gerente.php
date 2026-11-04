@@ -14,86 +14,195 @@ if (
     header("Location: login.php");
     exit();
 }
+
+$nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 ?>
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/style/style.css">
-    <title>Home Gerente</title>
 
+    <title>Painel do Gerente</title>
+
+    <link rel="stylesheet" href="../assets/style/style.css">
     <link rel="icon" href="../assets/imgs/PageIcon.png" type="image/x-icon">
 </head>
 
 <body class="body_home">
 
-    <header class="cabecalho">
-    
-    <div class="lado-esquerdo">
-        <a class="home-detrain-logo" href="../index.php">DE-TRAIN</a>
-        <img id="icon" src="../assets/imgs/LogoDeTrain.png" class="logo">
+    <header class="hg-header">
+
+        <div class="hg-brand">
+            <img src="../assets/imgs/LogoDeTrain.png" alt="Logo DE-TRAIN">
+            <a href="../public/home_gerente.php">DE-TRAIN</a>
+        </div>
 
 
-        <nav class="menu">
-        <a class="home-detrain-logo" href="cadastro_funcionario.php">CADASTRAR FUNCIONÁRIO</a>
-        <a class="home-detrain-logo" href="cadastro_trem.php">CADASTRAR TREM</a>
-        <a class="home-detrain-logo" href="cadastro_rota.php">CADASTRAR ROTA</a>
-        <a class="home-detrain-logo" href="cadastro_sensor.php">CADASTRAR SENSOR</a>
-        <a class="home-detrain-logo" href="visualizar_sensor.php">VISUALIZAR SENSOR</a>
-        <a class="home-detrain-logo" href="visualizar_usuario.php">VISUALIZAR USUÁRIO</a>
-        <a class="home-detrain-logo" href="visualizar_rota.php">VISUALIZAR ROTA</a>
-        <a class="home-detrain-logo" href="visualizar_trem.php">VISUALIZAR TRENS</a>
-        </nav>
-    </div>
+        <div class="hg-profile">
+            <div class="hg-profile-info">
+                <span>Bem-vindo(a),</span>
+                <strong><?= $nomeGerente ?></strong>
+            </div>
 
 
-    <div class="lado-direito">
+            <img src="../assets/imgs/LoginIcon.png" alt="Perfil">
 
-    <?php if (isset($_SESSION["gerente_id"])): ?>
+            <a href="logout.php" class="hg-logout">Sair</a>
+        </div>
 
-        <h1>
-            Olá, <?= htmlspecialchars($_SESSION["gerente_nome"]) ?>
-        </h1>
-        <a class="sair-link" href="logout.php">SAIR</a>
-
-    <?php elseif (isset($_SESSION["id"])): ?>
-
-        <h1>
-            Olá, <?= htmlspecialchars($_SESSION["nome"]) ?>
-        </h1>
-        <a class="sair-link" href="logout.php">SAIR</a>
-
-    <?php else: ?>
-
-        <h1>
-            <a class="EntrarText_home" href="login.php">ENTRAR</a>
-        </h1>
-
-    <?php endif; ?>
-
-    <img src="../assets/imgs/LoginIcon.png" class="perfil">
-
-    </div>
-
-</header>
-
-<main class="main_home">
-    <img src="../assets/imgs/sistema-metrô-joinvilense.webp" alt="Linhas" class="linhas_home">
-</main>
+    </header>
 
 
-<footer class="footer_home">
-
-        <h2 class="slogan_footer_home">Melhor ir DE-TRAIN!</h2>
+    <main class="hg-main">
 
 
-</footer>
+
+        <section class="hg-dashboard">
+
+
+            <aside class="hg-sidebar">
+
+                <div class="hg-section-heading">
+                    <h2>Dashboard</h2>
+                    <span>Visão geral</span>
+                </div>
+
+                <div class="hg-stat-card">
+                    <div class="hg-stat-icon">T</div>
+                    <div>
+                        <span>Trens cadastrados</span>
+                        <strong>--</strong>
+                    </div>
+                </div>
+
+                <div class="hg-stat-card">
+                    <div class="hg-stat-icon">R</div>
+                    <div>
+                        <span>Rotas cadastradas</span>
+                        <strong>--</strong>
+                    </div>
+                </div>
+
+                <div class="hg-stat-card">
+                    <div class="hg-stat-icon">S</div>
+                    <div>
+                        <span>Sensores cadastrados</span>
+                        <strong>--</strong>
+                    </div>
+                </div>
+
+
+                <div class="hg-operations-card">
+                    <h3>Área operacional</h3>
+                    <p>Utilize os atalhos para administrar os registros do sistema.</p>
+
+                    <a href="cadastro_trem.php">Cadastrar trem</a>
+                    <a href="cadastro_rota.php">Cadastrar rota</a>
+                    <a href="cadastro_sensor.php">Cadastrar sensor</a>
+                    <a href="cadastro_funcionario.php">Cadastrar funcionário</a>
+                </div>
+
+            </aside>
+
+
+            <section class="hg-map-section">
+
+                <div class="hg-section-heading">
+                    <div>
+                        <h2>Mapa Ferroviário</h2>
+                        <span>Visualização da malha ferroviária</span>
+                    </div>
+
+                    <span class="hg-map-tag">JOINVILLE - SC</span>
+                </div>
+
+                <div class="hg-map-container">
+
+                    <img
+                        src="../assets/imgs/sistema-metrô-joinvilense.webp"
+                        alt="Mapa da malha ferroviária"
+                        class="hg-map-image"
+                    >
+
+                </div>
+
+               
+
+            </section>
+
+
+
+            <aside class="hg-alerts">
+
+                <div class="hg-section-heading">
+                    <h2>Alertas e Avisos</h2>
+                </div>
+
+                <div class="hg-alert-card hg-alert-info">
+                    <span class="hg-alert-symbol">!</span>
+
+                    <div>
+                        <strong>Alerta Exemplo</strong>
+                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
+                    </div>
+                </div>
+
+                <div class="hg-alert-card hg-alert-warning">
+                    <span class="hg-alert-symbol">!</span>
+
+                    <div>
+                        <strong>Alerta Exemplo</strong>
+                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
+                    </div>
+                </div>
+
+                <div class="hg-alert-card hg-alert-info">
+                    <span class="hg-alert-symbol">!</span>
+
+                    <div>
+                        <strong>Alerta Exemplo</strong>
+                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
+                    </div>
+                </div>
+
+                <div class="hg-quick-access">
+                    <h3>Acessos rápidos</h3>
+
+                    <a href="visualizar_sensor.php">
+                        <span>Visualizar sensores</span>
+                        <span>→</span>
+                    </a>
+
+                    <a href="visualizar_trem.php">
+                        <span>Visualizar trens</span>
+                        <span>→</span>
+                    </a>
+
+                    <a href="visualizar_rota.php">
+                        <span>Visualizar rotas</span>
+                        <span>→</span>
+                    </a>
+
+                    <a href="visualizar_usuario.php">
+                        <span>Visualizar usuários</span>
+                        <span>→</span>
+                    </a>
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <footer class="hg-footer">
+        <strong>Melhor ir DE-TRAIN!</strong>
+        <span>SA-Ferrorama | Sistema de gerenciamento ferroviário</span>
+    </footer>
 
 </body>
-
-
-
-
 </html>

@@ -134,10 +134,3 @@ VALUES
 ('Ultrassônico', 'Sensor Montanha', 13),
 ('Infravermelho', 'Sensor Expresso', 14),
 ('Magnético', 'Sensor Metropolitano', 15);
-
-
-ALTER TABLE funcionarios
-MODIFY senha VARCHAR(255) NOT NULL;
-
-ALTER TABLE gerentes
-MODIFY senha VARCHAR(255) NOT NULL;

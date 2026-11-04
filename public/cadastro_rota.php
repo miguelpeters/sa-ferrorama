@@ -172,16 +172,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         >
                         <br><br>
 
-                        <label for="cadastro-trem" id="CadastroLabel">ID do trem</label>
-                        <input
-                            type="number"
+                            <?php
+                            $resultadoTrens = $conexao->query("SELECT id, modelo FROM trens ORDER BY modelo");
+                            ?>
+
+                            <label for="cadastro-trem" id="CadastroLabel">Trem</label>
+
+                        <select
                             id="cadastro-trem"
                             name="trem_id"
                             class="CadastroInput"
-                            placeholder="ID do trem associado"
-                            min="1"
                             required
                         >
+                            <option value="">Selecione um trem</option>
+
+                            <?php if ($resultadoTrens): ?>
+                                <?php while ($trem = $resultadoTrens->fetch_assoc()): ?>
+                                    <option value="<?= (int) $trem['id'] ?>"
+                                        <?= isset($trem_id) && $trem_id == $trem['id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($trem['id'] . ' - ' . $trem['modelo']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            <?php endif; ?>
+                        </select>
+
+                        <?php if ($resultadoTrens && $resultadoTrens->num_rows === 0): ?>
+                            <p>Nenhum trem cadastrado. Cadastre um trem primeiro.</p>
+                        <?php endif; ?>
+
+
                         <br><br>
 
                         <button type="submit" class="ButtonCadastro">

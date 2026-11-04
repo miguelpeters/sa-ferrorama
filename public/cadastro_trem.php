@@ -2,6 +2,8 @@
 
 session_start();
 
+$funcionario_id = $_POST['funcionario_id'] ?? null;
+
 $tipoUsuario = $_SESSION['tipo'] ?? '';
 
 if ($tipoUsuario === 'funcionario') {
@@ -148,16 +150,35 @@ $resultadoFuncionarios = $conexao->query($sqlFuncionarios);
                         </select>
                         <br><br>
 
-                        <label for="funcionario_id" id="CadastroLabel">ID do Funcionário</label>
-                        <input
-                            type="number"
-                            id="funcionario_id"
-                            name="funcionario_id"
-                            class="CadastroInput"
-                            placeholder="ID do funcionário"
-                            min="1"
-                            required
->
+
+                            <?php
+                            $resultadoFuncionarios = $conexao->query("SELECT id, nome FROM funcionarios ORDER BY nome");
+                            ?>
+
+
+                        <label id="CadastroLabel" for="funcionario_id">Funcionário</label>
+
+                            <select
+                                id="funcionario_id"
+                                name="funcionario_id"
+                                class="CadastroInput"
+                                required
+                            >
+                                <option value="">Selecione um funcionário</option>
+
+                                <?php if ($resultadoFuncionarios): ?>
+                                    <?php while ($func = $resultadoFuncionarios->fetch_assoc()): ?>
+                                        <option value="<?= (int) $func['id'] ?>"
+                                            <?= isset($funcionario_id) && $funcionario_id == $func['id'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($func['id'] . ' - ' . $func['nome']) ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                <?php endif; ?>
+                            </select>
+
+                            <?php if ($resultadoFuncionarios && $resultadoFuncionarios->num_rows === 0): ?>
+                                <p>Nenhum funcionário cadastrado. Cadastre um funcionário primeiro.</p>
+                            <?php endif; ?>
 <br><br>
 
                         <button type="submit" class="ButtonCadastro">

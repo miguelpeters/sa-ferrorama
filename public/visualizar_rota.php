@@ -412,37 +412,7 @@ if (!$resultado) {
 
 </div>
 
-</div>
 
-    <div class="lado-direito">
-
-        <span>
-
-            <?php
-
-            echo htmlspecialchars(
-                $_SESSION["gerente_nome"]
-                ?? $_SESSION["nome"]
-                ?? "USUÁRIO"
-            );
-
-            if ($tipoUsuario === "gerente") {
-                echo " - GERENTE";
-            } else {
-                echo " - FUNCIONÁRIO";
-            }
-
-            ?>
-
-        </span>
-
-        <img
-            src="../assets/imgs/LoginIcon.png"
-            class="perfil"
-            alt="Perfil"
-        >
-
-    </div>
 
 </header>
 
@@ -652,7 +622,7 @@ if (!$resultado) {
 
     <div class="container_tabela_usuarios">
 
-        <table class="tabela_usuarios table table-bordered">
+        <table class="tabela_visualizacao">
 
             <thead>
 

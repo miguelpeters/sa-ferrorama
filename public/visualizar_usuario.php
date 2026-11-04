@@ -434,27 +434,7 @@ if (!$resultado) {
 
 </div>
 
-            <br>
-
-        </div>
-
-        <div class="lado-direito">
-
-            <span>
-                <?php
-                echo htmlspecialchars(
-                    $_SESSION["gerente_nome"] ?? "GERENTE"
-                );
-                ?>
-                - GERENTE
-            </span>
-
-            <img
-                src="../assets/imgs/LoginIcon.png"
-                class="perfil"
-            >
-
-        </div>
+    
 
     </header>
 

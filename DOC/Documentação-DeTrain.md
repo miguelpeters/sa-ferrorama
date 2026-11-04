@@ -3,7 +3,8 @@ Este Documento tem como razão documentar todas as funções do CSS de "De-Train
 Paleta de Cores:
 
 Off-White: #faf9f6
-Verde-DeTrain: #044d44
+Verde-DeTrain: #073d30;
+back-ground: #102d25;
 Amarelo-DeTrain: #f6f5e9
 
 Geral:

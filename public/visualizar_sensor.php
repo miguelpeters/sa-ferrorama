@@ -165,12 +165,6 @@ if (isset($_GET["editar"])) {
         alt="Logo DE-TRAIN"
     >
 
-</div>
-
-    <div class="lado-direito">
-      <span>FULANO DE TAL - FUNCIONÁRIO</span>
-      <img src="../assets/imgs/LoginIcon.png" class="perfil">
-    </div>
 
   </header>
 

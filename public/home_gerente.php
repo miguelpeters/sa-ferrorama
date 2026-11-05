@@ -65,35 +65,35 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
             <aside class="hg-sidebar">
 
-                <div class="hg-section-heading">
-                    <h2>Dashboard</h2>
-                    <span>Visão geral</span>
-                </div>
+                
+    <div class="hg-cep-card">
 
-                <div class="hg-stat-card">
-                    <div class="hg-stat-icon">T</div>
-                    <div>
-                        <span>Trens cadastrados</span>
-                        <strong>--</strong>
-                    </div>
-                </div>
+    <h3>Consulta de CEP</h3>
 
-                <div class="hg-stat-card">
-                    <div class="hg-stat-icon">R</div>
-                    <div>
-                        <span>Rotas cadastradas</span>
-                        <strong>--</strong>
-                    </div>
-                </div>
+    <p>Digite um CEP para localizar um endereço.</p>
 
-                <div class="hg-stat-card">
-                    <div class="hg-stat-icon">S</div>
-                    <div>
-                        <span>Sensores cadastrados</span>
-                        <strong>--</strong>
-                    </div>
-                </div>
+    <form id="formCEP">
 
+        <input
+            type="text"
+            id="cep"
+            placeholder="00000-000"
+            maxlength="9"
+            inputmode="numeric"
+            required
+        >
+
+        <button type="submit">
+            Consultar CEP
+        </button>
+
+    </form>
+
+    <div id="resultadoCEP" class="hg-cep-resultado"></div>
+
+    <p id="mensagemCEP" class="hg-cep-mensagem"></p>
+
+    </div>
 
                 <div class="hg-operations-card">
                     <h3>Área operacional</h3>
@@ -135,74 +135,212 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
 
 
-            <aside class="hg-alerts">
+           <aside class="hg-alerts">
 
-                <div class="hg-section-heading">
-                    <h2>Alertas e Avisos</h2>
-                </div>
+    <div class="hg-section-heading">
+        <h2>Monitoramento Climático</h2>
+    </div>
 
-                <div class="hg-alert-card hg-alert-info">
-                    <span class="hg-alert-symbol">!</span>
+    <div class="hg-weather">
 
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
+        <div class="hg-weather-location">
+            <span class="hg-weather-pin">📍</span>
+            <span>JOINVILLE - SC</span>
+        </div>
 
-                <div class="hg-alert-card hg-alert-warning">
-                    <span class="hg-alert-symbol">!</span>
+        <div class="hg-weather-temperature">
+            <span>Temperatura atual</span>
+            <strong id="temperatura">-- °C</strong>
+        </div>
 
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
+        <div class="hg-weather-condition">
+            <span>Condição climática</span>
+            <strong id="condicao">Carregando...</strong>
+        </div>
 
-                <div class="hg-alert-card hg-alert-info">
-                    <span class="hg-alert-symbol">!</span>
+        <div class="hg-weather-update">
+            <span id="atualizacao">Consultando clima...</span>
+        </div>
 
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
+    </div>
 
-                <div class="hg-quick-access">
-                    <h3>Acessos rápidos</h3>
+    <div class="hg-quick-access">
 
-                    <a href="visualizar_sensor.php">
-                        <span>Visualizar sensores</span>
-                        <span>→</span>
-                    </a>
+        <h3>Acessos rápidos</h3>
 
-                    <a href="visualizar_trem.php">
-                        <span>Visualizar trens</span>
-                        <span>→</span>
-                    </a>
+        <a href="visualizar_sensor.php">
+            <span>Visualizar sensores</span>
+            <span>→</span>
+        </a>
 
-                    <a href="visualizar_rota.php">
-                        <span>Visualizar rotas</span>
-                        <span>→</span>
-                    </a>
+        <a href="visualizar_trem.php">
+            <span>Visualizar trens</span>
+            <span>→</span>
+        </a>
 
-                    <a href="visualizar_usuario.php">
-                        <span>Visualizar usuários</span>
-                        <span>→</span>
-                    </a>
-                </div>
+        <a href="visualizar_rota.php">
+            <span>Visualizar rotas</span>
+            <span>→</span>
+        </a>
 
-            </aside>
+        <a href="visualizar_usuario.php">
+            <span>Visualizar usuários</span>
+            <span>→</span>
+        </a>
 
         </section>
 
     </main>
 
 
-    <footer class="hg-footer">
+  <footer class="hg-footer">
         <strong>Melhor ir DE-TRAIN!</strong>
         <span>SA-Ferrorama | Sistema de gerenciamento ferroviário</span>
     </footer>
+
+    <!-- API DE MONITORAMENTO CLIMÁTICO -->
+    <script>
+
+        async function atualizarClima() {
+
+            const latitude = -26.3044;
+            const longitude = -48.8487;
+
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=America%2FSao_Paulo`;
+
+            try {
+
+                const resposta = await fetch(url);
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao consultar a API");
+                }
+
+                const dados = await resposta.json();
+
+                const temperatura = dados.current.temperature_2m;
+                const codigo = dados.current.weather_code;
+
+                const condicoes = {
+                    0: "Céu limpo ☀️",
+                    1: "Predominantemente limpo 🌤️",
+                    2: "Parcialmente nublado ⛅",
+                    3: "Nublado ☁️",
+                    45: "Neblina 🌫️",
+                    48: "Neblina com geada 🌫️",
+                    51: "Garoa leve 🌧️",
+                    53: "Garoa moderada 🌧️",
+                    55: "Garoa intensa 🌧️",
+                    61: "Chuva leve 🌧️",
+                    63: "Chuva moderada 🌧️",
+                    65: "Chuva intensa 🌧️",
+                    80: "Pancadas de chuva 🌦️",
+                    81: "Pancadas moderadas 🌧️",
+                    82: "Pancadas fortes ⛈️",
+                    95: "Tempestade ⛈️",
+                    96: "Tempestade com granizo ⛈️",
+                    99: "Tempestade com granizo forte ⛈️"
+                };
+
+                document.getElementById("temperatura").textContent =
+                    temperatura.toFixed(1) + " °C";
+
+                document.getElementById("condicao").textContent =
+                    condicoes[codigo] || "Condição não identificada";
+
+                document.getElementById("atualizacao").textContent =
+                    "Última atualização: " +
+                    new Date().toLocaleTimeString("pt-BR");
+
+            } catch (erro) {
+
+                document.getElementById("temperatura").textContent = "-- °C";
+
+                document.getElementById("condicao").textContent =
+                    "Clima indisponível";
+
+                document.getElementById("atualizacao").textContent =
+                    "Não foi possível consultar o clima.";
+
+                console.error(erro);
+
+            }
+
+        }
+
+        atualizarClima();
+
+        setInterval(atualizarClima, 15 * 60 * 1000);
+
+        document.getElementById("formCEP").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const cep = document.getElementById("cep").value.replace(/\D/g, "");
+
+    const resultado = document.getElementById("resultadoCEP");
+    const mensagem = document.getElementById("mensagemCEP");
+
+    resultado.innerHTML = "";
+    mensagem.textContent = "";
+
+    if (cep.length !== 8) {
+        mensagem.textContent = "Digite um CEP válido com 8 números.";
+        return;
+    }
+
+    mensagem.textContent = "Consultando CEP...";
+
+    try {
+
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+
+        if (!resposta.ok) {
+            throw new Error("Erro na consulta.");
+        }
+
+        const dados = await resposta.json();
+
+        if (dados.erro) {
+            mensagem.textContent = "CEP não encontrado.";
+            return;
+        }
+
+        mensagem.textContent = "";
+
+        const campos = [
+            ["Rua", dados.logradouro],
+            ["Bairro", dados.bairro],
+            ["Cidade", dados.localidade],
+            ["Estado", dados.uf]
+        ];
+
+        campos.forEach(([nome, valor]) => {
+
+            const linha = document.createElement("p");
+            const titulo = document.createElement("strong");
+
+            titulo.textContent = nome + ": ";
+            linha.appendChild(titulo);
+            linha.appendChild(
+                document.createTextNode(valor || "Não informado")
+            );
+
+            resultado.appendChild(linha);
+
+        });
+
+    } catch (erro) {
+
+        mensagem.textContent = "Não foi possível consultar o CEP.";
+
+        console.error(erro);
+
+    }
+
+});
+
+    </script>
 
 </body>
 </html>

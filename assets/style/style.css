@@ -533,6 +533,145 @@ button:hover {
     border-radius: 50%;
 }
 
+.hg-weather {
+    background-color: #204b3e;
+    border: 1px solid #326b57;
+    border-left: 4px solid #39c99a;
+    border-radius: 8px;
+    padding: 17px;
+    margin-bottom: 20px;
+}
+
+.hg-weather-location {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #8debd0;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 22px;
+}
+
+.hg-weather-pin {
+    font-size: 15px;
+}
+
+.hg-weather-temperature,
+.hg-weather-condition {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 20px;
+}
+
+.hg-weather-temperature span,
+.hg-weather-condition span {
+    color: #b8d8ce;
+    font-size: 12px;
+}
+
+.hg-weather-temperature strong {
+    color: white;
+    font-size: 36px;
+}
+
+.hg-weather-condition strong {
+    color: #8debd0;
+    font-size: 17px;
+}
+
+.hg-weather-update {
+    border-top: 1px solid #356151;
+    padding-top: 12px;
+    color: #a9c9bc;
+    font-size: 10px;
+}
+
+.hg-cep-card {
+    background-color: #0d3329;
+    padding: 15px;
+    border-radius: 9px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.hg-cep-card h3 {
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 0 12px;
+}
+
+.hg-cep-card p {
+    color: #c5ddd3;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+/* Campo de CEP */
+.hg-cep-card input#cep {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px;
+    margin: 12px 0 10px;
+    border: 1px solid #39735e;
+    border-radius: 6px;
+    background-color: #204b3e;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.hg-cep-card input#cep::placeholder {
+    color: #a9c6ba;
+}
+
+.hg-cep-card input#cep:focus {
+    border-color: #56d6b0;
+}
+
+/* Botão */
+.hg-cep-card button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px;
+    margin-top: 5px;
+    border: 1px solid #397c65;
+    border-radius: 6px;
+    background-color: #286b54;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.hg-cep-card button:hover {
+    background-color: #348567;
+}
+
+/* Resultado */
+.hg-cep-resultado {
+    margin-top: 15px;
+    color: #d4e7df;
+    font-size: 11px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.hg-cep-resultado strong {
+    color: #56d6b0;
+}
+
+.hg-cep-mensagem {
+    color: #ff9b9b !important;
+    font-size: 11px;
+}
 
 /* colunas */
 

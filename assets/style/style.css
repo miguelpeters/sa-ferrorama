@@ -1556,3 +1556,634 @@ tabela_visualizacao tbody tr:nth-child(even) td,
     display: inline-block;
     vertical-align: middle;
 }
+
+/* Landing Page */
+
+.landing-page {
+    margin: 0;
+    background-color: #0b3027;
+    color: #f5f8f6;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+}
+
+.landing-page * {
+    box-sizing: border-box;
+}
+
+.landing-header {
+    background-color: #073d30;
+    border-bottom: 1px solid #285e4e;
+}
+
+.landing-nav {
+    width: 90%;
+    max-width: 1250px;
+    min-height: 78px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.landing-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.landing-logo img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.landing-menu {
+    display: flex;
+    gap: 28px;
+}
+
+.landing-menu a {
+    color: #c5ddd3;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.landing-menu a:hover {
+    color: #56d6b0;
+}
+
+.landing-login {
+    padding: 11px 16px;
+    background-color: #174f40;
+    border: 1px solid #397c65;
+    border-radius: 7px;
+
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.landing-login:hover {
+    background-color: #286b54;
+}
+
+.landing-hero {
+    min-height: 610px;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    background-image:
+        linear-gradient(90deg, rgba(7, 61, 48, 0.96), rgba(7, 61, 48, 0.76), rgba(7, 61, 48, 0.30)),
+        url("../imgs/sistema-metrô-joinvilense.webp");
+    background-size: cover;
+    background-position: center;
+}
+
+.landing-hero-conteudo {
+    width: 90%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 80px 0 110px;
+}
+
+.landing-etiqueta,
+.landing-numero {
+    margin: 0 0 15px;
+    color: #56d6b0;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.landing-hero h1,
+.landing-secao h2,
+.landing-cta h2 {
+    margin: 0;
+    color: white;
+    font-size: clamp(35px, 5vw, 62px);
+    line-height: 1.08;
+}
+
+.landing-hero h1 {
+    max-width: 760px;
+}
+
+.landing-hero h1 span,
+.landing-secao h2 span {
+    display: block;
+    color: #c6f24e;
+}
+
+.landing-texto-hero {
+    max-width: 590px;
+    margin: 25px 0;
+    color: #d4e7df;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.landing-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.landing-botao-principal,
+.landing-botao-secundario {
+    display: inline-block;
+    padding: 14px 20px;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.landing-botao-principal {
+    background-color: #c6f24e;
+    color: #073d30;
+}
+
+.landing-botao-principal:hover {
+    background-color: #a9d93e;
+}
+
+.landing-botao-secundario {
+    border: 1px solid #6c9d8b;
+    color: white;
+}
+
+.landing-botao-secundario:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.landing-aviso {
+    margin-top: 35px;
+    color: #b9d4ca;
+    font-size: 12px;
+}
+
+.landing-aviso::first-letter {
+    color: #c6f24e;
+}
+
+.landing-hero-rodape {
+    width: 90%;
+    max-width: 1250px;
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    color: #d4e7df;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.landing-hero-rodape span:nth-child(even) {
+    color: #c6f24e;
+}
+
+.landing-secao {
+    width: 90%;
+    max-width: 1250px;
+    margin: auto;
+    padding: 95px 0;
+}
+
+.landing-sobre {
+    border-bottom: 1px solid #285e4e;
+}
+
+.landing-sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 90px;
+}
+
+.landing-secao h2 {
+    font-size: clamp(30px, 4vw, 47px);
+}
+
+.landing-sobre-grid p,
+.landing-problema p,
+.landing-titulo-secao > p,
+.landing-beneficios-titulo > p {
+    color: #b9d4ca;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.landing-sobre-grid p:first-child,
+.landing-problema p:first-of-type {
+    margin-top: 0;
+}
+
+.landing-problema {
+    background-color: #102f28;
+}
+
+.landing-problema-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 85px;
+}
+
+.landing-painel-iot {
+    min-height: 360px;
+    position: relative;
+    overflow: hidden;
+    padding: 25px;
+
+    background-color: #174438;
+    border: 1px solid #39735e;
+    border-radius: 12px;
+}
+
+.landing-painel-iot p {
+    margin: 0;
+    color: #8debd0;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.landing-painel-iot p span {
+    color: #c6f24e;
+}
+
+.landing-painel-iot strong {
+    position: absolute;
+    right: 26px;
+    bottom: 22px;
+
+    color: white;
+    font-size: 42px;
+}
+
+.landing-painel-iot small {
+    color: #8debd0;
+    font-size: 18px;
+}
+
+.landing-trilho {
+    width: 145%;
+    height: 54px;
+    position: absolute;
+    left: -20%;
+    border: 6px solid #7da395;
+    border-radius: 50%;
+    opacity: 0.65;
+}
+
+.trilho-um {
+    top: 125px;
+    transform: rotate(-17deg);
+}
+
+.trilho-dois {
+    top: 210px;
+    transform: rotate(-17deg);
+}
+
+.landing-sinal {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+
+    background-color: #c6f24e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px rgba(198, 242, 78, 0.15);
+}
+
+.sinal-um {
+    top: 127px;
+    left: 35%;
+}
+
+.sinal-dois {
+    top: 220px;
+    left: 62%;
+}
+
+.landing-titulo-secao {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.landing-titulo-secao > p {
+    max-width: 360px;
+    margin: 0;
+}
+
+.landing-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+}
+
+.landing-card {
+    min-height: 300px;
+    padding: 22px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #164438;
+    border: 1px solid #285e4e;
+    border-radius: 10px;
+}
+
+.landing-card-destaque {
+    background-color: #073d30;
+    border-color: #397c65;
+}
+
+.landing-card-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.landing-card-topo span {
+    color: #8debd0;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.landing-card-topo strong {
+    color: #c6f24e;
+    font-size: 25px;
+}
+
+.landing-card h3 {
+    margin: 35px 0 12px;
+    color: white;
+    font-size: 20px;
+    line-height: 1.25;
+}
+
+.landing-card p {
+    margin: 0;
+    color: #b9d4ca;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.landing-card small {
+    margin-top: auto;
+    padding-top: 25px;
+
+    color: #56d6b0;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.landing-como-funciona {
+    background-color: #073d30;
+}
+
+.landing-como-funciona h2 {
+    margin-bottom: 45px;
+}
+
+.landing-etapas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.landing-etapas article > span {
+    color: #c6f24e;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.landing-etapas hr {
+    border: 0;
+    border-top: 1px solid #397c65;
+    margin: 18px 0;
+}
+
+.landing-etapas h3 {
+    margin: 0 0 10px;
+    color: white;
+    font-size: 21px;
+}
+
+.landing-etapas p {
+    margin: 0;
+    color: #b9d4ca;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.landing-beneficios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+}
+
+.landing-beneficios-titulo h2 {
+    margin-bottom: 22px;
+}
+
+.landing-lista-beneficios {
+    border-top: 1px solid #285e4e;
+}
+
+.landing-lista-beneficios article {
+    display: flex;
+    gap: 22px;
+    padding: 23px 0;
+    border-bottom: 1px solid #285e4e;
+}
+
+.landing-lista-beneficios > article > span {
+    color: #56d6b0;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.landing-lista-beneficios h3 {
+    margin: 0 0 7px;
+    color: white;
+    font-size: 19px;
+}
+
+.landing-lista-beneficios p {
+    margin: 0;
+    color: #b9d4ca;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.landing-cta {
+    min-height: 390px;
+    position: relative;
+    overflow: hidden;
+    padding: 85px 8%;
+
+    background-color: #174438;
+    border-top: 1px solid #39735e;
+}
+
+.landing-cta > div {
+    max-width: 680px;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-cta h2 {
+    margin-bottom: 18px;
+    font-size: clamp(31px, 4vw, 50px);
+}
+
+.landing-cta p {
+    margin-bottom: 28px;
+    color: #c5ddd3;
+    font-size: 16px;
+}
+
+.landing-cta > span {
+    position: absolute;
+    right: -25px;
+    bottom: -34px;
+
+    color: rgba(198, 242, 78, 0.09);
+    font-size: clamp(80px, 14vw, 210px);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.landing-footer {
+    padding: 30px 5%;
+    background-color: #073d30;
+    border-top: 1px solid #285e4e;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+.landing-footer a {
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.landing-footer sup {
+    color: #56d6b0;
+    font-size: 10px;
+}
+
+.landing-footer p,
+.landing-footer span {
+    margin: 0;
+    color: #a9c2b7;
+    font-size: 12px;
+}
+
+@media (max-width: 950px) {
+    .landing-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .landing-sobre-grid,
+    .landing-problema-grid,
+    .landing-beneficios {
+        gap: 45px;
+    }
+}
+
+@media (max-width: 700px) {
+    .landing-nav {
+        padding: 17px 0;
+        flex-wrap: wrap;
+    }
+
+    .landing-menu {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .landing-login {
+        margin-left: auto;
+    }
+
+    .landing-sobre-grid,
+    .landing-problema-grid,
+    .landing-beneficios,
+    .landing-titulo-secao {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .landing-titulo-secao {
+        align-items: start;
+    }
+
+    .landing-etapas {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .landing-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 500px) {
+    .landing-menu {
+        justify-content: flex-start;
+        gap: 17px;
+    }
+
+    .landing-menu a {
+        font-size: 12px;
+    }
+
+    .landing-login {
+        padding: 9px 12px;
+        font-size: 11px;
+    }
+
+    .landing-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-hero {
+        min-height: 650px;
+    }
+
+    .landing-hero-conteudo {
+        padding-top: 65px;
+    }
+}

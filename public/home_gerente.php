@@ -37,7 +37,7 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
         <div class="hg-brand">
             <img src="../assets/imgs/LogoDeTrain.png" alt="Logo DE-TRAIN">
-            <a href="../public/home_gerente.php">DE-TRAIN</a>
+            <a href="../index.php">DE-TRAIN</a>
         </div>
 
 
@@ -46,9 +46,6 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
                 <span>Bem-vindo(a),</span>
                 <strong><?= $nomeGerente ?></strong>
             </div>
-
-
-            <img src="../assets/imgs/LoginIcon.png" alt="Perfil">
 
             <a href="logout.php" class="hg-logout">Sair</a>
         </div>
@@ -96,8 +93,8 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
 
                 <div class="hg-operations-card">
-                    <h3>Área operacional</h3>
-                    <p>Utilize os atalhos para administrar os registros do sistema.</p>
+                    <h3>Cadastros</h3>
+                    <p>Utilize os atalhos para cadastrar novos registros no sistema.</p>
 
                     <a href="cadastro_trem.php">Cadastrar trem</a>
                     <a href="cadastro_rota.php">Cadastrar rota</a>
@@ -137,39 +134,8 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
             <aside class="hg-alerts">
 
-                <div class="hg-section-heading">
-                    <h2>Alertas e Avisos</h2>
-                </div>
-
-                <div class="hg-alert-card hg-alert-info">
-                    <span class="hg-alert-symbol">!</span>
-
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
-
-                <div class="hg-alert-card hg-alert-warning">
-                    <span class="hg-alert-symbol">!</span>
-
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
-
-                <div class="hg-alert-card hg-alert-info">
-                    <span class="hg-alert-symbol">!</span>
-
-                    <div>
-                        <strong>Alerta Exemplo</strong>
-                        <p>um alerta de exemplo para demostrar como o site vai funcionar</p>
-                    </div>
-                </div>
-
                 <div class="hg-quick-access">
-                    <h3>Acessos rápidos</h3>
+                    <h3>Visualizações</h3>
 
                     <a href="visualizar_sensor.php">
                         <span>Visualizar sensores</span>

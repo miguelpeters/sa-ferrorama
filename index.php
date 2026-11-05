@@ -94,7 +94,7 @@
         <div class="FakeFooter">
             <h1 class="Bordao">Melhor ir DE-TRAIN!</h1>
             <p class="strike">Todos os direitos reservados</p>
-            <img id="StrikeImage" src="assets/imgs/StrikeImage.png">
+            <img id="StrikeImage" src="assets/imgs/StrikeImagePNG.png">
         </div>
     </footer>
 </body>

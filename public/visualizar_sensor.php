@@ -156,7 +156,7 @@ if (isset($_GET["editar"])) {
     <a
         class="login-detrain-logo"
         href="<?= htmlspecialchars($paginaHome) ?>"
-    >DE-TRAIN</a>
+    >VOLTAR</a>
 
     <img
         id="icon"

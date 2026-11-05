@@ -88,7 +88,7 @@ $resultadoFuncionarios = $conexao->query($sqlFuncionarios);
 <body class="bodyCadastro">
 
     <div class="cadastro-detrain-topo">
-        <a class="login-detrain-logo" href="<?= htmlspecialchars($paginaHome) ?>">DE-TRAIN</a>
+        <a class="login-detrain-logo" href="<?= htmlspecialchars($paginaHome) ?>">VOLTAR</a>
         <img id="icon-login" src="../assets/imgs/LogoDeTrain.png">
     </div>
 

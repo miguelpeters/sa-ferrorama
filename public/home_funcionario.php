@@ -107,20 +107,22 @@ if (
 
                 <div class="hg-section-heading">
                     <div>
-                        <h2>Mapa Ferroviário</h2>
-                        <span>Visualização da malha ferroviária</span>
                     </div>
 
-                    <span class="hg-map-tag">JOINVILLE - SC</span>
                 </div>
 
                 <div class="hg-map-container">
 
-                    <img
-                        src="../assets/imgs/sistema-metrô-joinvilense.webp"
-                        alt="Mapa da malha ferroviária"
-                        class="hg-map-image"
-                    >
+                    <div class="hg-map-container">
+
+                        <iframe
+                            class="hg-map-iframe"
+                            src="https://embed.windy.com/embed2.html?lat=-26.30&lon=-48.85&detailLat=-26.30&detailLon=-48.85&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=true&message=true&marker=true&calendar=now&type=map&location=coordinates&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1"
+                            title="Mapa de vento e chuva"
+                            loading="lazy">
+                        </iframe>
+
+                    </div>
 
                 </div>
 
@@ -190,10 +192,9 @@ if (
 
   <footer class="hg-footer">
         <strong>Melhor ir DE-TRAIN!</strong>
-        <span>SA-Ferrorama | Sistema de gerenciamento ferroviário</span>
+         <span><a href="../public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
     </footer>
 
-    <!-- API DE MONITORAMENTO CLIMÁTICO -->
     <script>
 
         async function atualizarClima() {

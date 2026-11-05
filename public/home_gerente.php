@@ -37,7 +37,7 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
         <div class="hg-brand">
             <img src="../assets/imgs/LogoDeTrain.png" alt="Logo DE-TRAIN">
-            <a href="../index.php">DE-TRAIN</a>
+            <a href="../public/home_gerente.php">DE-TRAIN - Perfil Adminstrativo</a>
         </div>
 
 
@@ -143,7 +143,7 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
     <div class="hg-weather">
 
         <div class="hg-weather-location">
-            <span class="hg-weather-pin">📍</span>
+            <span class="hg-weather-pin"></span>
             <span class="hg-map-tag" id="localMapa">JOINVILLE - SC</span>
         </div>
 
@@ -222,24 +222,24 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
             const codigo = dados.current.weather_code;
 
             const condicoes = {
-                0: "Céu limpo ☀️",
-                1: "Predominantemente limpo 🌤️",
-                2: "Parcialmente nublado ⛅",
-                3: "Nublado ☁️",
-                45: "Neblina 🌫️",
-                48: "Neblina com geada 🌫️",
-                51: "Garoa leve 🌧️",
-                53: "Garoa moderada 🌧️",
-                55: "Garoa intensa 🌧️",
-                61: "Chuva leve 🌧️",
-                63: "Chuva moderada 🌧️",
-                65: "Chuva intensa 🌧️",
-                80: "Pancadas de chuva 🌦️",
-                81: "Pancadas moderadas 🌧️",
-                82: "Pancadas fortes ⛈️",
-                95: "Tempestade ⛈️",
-                96: "Tempestade com granizo ⛈️",
-                99: "Tempestade com granizo forte ⛈️"
+                0: "Céu limpo",
+                1: "Predominantemente limpo",
+                2: "Parcialmente nublado",
+                3: "Nublado",
+                45: "Neblina",
+                48: "Neblina com geada",
+                51: "Garoa leve",
+                53: "Garoa moderada",
+                55: "Garoa intensa",
+                61: "Chuva leve",
+                63: "Chuva moderada",
+                65: "Chuva intensa",
+                80: "Pancadas de chuva",
+                81: "Pancadas moderadas",
+                82: "Pancadas fortes",
+                95: "Tempestade",
+                96: "Tempestade com granizo",
+                99: "Tempestade com granizo forte"
             };
 
             document.getElementById("temperatura").textContent =

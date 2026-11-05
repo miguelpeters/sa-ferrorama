@@ -100,31 +100,6 @@ body {
          transparent);
 }
 
-.FakeFooter {
-   display: flex;
-   align-items: center;
-
-   background-color:#102d25;
-   color: rgb(253, 252, 248);
-   position: fixed;
-   bottom: 0px;
-   width: 100%;
-}
-
-.Bordao {
-   margin-left: 10px;
-   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-
-}
-
-.strike {
-   margin-left: 1300px;
-}
-
-
-#StrikeImage {
-   width: 30px;
-}
 
 .info-section {
    width: 100%;
@@ -1165,7 +1140,7 @@ button:hover {
    color: #0c3527;
    font-weight: bold;
    border: none;
-   border-radius: 30px;
+   border-radius: 15px;
    cursor: pointer;
    font-size: 15px;
 }
@@ -1203,19 +1178,19 @@ button:hover {
 #icon-login {
    width: 80px;
    margin-right: 1590px;
-   border-radius: 15px;
+   border-radius: 10px;
 }
 
 #login-email {
    padding: 10px;
    width: 600px;
-   border-radius: 20px;
+   border-radius: 10px;
 }
 
 #login-senha {
    padding: 10px;
    width: 600px;
-   border-radius: 20px;
+   border-radius: 10px;
 }
 
 .login-rodape {

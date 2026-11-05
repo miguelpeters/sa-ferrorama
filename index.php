@@ -90,13 +90,10 @@
 
     </main>
 
-    <footer>
-        <div class="FakeFooter">
-            <h1 class="Bordao">Melhor ir DE-TRAIN!</h1>
-            <p class="strike">Todos os direitos reservados</p>
-            <img id="StrikeImage" src="assets/imgs/StrikeImagePNG.png">
-        </div>
-    </footer>
+<footer class="hg-footer">
+        <strong>Melhor ir DE-TRAIN!</strong>
+        <span><a href="../public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
+</footer>
 </body>
 
 </html>

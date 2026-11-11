@@ -16,6 +16,9 @@ if (
 }
 
 $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
+
+$resultadoFuncionarios = $conexao->query("SELECT id, nome FROM funcionarios ORDER BY nome");
+$resultadoTrens = $conexao->query("SELECT id, modelo FROM trens ORDER BY modelo");
 ?>
 
 <!DOCTYPE html>
@@ -96,8 +99,8 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
                     <h3>Cadastros</h3>
                     <p>Utilize os atalhos para cadastrar novos registros no sistema.</p>
 
-                    <a href="cadastro_trem.php">Cadastrar trem</a>
-                    <a href="cadastro_rota.php">Cadastrar rota</a>
+                    <a href="cadastro_trem.php" id="abrirModalTrem">Cadastrar trem</a>
+                    <a href="cadastro_rota.php" id="abrirModalRota">Cadastrar rota</a>
                     <a href="cadastro_sensor.php">Cadastrar sensor</a>
                     <a href="cadastro_funcionario.php">Cadastrar funcionário</a>
                 </div>
@@ -199,6 +202,131 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
         <strong>Melhor ir DE-TRAIN!</strong>
         <span><a href="../public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
     </footer>
+
+    <dialog id="modalTrem" class="modal-trem">
+    <div class="modal-conteudo">
+
+        <button type="button" id="fecharModalTrem" class="modal-fechar" aria-label="Fechar">&times;</button>
+
+        <div id="BlocoCadastro">
+            <div class="Cadastro">
+
+                <h2 id="CadastroTitulo">Cadastrar Trem</h2>
+
+                <p id="mensagemTrem" role="status"></p>
+
+                <form id="FormsCadastro" method="POST">
+
+                    <label for="cadastro-modelo" id="CadastroLabel">Modelo</label>
+                    <input type="text" id="cadastro-modelo" name="modelo"
+                           class="CadastroInput" placeholder="Modelo do trem" required>
+                    <br><br>
+
+                    <label for="cadastro-serie" id="CadastroLabel">Série</label>
+                    <input type="text" id="cadastro-serie" name="serie"
+                           class="CadastroInput" placeholder="Série do trem" required>
+                    <br><br>
+
+                    <label for="estado" id="CadastroLabel">Estado</label>
+                    <select id="estado" name="estado" class="CadastroInput" required>
+                        <option value="">Selecione o estado</option>
+                        <option value="operante">Operante</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                    <br><br>
+
+                    <label for="funcionario_id" id="CadastroLabel">Funcionário</label>
+                    <select id="funcionario_id" name="funcionario_id" class="CadastroInput" required>
+                        <option value="">Selecione um funcionário</option>
+                        <?php if ($resultadoFuncionarios): ?>
+                            <?php while ($func = $resultadoFuncionarios->fetch_assoc()): ?>
+                                <option value="<?= (int) $func['id'] ?>">
+                                    <?= htmlspecialchars($func['id'] . ' - ' . $func['nome']) ?>
+                                </option>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
+                    </select>
+
+                    <?php if ($resultadoFuncionarios && $resultadoFuncionarios->num_rows === 0): ?>
+                        <p>Nenhum funcionário cadastrado. Cadastre um funcionário primeiro.</p>
+                    <?php endif; ?>
+                    <br><br>
+
+                    <button type="submit" class="ButtonCadastro">CADASTRAR TREM</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</dialog>
+
+<dialog id="modalRota" class="modal-trem modal-rota">
+    <div class="modal-conteudo">
+
+        <button type="button" id="fecharModalRota" class="modal-fechar" aria-label="Fechar">&times;</button>
+
+        <div id="BlocoCadastro">
+            <div class="Cadastro">
+
+                <h2 id="CadastroTitulo">Cadastrar Rota</h2>
+
+                <p id="mensagemRota" role="status"></p>
+
+                <form id="FormsCadastro" method="POST">
+
+                    <label for="cadastro-nome" id="CadastroLabel">Nome</label>
+                    <input type="text" id="cadastro-nome" name="nome"
+                           class="CadastroInput" placeholder="Nome da rota" required>
+                    <br><br>
+
+                    <label for="cadastro-descricao" id="CadastroLabel">Descrição</label>
+                    <input type="text" id="cadastro-descricao" name="descricao"
+                           class="CadastroInput" placeholder="Descrição da rota" required>
+                    <br><br>
+
+                    <label for="cadastro-distancia" id="CadastroLabel">Distância (km)</label>
+                    <input type="number" id="cadastro-distancia" name="distancia"
+                           class="CadastroInput" placeholder="Distância da rota"
+                           step="0.01" min="0.01" required>
+                    <br><br>
+
+                    <label for="cadastro-duracao" id="CadastroLabel">Duração (horas)</label>
+                    <input type="number" id="cadastro-duracao" name="duracao"
+                           class="CadastroInput" placeholder="Duração da rota"
+                           step="0.01" min="0.01" required>
+                    <br><br>
+
+                    <label for="cadastro-data" id="CadastroLabel">Data de criação</label>
+                    <input type="date" id="cadastro-data" name="data_criacao"
+                           class="CadastroInput" required>
+                    <br><br>
+
+                    <label for="cadastro-trem" id="CadastroLabel">Trem</label>
+                    <select id="cadastro-trem" name="trem_id" class="CadastroInput" required>
+                        <option value="">Selecione um trem</option>
+                        <?php if ($resultadoTrens): ?>
+                            <?php while ($trem = $resultadoTrens->fetch_assoc()): ?>
+                                <option value="<?= (int) $trem['id'] ?>">
+                                    <?= htmlspecialchars($trem['id'] . ' - ' . $trem['modelo']) ?>
+                                </option>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
+                    </select>
+
+                    <?php if ($resultadoTrens && $resultadoTrens->num_rows === 0): ?>
+                        <p>Nenhum trem cadastrado. Cadastre um trem primeiro.</p>
+                    <?php endif; ?>
+                    <br><br>
+
+                    <button type="submit" class="ButtonCadastro">CADASTRAR ROTA</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</dialog>
 
     <script>
 
@@ -357,6 +485,94 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
             console.error(erro);
         }
     });
+
+    const modalTrem = document.getElementById("modalTrem");
+const formTrem = modalTrem.querySelector("form");
+const mensagemTrem = document.getElementById("mensagemTrem");
+
+document.getElementById("abrirModalTrem").addEventListener("click", function (event) {
+    event.preventDefault();
+    mensagemTrem.textContent = "";
+    modalTrem.showModal();
+});
+
+document.getElementById("fecharModalTrem").addEventListener("click", () => modalTrem.close());
+
+modalTrem.addEventListener("click", function (event) {
+    if (event.target === modalTrem) modalTrem.close();
+});
+
+formTrem.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    mensagemTrem.textContent = "Cadastrando...";
+
+    try {
+        const resposta = await fetch("processa_trem.php", {
+            method: "POST",
+            body: new FormData(formTrem)
+        });
+
+        const dados = await resposta.json();
+
+        mensagemTrem.textContent = dados.mensagem;
+
+        if (dados.ok) {
+
+            // coloca o trem novo na lista do modal de rota
+            const selectTrem = document.getElementById("cadastro-trem");
+            selectTrem.add(new Option(dados.id + " - " + formTrem.modelo.value, dados.id));
+
+            formTrem.reset();
+        }
+    } catch (erro) {
+        mensagemTrem.textContent = "Não foi possível cadastrar o trem.";
+        console.error(erro);
+    }
+});
+
+
+
+
+const modalRota = document.getElementById("modalRota");
+const formRota = modalRota.querySelector("form");
+const mensagemRota = document.getElementById("mensagemRota");
+
+document.getElementById("abrirModalRota").addEventListener("click", function (event) {
+    event.preventDefault();
+    mensagemRota.textContent = "";
+    modalRota.showModal();
+});
+
+document.getElementById("fecharModalRota").addEventListener("click", () => modalRota.close());
+
+modalRota.addEventListener("click", function (event) {
+    if (event.target === modalRota) modalRota.close();
+});
+
+formRota.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    mensagemRota.textContent = "Cadastrando...";
+
+    try {
+        const resposta = await fetch("processa_rota.php", {
+            method: "POST",
+            body: new FormData(formRota)
+        });
+
+        const dados = await resposta.json();
+
+        mensagemRota.textContent = dados.mensagem;
+
+        if (dados.ok) {
+            formRota.reset();
+        }
+    } catch (erro) {
+        mensagemRota.textContent = "Não foi possível cadastrar a rota.";
+        console.error(erro);
+    }
+});
 
 </script>
 

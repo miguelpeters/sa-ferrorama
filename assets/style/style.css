@@ -341,6 +341,95 @@ button:hover {
 /* Home */
 
 
+.modal-trem {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-trem::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-conteudo {
+    position: relative;
+    padding: 24px;
+}
+
+.modal-fechar {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modal-trem {
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+    max-width: 460px;
+    width: 92%;
+}
+
+.modal-trem .modal-conteudo {
+    padding: 0;
+}
+
+/* neutraliza larguras/margens pensadas para a página inteira */
+.modal-trem #BlocoCadastro,
+.modal-trem .Cadastro,
+.modal-trem #FormsCadastro {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* o card verde: o BlocoCadastro continua com o estilo dele, só ajusto o espaço */
+.modal-trem #BlocoCadastro {
+    padding: 28px 24px;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.modal-trem #CadastroTitulo {
+    font-size: 1.8rem;
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+/* todos os labels em linha própria (o "Modelo" estava ao lado do input) */
+.modal-trem label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* inputs, selects e botão ocupam a largura do card */
+.modal-trem .CadastroInput,
+.modal-trem .ButtonCadastro {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* botão de fechar visível sobre o fundo verde */
+.modal-trem .modal-fechar {
+    top: 10px;
+    right: 14px;
+    color: #fff;
+    z-index: 2;
+}
+
 .body_home {
     margin: 0;
     min-height: 100vh;

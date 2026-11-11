@@ -1513,14 +1513,87 @@ body.bodyCadastro {
     color: var(--texto-principal);
 }
 
-
-/*tabelas*/
+/* tabelas */
 
 body {
     background-color: #0b3027;
     color: white;
 }
 
+.cabecalho {
+    background-color: #063d32;
+    border-bottom: 1px solid #285e4e;
+}
+
+table {
+    background-color: white;
+    color: #222;
+    border-collapse: collapse;
+}
+
+thead,
+th {
+    background-color: #e5e8e4;
+    color: #063d32;
+}
+
+td {
+    background-color: white;
+    color: #222;
+}
+
+table,
+th,
+td {
+    border-color: #cccccc;
+}
+
+.tabela_padrao tbody tr:nth-child(even) td,
+.tabela_padrao tbody tr:nth-child(even) th {
+    background-color: #f1f3f1;
+}
+
+.tabela_padrao tbody tr:hover td,
+.tabela_padrao tbody tr:hover th {
+    background-color: #e5eee9;
+}
+
+.tabela_padrao td:last-child {
+    white-space: nowrap;
+}
+
+.tabela_padrao td form {
+    display: inline;
+    margin: 0;
+}
+
+.tabela_padrao td button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+    cursor: pointer;
+}
+
+td a {
+    color: #007bff;
+}
+
+input[type="text"],
+input[type="search"],
+select,
+textarea {
+    background-color: white;
+    color: #222;
+    border: 1px solid #ccc;
+}
+
+input::placeholder {
+    color: #777;
+}
 
 
 .cabecalho {

@@ -310,8 +310,8 @@ if (isset($_GET["editar"])) {
 
                     <td>
 
-                        <a href="visualizar_sensor.php?editar=<?php echo $sensor["id"]; ?>">
-                            EDITAR
+                        <a class="button-editar-tabela" href="visualizar_sensor.php?editar=<?php echo $sensor["id"]; ?>">
+                            EDITAR 
                         </a>
 
                         <form method="POST" style="display:inline;">
@@ -323,10 +323,11 @@ if (isset($_GET["editar"])) {
                             >
 
                             <button
+                                class="button-excluir-tabela"
                                 type="submit"
                                 name="excluir"
                                 onclick="return confirm('Tem certeza que deseja excluir este sensor?');"
-                            >
+                            >   
                                 EXCLUIR
                             </button>
 

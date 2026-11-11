@@ -547,7 +547,8 @@ if (!$resultado) {
                         </button>
 
                         <a
-                            href="visualizar_usuario.php"
+                            
+                        href="visualizar_usuario.php"
                             class="button-cancelar"
                         >
                             CANCELAR
@@ -627,7 +628,8 @@ if (!$resultado) {
 
                                 <a
                                     href="visualizar_usuario.php?editar=<?php echo (int) $pessoa["id"]; ?>&tipo=<?php echo urlencode($pessoa["tipo"]); ?>"
-                                >
+                                
+                            class="button-editar-tabela"    >
                                     EDITAR
                                 </a>
 
@@ -652,6 +654,7 @@ if (!$resultado) {
                                     <button
                                         type="submit"
                                         name="excluir"
+                                        class="button-excluir-tabela"
                                     >
                                         EXCLUIR
                                     </button>

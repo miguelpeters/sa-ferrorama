@@ -703,7 +703,7 @@ if (!$resultado) {
 
                         <td>
 
-                            <a href="visualizar_rota.php?editar=<?php echo $rota['id']; ?>">
+                            <a href="visualizar_rota.php?editar=<?php echo $rota['id']; ?>"class="button-editar-tabela">
                                  EDITAR
                             </a>
 
@@ -722,6 +722,7 @@ if (!$resultado) {
                                     type="submit"
                                     name="excluir"
                                     onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
+                                    class="button-excluir-tabela"
                                 >
 
 

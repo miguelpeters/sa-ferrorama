@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -8,7 +9,6 @@ $paginaHome = ($tipoUsuario === "gerente")
     ? "home_gerente.php"
     : "home_funcionario.php";
 
-
 if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
     header("Location: login.php");
     exit();
@@ -16,10 +16,10 @@ if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
 
 include_once("../infra/conexao.php");
 
-$podeGerenciarRotas = true;
-
 $mensagem = "";
 $tipoMensagem = "";
+
+// EXCLUIR ROTA
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -51,8 +51,6 @@ if (
 
             if ($stmt->affected_rows > 0) {
 
-                $stmt->close();
-
                 header("Location: visualizar_rota.php?sucesso=excluir");
                 exit();
 
@@ -66,7 +64,6 @@ if (
         } catch (mysqli_sql_exception $e) {
 
             if ($e->getCode() == 1451) {
-
 
                 $stmtSensores = $conexao->prepare(
                     "SELECT id, nome, tipo
@@ -124,9 +121,13 @@ if (
             $stmt->close();
 
         }
+
     }
+
 }
 
+
+// ATUALIZAR ROTA
 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -237,27 +238,31 @@ if (
 
             if ($stmt->execute()) {
 
-                if ($stmt->affected_rows >= 0) {
+                $stmt->close();
+                $stmtTrem->close();
 
-                    $stmt->close();
-                    $stmtTrem->close();
-
-                    header("Location: visualizar_rota.php?sucesso=atualizar");
-                    exit();
-                }
+                header("Location: visualizar_rota.php?sucesso=atualizar");
+                exit();
 
             } else {
 
                 $mensagem = "Erro ao atualizar a rota.";
                 $tipoMensagem = "danger";
+
             }
 
             $stmt->close();
+
         }
 
         $stmtTrem->close();
+
     }
+
 }
+
+
+// MENSAGENS DE SUCESSO
 
 $mensagemSucesso = "";
 
@@ -272,7 +277,11 @@ if (isset($_GET["sucesso"])) {
         $mensagemSucesso = "Rota atualizada com sucesso!";
 
     }
+
 }
+
+
+// BUSCAR ROTA PARA EDIÇÃO
 
 $rotaEditar = null;
 
@@ -307,8 +316,13 @@ if (isset($_GET["editar"])) {
         }
 
         $stmt->close();
+
     }
+
 }
+
+
+// BUSCAR TRENS
 
 $sqlTrens = "SELECT id, modelo FROM trens ORDER BY modelo";
 
@@ -323,6 +337,9 @@ $trens = [];
 while ($trem = $resultadoTrens->fetch_assoc()) {
     $trens[] = $trem;
 }
+
+
+// BUSCAR ROTAS
 
 $sql = "SELECT
             rotas.id,
@@ -355,12 +372,12 @@ if (!$resultado) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../assets/style/style.css">
-
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     >
+
+    <link rel="stylesheet" href="../assets/style/style.css">
 
     <link
         rel="icon"
@@ -374,8 +391,18 @@ if (!$resultado) {
 
 <body class="body_home">
 
-<?php if ($mensagemSucesso !== "") { ?>
+<?php if ($mensagem !== "") { ?>
+
     <script>
+        alert(<?php echo json_encode($mensagem); ?>);
+    </script>
+
+<?php } ?>
+
+<?php if ($mensagemSucesso !== "") { ?>
+
+    <script>
+
         alert(<?php echo json_encode($mensagemSucesso); ?>);
 
         window.history.replaceState(
@@ -383,41 +410,34 @@ if (!$resultado) {
             "",
             window.location.pathname
         );
+
     </script>
+
 <?php } ?>
+
 
 <header class="cabecalho">
 
     <div class="lado-esquerdo">
 
-    <a
-        class="login-detrain-logo"
-        href="<?= htmlspecialchars($paginaHome) ?>"
-    >VOLTAR</a>
+        <a
+            class="login-detrain-logo"
+            href="<?= htmlspecialchars($paginaHome) ?>"
+        >VOLTAR</a>
 
-    <img
-        id="icon"
-        src="../assets/imgs/LogoDeTrain.png"
-        class="logo"
-        alt="Logo DE-TRAIN"
-    >
+        <img
+            id="icon"
+            src="../assets/imgs/LogoDeTrain.png"
+            class="logo"
+            alt="Logo DE-TRAIN"
+        >
 
-</div>
-
-
+    </div>
 
 </header>
 
+
 <main>
-
-
-    <?php if ($mensagem !== "") { ?>
-
-    <p>
-        <?php echo htmlspecialchars($mensagem); ?>
-    </p>
-
-    <?php } ?>
 
 
     <?php if ($rotaEditar !== null) { ?>
@@ -425,9 +445,7 @@ if (!$resultado) {
         <div class="container_editar_usuario">
 
             <div class="texto-editar-usuario">
-
                 <h2>Editar rota</h2>
-
             </div>
 
             <form method="POST">
@@ -610,8 +628,12 @@ if (!$resultado) {
 
     <?php } ?>
 
-<div class="container_tabelas">
-    <table class="tabela_padrao">
+
+    <!-- TABELA DE ROTAS -->
+
+    <div class="container_tabelas">
+
+        <table class="tabela_padrao">
 
             <thead>
 
@@ -644,56 +666,42 @@ if (!$resultado) {
                     <tr class="visualizar_usuario_gerente">
 
                         <th scope="row">
-
                             <?php echo (int) $rota["id"]; ?>
-
                         </th>
 
                         <td>
-
                             <?php echo htmlspecialchars($rota["nome"]); ?>
-
                         </td>
 
                         <td>
-
                             <?php echo htmlspecialchars($rota["descricao"] ?? ""); ?>
-
                         </td>
 
                         <td>
-
                             <?php echo htmlspecialchars($rota["distancia"]); ?>
-
                         </td>
 
                         <td>
-
                             <?php echo htmlspecialchars($rota["duracao"]); ?>
-
                         </td>
 
                         <td>
-
                             <?php
                             echo date(
                                 "d/m/Y",
                                 strtotime($rota["data_criacao"])
                             );
                             ?>
-
                         </td>
 
                         <td>
-
                             <?php echo htmlspecialchars($rota["modelo_trem"]); ?>
-
                         </td>
 
                         <td>
 
                             <a href="visualizar_rota.php?editar=<?php echo $rota['id']; ?>">
-                                 EDITAR
+                                EDITAR
                             </a>
 
                             <form
@@ -712,10 +720,7 @@ if (!$resultado) {
                                     name="excluir"
                                     onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
                                 >
-
-
                                     EXCLUIR
-
                                 </button>
 
                             </form>
@@ -733,6 +738,7 @@ if (!$resultado) {
     </div>
 
 </main>
+
 
 <?php
 

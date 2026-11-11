@@ -67,34 +67,29 @@ $resultadoRotas = $conexao->query("SELECT id, nome FROM rotas ORDER BY nome");
             <aside class="hg-sidebar">
 
                 
-    <div class="hg-cep-card">
+            <div class="hg-quick-access">
 
-    <h3>Consulta de CEP</h3>
+            <h3>Acessos rápidos</h3>
 
-    <p>Digite um CEP para localizar um endereço.</p>
+            <a href="visualizar_sensor.php">
+                <span>Visualizar sensores</span>
+                <span>></span>
+            </a>
 
-    <form id="formCEP">
+            <a href="visualizar_trem.php">
+                <span>Visualizar trens</span>
+                <span>></span>
+            </a>
 
-        <input
-            type="text"
-            id="cep"
-            placeholder="00000-000"
-            maxlength="9"
-            inputmode="numeric"
-            required
-        >
+            <a href="visualizar_rota.php">
+                <span>Visualizar rotas</span>
+                <span>></span>
+            </a>
 
-        <button type="submit">
-            Consultar CEP
-        </button>
-
-    </form>
-
-    <div id="resultadoCEP" class="hg-cep-resultado"></div>
-
-    <p id="mensagemCEP" class="hg-cep-mensagem"></p>
-
-    </div>
+            <a href="visualizar_usuario.php">
+                <span>Visualizar usuários</span>
+                <span>></span>
+            </a>
 
                 <div class="hg-operations-card">
                     <h3>Cadastros</h3>
@@ -167,35 +162,36 @@ $resultadoRotas = $conexao->query("SELECT id, nome FROM rotas ORDER BY nome");
 
     </div>
 
-    <div class="hg-quick-access">
+    <div class="hg-cep-card">
 
-        <h3>Acessos rápidos</h3>
+    <h3>Consulta de CEP</h3>
 
-        <a href="visualizar_sensor.php">
-            <span>Visualizar sensores</span>
-            <span>→</span>
-        </a>
+    <p>Digite um CEP para localizar um endereço.</p>
 
-        <a href="visualizar_trem.php">
-            <span>Visualizar trens</span>
-            <span>→</span>
-        </a>
+    <form id="formCEP">
 
-        <a href="visualizar_rota.php">
-            <span>Visualizar rotas</span>
-            <span>→</span>
-        </a>
+        <input
+            type="text"
+            id="cep"
+            placeholder="00000-000"
+            maxlength="9"
+            inputmode="numeric"
+            required
+        >
 
-        <a href="visualizar_usuario.php">
-            <span>Visualizar usuários</span>
-            <span>→</span>
-        </a>
+        <button type="submit">
+            Consultar CEP
+        </button>
 
-        </div> 
+    </form>
 
-            </aside> 
+    <div id="resultadoCEP" class="hg-cep-resultado"></div>
 
-            </section> 
+    <p id="mensagemCEP" class="hg-cep-mensagem"></p>
+
+    </div>
+
+   
 
             </main>
 

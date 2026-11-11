@@ -623,7 +623,7 @@ button:hover {
     align-items: center;
     gap: 7px;
     color: #8debd0;
-    font-size: 11px;
+    font-size: 122px;
     font-weight: bold;
     margin-bottom: 22px;
 }
@@ -674,13 +674,13 @@ button:hover {
 
 .hg-cep-card h3 {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 20px;
     margin: 0 0 12px;
 }
 
 .hg-cep-card p {
     color: #c5ddd3;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.5;
     margin-bottom: 12px;
 }
@@ -697,7 +697,7 @@ button:hover {
     background-color: #204b3e;
     color: #ffffff;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 20px;
     outline: none;
 }
 
@@ -721,7 +721,7 @@ button:hover {
     background-color: #286b54;
     color: #ffffff;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -850,7 +850,7 @@ button:hover {
 .hg-quick-access h3 {
     margin: 0 0 9px;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .hg-operations-card p {
@@ -864,7 +864,7 @@ button:hover {
     padding: 9px 0;
     border-top: 1px solid #285142;
     color: #65d9b2;
-    font-size: 12px;
+    font-size: 15px;
     text-decoration: none;
 }
 
@@ -1031,17 +1031,17 @@ button:hover {
     padding: 12px 2px;
     border-bottom: 1px solid #315747;
     color: #c7ddd2;
-    font-size: 12px;
+    font-size: 22px;
     text-decoration: none;
 }
 
 .hg-quick-access a span:last-child {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .hg-quick-access a:hover {
-    color: #417e0c;
+    color: #c7ddd2;
 }
 
 
@@ -1055,8 +1055,8 @@ button:hover {
     gap: 15px;
     padding: 50px 35px;
     margin: 0;
-    background-color: #073d30;
     border-top: 1px solid #1b5b49;
+    font-size: 16px;
 }
 
 .hg-footer strong {

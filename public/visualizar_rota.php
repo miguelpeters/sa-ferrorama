@@ -2,8 +2,6 @@
 
 session_start();
 
-
-
 $tipoUsuario = $_SESSION["tipo"] ?? "";
 
 $paginaHome = ($tipoUsuario === "gerente")
@@ -376,12 +374,6 @@ if (!$resultado) {
 
 <body class="body_home">
 
-<?php if ($mensagem !== "") { ?>
-    <script>
-        alert(<?php echo json_encode($mensagem); ?>);
-    </script>
-<?php } ?>
-
 <?php if ($mensagemSucesso !== "") { ?>
     <script>
         alert(<?php echo json_encode($mensagemSucesso); ?>);
@@ -618,11 +610,8 @@ if (!$resultado) {
 
     <?php } ?>
 
-    <!-- TABELA DE ROTAS -->
-
-    <div class="container_tabela_usuarios">
-
-        <table class="tabela_visualizacao">
+<div class="container_tabelas">
+    <table class="tabela_padrao">
 
             <thead>
 

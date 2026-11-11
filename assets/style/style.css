@@ -1440,26 +1440,40 @@ input::placeholder {
 
 /* tabela de visualização */
 
-.tabela_visualizacao tbody tr:nth-child(even) td,
-.tabela_visualizacao tbody tr:nth-child(even) th {
+.container_tabelas {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0 40px;
+}
+
+.tabela_padrao {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 18px;
+}
+
+.tabela_padrao tbody tr:nth-child(even) td,
+.tabela_padrao tbody tr:nth-child(even) th {
     background-color: #f1f3f1 !important;
 }
 
-.tabela_visualizacao tbody tr:hover td,
-.tabela_visualizacao tbody tr:hover th {
+.tabela_padrao tbody tr:hover td,
+.tabela_padrao tbody tr:hover th {
     background-color: #e5eee9 !important;
 }
 
-.tabela_visualizacao td:last-child {
+.tabela_padrao td:last-child {
     white-space: nowrap;
 }
 
-.tabela_visualizacao td form {
+.tabela_padrao td form {
     display: inline;
     margin: 0;
 }
 
-.tabela_visualizacao td button {
+.tabela_padrao td button {
     display: inline-block;
     vertical-align: middle;
 }

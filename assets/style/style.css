@@ -1419,40 +1419,37 @@ input::placeholder {
     background-color: #ffffff;
 }
 
-/* CABEÇALHO */
-.tabela_usuarios thead th {
-    background-color: #164638;
-    color: #ffffff;
-    padding: 16px 12px;
-    font-size: 15px;
-    font-weight: 600;
-    border: none;
-    white-space: nowrap;
-}
-
 /* CÉLULAS */
 .tabela_usuarios tbody td,
 .tabela_usuarios tbody th {
     padding: 13px 12px;
-    color: #263b35;
+    color: #e5f1eb;
     font-size: 14px;
-    border-bottom: 1px solid #dce7e2;
+    border-bottom: 1px solid #31594c;
+    border-right: 1px solid #31594c;
     vertical-align: middle;
+    background-color: #183b30;
 }
 
 /* LINHAS ALTERNADAS */
-.tabela_usuarios tbody tr:nth-child(even) {
-    background-color: #f0f6f3;
-}
-
-.tabela_usuarios tbody tr:nth-child(odd) {
-    background-color: #ffffff;
+.tabela_usuarios tbody tr:nth-child(even) td,
+.tabela_usuarios tbody tr:nth-child(even) th {
+    background-color: #214b3d;
 }
 
 /* EFEITO AO PASSAR O MOUSE */
-.tabela_usuarios tbody tr:hover {
-    background-color: #dceee5;
+.tabela_usuarios tbody tr:hover td,
+.tabela_usuarios tbody tr:hover th {
+    background-color: #306653;
     transition: 0.2s;
+}
+
+/* CABEÇALHO */
+.tabela_usuarios thead th {
+    background-color: #102e25;
+    color: #ffffff;
+    padding: 16px 12px;
+    border-bottom: 2px solid #4c8b70;
 }
 
 /* BOTÃO EDITAR */
@@ -1460,8 +1457,8 @@ input::placeholder {
     display: inline-block;
     padding: 7px 12px;
     margin: 2px;
-    background-color: #e3f1eb;
-    color: #176348;
+    background-color: #306653;
+    color: #ffffff;
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
@@ -1478,8 +1475,8 @@ input::placeholder {
 .tabela_usuarios button {
     padding: 7px 12px;
     margin: 2px;
-    background-color: #fff0f0;
-    color: #c0392b;
+    background-color: #c0392b;
+    color: #ffffff;
     border: none;
     border-radius: 6px;
     font-size: 12px;

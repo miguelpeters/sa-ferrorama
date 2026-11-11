@@ -174,22 +174,23 @@ if (isset($_GET["editar"])) {
 
     <div class="container_editar_usuario">
 
-        <div class="texto-editar-usuario">
-            <h2>Editar <?php echo htmlspecialchars($sensorEditar["tipo"]); ?></h2>
-        </div>
+    <div class="texto-editar-usuario">
+        <h2>EDITAR SENSOR</h2>
+        <p>Atualize as informações do sensor selecionado.</p>
+    </div>
 
-        <form method="POST">
+    <form method="POST">
 
-            <div class="form-editar-sensor">
+        <div class="form-editar-sensor">
 
-                <input
-                    type="hidden"
-                    name="id"
-                    value="<?php echo $sensorEditar["id"]; ?>"
-                >
+            <input
+                type="hidden"
+                name="id"
+                value="<?php echo $sensorEditar["id"]; ?>"
+            >
 
+            <div class="campo-editar-sensor">
                 <label for="nome" class="editar-sensor">Nome</label>
-                <br>
 
                 <input
                     class="input-editar-sensor"
@@ -199,11 +200,10 @@ if (isset($_GET["editar"])) {
                     value="<?php echo htmlspecialchars($sensorEditar["nome"]); ?>"
                     required
                 >
+            </div>
 
-                <br><br>
-
+            <div class="campo-editar-sensor">
                 <label for="tipo" class="editar-sensor">Tipo</label>
-                <br>
 
                 <input
                     class="input-editar-sensor"
@@ -213,11 +213,10 @@ if (isset($_GET["editar"])) {
                     value="<?php echo htmlspecialchars($sensorEditar["tipo"]); ?>"
                     required
                 >
+            </div>
 
-                <br><br>
-
+            <div class="campo-editar-sensor">
                 <label for="rota_id" class="editar-sensor">ID da rota</label>
-                <br>
 
                 <input
                     class="input-editar-sensor"
@@ -226,8 +225,9 @@ if (isset($_GET["editar"])) {
                     name="rota_id"
                     value="<?php echo htmlspecialchars((string)($sensorEditar["rota_id"] ?? "")); ?>"
                 >
+            </div>
 
-                <br><br>
+            <div class="botoes-editar">
 
                 <button
                     class="button-atualizar"
@@ -243,17 +243,19 @@ if (isset($_GET["editar"])) {
 
             </div>
 
-        </form>
+        </div>
 
-    </div>
+    </form>
 
-    <hr>
+</div>
+
+<hr>
 
 <?php } ?>
 
 <div class="container_tabela_usuarios">
 
-    <table class="tabela_usuarios table-bordered">
+    <table class="tabela_usuarios">
 
         <thead>
             <tr>

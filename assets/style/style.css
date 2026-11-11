@@ -1397,6 +1397,116 @@ input::placeholder {
 
 /* tabela padrão (rotas, sensores, etc.) */
 
+
+/* CONTAINER DA TABELA */
+.container_tabela_usuarios {
+    width: 90%;
+    max-width: 1100px;
+    margin: 45px auto;
+    overflow-x: auto;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* TABELA */
+.tabela_usuarios {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: none;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+/* CABEÇALHO */
+.tabela_usuarios thead th {
+    background-color: #164638;
+    color: #ffffff;
+    padding: 16px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    white-space: nowrap;
+}
+
+/* CÉLULAS */
+.tabela_usuarios tbody td,
+.tabela_usuarios tbody th {
+    padding: 13px 12px;
+    color: #263b35;
+    font-size: 14px;
+    border-bottom: 1px solid #dce7e2;
+    vertical-align: middle;
+}
+
+/* LINHAS ALTERNADAS */
+.tabela_usuarios tbody tr:nth-child(even) {
+    background-color: #f0f6f3;
+}
+
+.tabela_usuarios tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* EFEITO AO PASSAR O MOUSE */
+.tabela_usuarios tbody tr:hover {
+    background-color: #dceee5;
+    transition: 0.2s;
+}
+
+/* BOTÃO EDITAR */
+.tabela_usuarios a {
+    display: inline-block;
+    padding: 7px 12px;
+    margin: 2px;
+    background-color: #e3f1eb;
+    color: #176348;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.tabela_usuarios a:hover {
+    background-color: #176348;
+    color: #ffffff;
+}
+
+/* BOTÃO EXCLUIR */
+.tabela_usuarios button {
+    padding: 7px 12px;
+    margin: 2px;
+    background-color: #fff0f0;
+    color: #c0392b;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tabela_usuarios button:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .container_tabela_usuarios {
+        width: 95%;
+    }
+
+    .tabela_usuarios thead th,
+    .tabela_usuarios tbody td,
+    .tabela_usuarios tbody th {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+}
+
 .container_tabelas {
     display: flex;
     justify-content: center;

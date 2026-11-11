@@ -1296,17 +1296,95 @@ button:hover {
    color: #a9d93e;
 }
 
-/* tabelas */
+
+/* ==========================================================
+   TABELAS E FORMULÁRIOS DE EDIÇÃO
+   (seção consolidada: as regras duplicadas foram unificadas)
+   ========================================================== */
+
+body {
+    background-color: #0b3027;
+    color: white;
+}
 
 .cabecalho {
     background-color: #063d32;
     border-bottom: 1px solid #285e4e;
 }
 
-.tabela_padrao {
+/* regras gerais de tabela */
+
+table {
     background-color: white;
     color: #222;
     border-collapse: collapse;
+}
+
+thead,
+th {
+    background-color: #e5e8e4;
+    color: #063d32;
+}
+
+td {
+    background-color: white;
+    color: #222;
+}
+
+table,
+th,
+td {
+    border-color: #cccccc;
+}
+
+tbody tr:nth-child(even) td {
+    background-color: #f2f4f2;
+}
+
+tbody tr:hover td {
+    background-color: #e5eee9;
+}
+
+td a {
+    color: #007bff;
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+    cursor: pointer;
+}
+
+input[type="text"],
+input[type="search"],
+select,
+textarea {
+    background-color: white;
+    color: #222;
+    border: 1px solid #ccc;
+}
+
+input::placeholder {
+    color: #777;
+}
+
+/* tabela padrão (rotas, sensores, etc.) */
+
+.container_tabelas {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela_padrao {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 18px;
+    background-color: white;
+    color: #222;
+    border-collapse: collapse;
+    border-radius: 5px;
 }
 
 .tabela_padrao thead,
@@ -1360,171 +1438,17 @@ button:hover {
     color: #007bff;
 }
 
-/* tabelas */
-
-body {
-    background-color: #0b3027;
-    color: white;
-}
-
-.cabecalho {
-    background-color: #063d32;
-    border-bottom: 1px solid #285e4e;
-}
-
-.tabela_padrao {
-    width: 80%;
-    font-size: 18px;
-    background-color: white;
-    color: #222;
-    border-collapse: collapse;
-    border-radius: 5px;
-}
-
-thead,
-th {
-    background-color: #e5e8e4;
-    color: #063d32;
-}
-
-td {
-    background-color: white;
-    color: #222;
-}
-
-table,
-th,
-td {
-    border-color: #cccccc;
-}
-
-.tabela_padrao tbody tr:nth-child(even) td,
-.tabela_padrao tbody tr:nth-child(even) th {
-    background-color: #f1f3f1;
-}
-
-.tabela_padrao tbody tr:hover td,
-.tabela_padrao tbody tr:hover th {
-    background-color: #e5eee9;
-}
-
-.tabela_padrao td:last-child {
-    white-space: nowrap;
-}
-
-.tabela_padrao td form {
-    display: inline;
-    margin: 0;
-}
-
-.tabela_padrao td button {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-button,
-input[type="submit"],
-input[type="button"] {
-    cursor: pointer;
-}
-
-td a {
-    color: #007bff;
-}
-
-input[type="text"],
-input[type="search"],
-select,
-textarea {
-    background-color: white;
-    color: #222;
-    border: 1px solid #ccc;
-}
-
-input::placeholder {
-    color: #777;
-}
-
-.cabecalho {
-    background-color: #063d32;
-    border-bottom: 1px solid #285e4e;
-}
-
-table {
-    background-color: white;
-    color: #222;
-    border-collapse: collapse;
-}
-
-thead,
-th {
-    background-color: #e5e8e4;
-    color: #063d32;
-}
-
-
-td {
-    background-color: white;
-    color: #222;
-}
-
-
-
-table,
-th,
-td {
-    border-color: #cccccc;
-}
-
-
-
-tbody tr:nth-child(even) td {
-    background-color: #f2f4f2;
-}
-
-
-tbody tr:hover td {
-    background-color: #e5eee9;
-}
-
-
-button,
-input[type="submit"],
-input[type="button"] {
-    cursor: pointer;
-}
-
-
-td a {
-    color: #007bff;
-}
-
-
-input[type="text"],
-input[type="search"],
-select,
-textarea {
-    background-color: white;
-    color: #222;
-    border: 1px solid #ccc;
-}
-
-
-input::placeholder {
-    color: #777;
-}
+/* tabela de visualização */
 
 .tabela_visualizacao tbody tr:nth-child(even) td,
 .tabela_visualizacao tbody tr:nth-child(even) th {
     background-color: #f1f3f1 !important;
 }
 
-
 .tabela_visualizacao tbody tr:hover td,
 .tabela_visualizacao tbody tr:hover th {
     background-color: #e5eee9 !important;
 }
-
 
 .tabela_visualizacao td:last-child {
     white-space: nowrap;
@@ -1535,11 +1459,107 @@ input::placeholder {
     margin: 0;
 }
 
-
 .tabela_visualizacao td button {
     display: inline-block;
     vertical-align: middle;
 }
+
+/* página de rotas: área principal */
+
+.pagina-rotas {
+    width: 100%;
+    flex: 1;
+    box-sizing: border-box;
+    padding: 30px 20px 40px;
+}
+
+.pagina-rotas hr {
+    border: 0;
+    border-top: 1px solid #285e4e;
+    opacity: 1;
+    margin: 30px 0;
+}
+
+/* formulário de edição (centralizado na página) */
+
+.container_editar_usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.texto-editar-usuario h2 {
+    margin: 0 0 20px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.container_editar_usuario form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-editar-rota {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.editar-rota {
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.input-editar-rota {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+textarea.input-editar-rota {
+    resize: vertical;
+}
+
+.acoes-editar-rota {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+}
+
+.button-atualizar {
+    padding: 10px 22px;
+    background-color: #c6f24e;
+    color: #073d30;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+}
+
+.button-atualizar:hover {
+    background-color: #a9d93e;
+}
+
+.button-cancelar {
+    color: #ff6b6b;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.button-cancelar:hover {
+    text-decoration: underline;
+}
+
 
 /* Landing Page */
 

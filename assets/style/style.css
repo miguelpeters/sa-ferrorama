@@ -1302,6 +1302,19 @@ button:hover {
    (seção consolidada: as regras duplicadas foram unificadas)
    ========================================================== */
 
+.container_tabela_usuarios {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 30px auto;
+}
+
+.tabela_usuarios {
+    margin: 0 auto;
+    text-align: center;
+}
+
 body {
     background-color: #0b3027;
     color: white;

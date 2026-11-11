@@ -10,7 +10,7 @@
     <link rel="icon" href="./assets/imgs/PageIcon.png" type="image/x-icon">
 </head>
 
-<body>
+<body class="pagina-index">
     <header>
         <nav class="bodyindex">
             <h1 class="DE-TRAIN">DE-TRAIN</h1>
@@ -92,7 +92,7 @@
 
 <footer class="hg-footer">
         <strong>Melhor ir DE-TRAIN!</strong>
-        <span><a href="../public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
+        <span><a href="public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
 </footer>
 </body>
 

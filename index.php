@@ -10,7 +10,7 @@
     <link rel="icon" href="./assets/imgs/PageIcon.png" type="image/x-icon">
 </head>
 
-<body>
+<body class="pagina-index">
     <header>
         <nav class="bodyindex">
             <h1 class="DE-TRAIN">DE-TRAIN</h1>

@@ -19,6 +19,7 @@ $nomeGerente = htmlspecialchars($_SESSION["gerente_nome"] ?? "Gerente");
 
 $resultadoFuncionarios = $conexao->query("SELECT id, nome FROM funcionarios ORDER BY nome");
 $resultadoTrens = $conexao->query("SELECT id, modelo FROM trens ORDER BY modelo");
+$resultadoRotas = $conexao->query("SELECT id, nome FROM rotas ORDER BY nome");
 ?>
 
 <!DOCTYPE html>
@@ -101,8 +102,8 @@ $resultadoTrens = $conexao->query("SELECT id, modelo FROM trens ORDER BY modelo"
 
                     <a href="cadastro_trem.php" id="abrirModalTrem">Cadastrar trem</a>
                     <a href="cadastro_rota.php" id="abrirModalRota">Cadastrar rota</a>
-                    <a href="cadastro_sensor.php">Cadastrar sensor</a>
-                    <a href="cadastro_funcionario.php">Cadastrar funcionário</a>
+                    <a href="cadastro_sensor.php" id="abrirModalSensor">Cadastrar sensor</a>
+                    <a href="cadastro_funcionario.php" id="abrirModalFuncionario">Cadastrar funcionário</a>
                 </div>
 
             </aside>
@@ -320,6 +321,102 @@ $resultadoTrens = $conexao->query("SELECT id, modelo FROM trens ORDER BY modelo"
                     <br><br>
 
                     <button type="submit" class="ButtonCadastro">CADASTRAR ROTA</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</dialog>
+
+<dialog id="modalSensor" class="modal-trem modal-sensor">
+    <div class="modal-conteudo">
+
+        <button type="button" id="fecharModalSensor" class="modal-fechar" aria-label="Fechar">&times;</button>
+
+        <div id="BlocoCadastro">
+            <div class="Cadastro">
+
+                <h2 id="CadastroTitulo">Cadastrar Sensor</h2>
+
+                <p id="mensagemSensor" role="status"></p>
+
+                <form id="FormsCadastro" method="POST">
+
+                    <label class="label-sensor" for="cadastro-sensor-nome">Nome</label>
+                    <input type="text" id="cadastro-sensor-nome" name="nome"
+                           class="CadastroInput" placeholder="Nome do sensor"
+                           maxlength="50" required>
+                    <br>
+
+                    <label class="label-sensor" for="cadastro-sensor-tipo">Tipo</label>
+                    <input type="text" id="cadastro-sensor-tipo" name="tipo"
+                           class="CadastroInput" placeholder="Tipo do sensor"
+                           maxlength="50" required>
+                    <br>
+
+                    <label class="label-sensor" for="cadastro-rota">Rota</label>
+                    <select id="cadastro-rota" name="rota_id" class="CadastroInput" required>
+                        <option value="">Selecione uma rota</option>
+                        <?php if ($resultadoRotas): ?>
+                            <?php while ($rota = $resultadoRotas->fetch_assoc()): ?>
+                                <option value="<?= (int) $rota['id'] ?>">
+                                    <?= htmlspecialchars($rota['nome']) ?>
+                                </option>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
+                    </select>
+
+                    <?php if ($resultadoRotas && $resultadoRotas->num_rows === 0): ?>
+                        <p>Nenhuma rota cadastrada. Cadastre uma rota primeiro.</p>
+                    <?php endif; ?>
+                    <br><br>
+
+                    <button type="submit" class="ButtonCadastro">CADASTRAR SENSOR</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</dialog>
+
+<dialog id="modalFuncionario" class="modal-trem modal-funcionario">
+    <div class="modal-conteudo">
+
+        <button type="button" id="fecharModalFuncionario" class="modal-fechar" aria-label="Fechar">&times;</button>
+
+        <div id="BlocoCadastro">
+            <div class="Cadastro">
+
+                <h2 id="CadastroTitulo">Cadastrar Funcionário</h2>
+
+                <p id="mensagemFuncionario" role="status"></p>
+
+                <form id="FormsCadastro" method="POST" autocomplete="off">
+
+                    <label for="cadastro-func-nome" id="CadastroLabel">Nome</label>
+                    <input type="text" id="cadastro-func-nome" name="nome"
+                           class="CadastroInput" placeholder="Nome do funcionário" required>
+                    <br>
+
+                    <label for="cadastro-func-email" id="CadastroLabel">Email</label>
+                    <input type="email" id="cadastro-func-email" name="email"
+                           class="CadastroInput" placeholder="Email do funcionário" required>
+                    <br>
+
+                    <label for="cadastro-func-telefone" id="CadastroLabel">Telefone</label>
+                    <input type="text" id="cadastro-func-telefone" name="numero_telefone"
+                           class="CadastroInput" placeholder="Telefone do funcionário" required>
+                    <br>
+
+                    <label for="cadastro-func-senha" id="CadastroLabel">Senha</label>
+                    <input type="password" id="cadastro-func-senha" name="senha"
+                           class="CadastroInput" placeholder="Insira a senha do funcionário"
+                           autocomplete="new-password" required>
+                    <br><br>
+
+                    <button type="submit" class="ButtonCadastro">CADASTRAR FUNCIONÁRIO</button>
 
                 </form>
             </div>
@@ -566,10 +663,99 @@ formRota.addEventListener("submit", async function (event) {
         mensagemRota.textContent = dados.mensagem;
 
         if (dados.ok) {
+
+             const selectRota = document.getElementById("cadastro-rota");
+            selectRota.add(new Option(formRota.nome.value, dados.id));
+
             formRota.reset();
         }
     } catch (erro) {
         mensagemRota.textContent = "Não foi possível cadastrar a rota.";
+        console.error(erro);
+    }
+});
+
+const modalSensor = document.getElementById("modalSensor");
+const formSensor = modalSensor.querySelector("form");
+const mensagemSensor = document.getElementById("mensagemSensor");
+
+document.getElementById("abrirModalSensor").addEventListener("click", function (event) {
+    event.preventDefault();
+    mensagemSensor.textContent = "";
+    modalSensor.showModal();
+});
+
+document.getElementById("fecharModalSensor").addEventListener("click", () => modalSensor.close());
+
+modalSensor.addEventListener("click", function (event) {
+    if (event.target === modalSensor) modalSensor.close();
+});
+
+formSensor.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    mensagemSensor.textContent = "Cadastrando...";
+
+    try {
+        const resposta = await fetch("processa_sensor.php", {
+            method: "POST",
+            body: new FormData(formSensor)
+        });
+
+        const dados = await resposta.json();
+
+        mensagemSensor.textContent = dados.mensagem;
+
+        if (dados.ok) {
+            formSensor.reset();
+        }
+    } catch (erro) {
+        mensagemSensor.textContent = "Não foi possível cadastrar o sensor.";
+        console.error(erro);
+    }
+});
+
+const modalFuncionario = document.getElementById("modalFuncionario");
+const formFuncionario = modalFuncionario.querySelector("form");
+const mensagemFuncionario = document.getElementById("mensagemFuncionario");
+
+document.getElementById("abrirModalFuncionario").addEventListener("click", function (event) {
+    event.preventDefault();
+    mensagemFuncionario.textContent = "";
+    modalFuncionario.showModal();
+});
+
+document.getElementById("fecharModalFuncionario").addEventListener("click", () => modalFuncionario.close());
+
+modalFuncionario.addEventListener("click", function (event) {
+    if (event.target === modalFuncionario) modalFuncionario.close();
+});
+
+formFuncionario.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    mensagemFuncionario.textContent = "Cadastrando...";
+
+    try {
+        const resposta = await fetch("processa_funcionario.php", {
+            method: "POST",
+            body: new FormData(formFuncionario)
+        });
+
+        const dados = await resposta.json();
+
+        mensagemFuncionario.textContent = dados.mensagem;
+
+        if (dados.ok) {
+
+            // coloca o funcionário novo na lista do modal de trem
+            const selectFuncionario = document.getElementById("funcionario_id");
+            selectFuncionario.add(new Option(dados.id + " - " + formFuncionario.nome.value, dados.id));
+
+            formFuncionario.reset();
+        }
+    } catch (erro) {
+        mensagemFuncionario.textContent = "Não foi possível cadastrar o funcionário.";
         console.error(erro);
     }
 });

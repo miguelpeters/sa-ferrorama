@@ -611,7 +611,7 @@ if (!$resultado) {
 
                             <td>
 
-                                <a href="visualizar_trem.php?editar=<?php echo (int) $trem["id"]; ?>">
+                                <a href="visualizar_trem.php?editar=<?php echo (int) $trem["id"]; ?>"class="button-editar-tabela">
                                     EDITAR
                                 </a>
 
@@ -630,7 +630,7 @@ if (!$resultado) {
                                         type="submit"
                                         name="excluir"
                                         onclick="return confirm('Tem certeza que deseja excluir este trem?');"
-                                    >
+                                    class="button-excluir-tabela">
                                         EXCLUIR
                                     </button>
 

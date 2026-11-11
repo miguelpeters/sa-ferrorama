@@ -1491,6 +1491,16 @@ input::placeholder {
     vertical-align: middle;
 }
 
+.button-excluir-tabela{
+color: #fc0303;
+button-decoration: none;
+}
+
+.button-editar-tabela {
+text-decoration: none;
+color:#00503f
+}
+
 /* página de rotas: área principal */
 
 .pagina-rotas {
@@ -1587,6 +1597,30 @@ textarea.input-editar-rota {
     text-decoration: underline;
 }
 
+.editar-sensor {
+margin-bottom: 6px;
+
+}
+
+.container_editar_usuario {
+    margin-left: 90px;
+}
+
+.texto-editar-usuario {
+    margin-right: 210px;
+    margin-top: 30px
+}
+
+.container_editar_usuario {
+    margin-left: 90px;
+}
+
+.input-editar-sensor {
+    border-radius: 5px
+}
+
+.button-atualizar {
+}
 
 /* Landing Page */
 

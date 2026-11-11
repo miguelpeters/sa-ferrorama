@@ -4,135 +4,387 @@ session_start();
 
 $tipoUsuario = $_SESSION["tipo"] ?? "";
 
+$paginaHome = ($tipoUsuario === "gerente")
+    ? "home_gerente.php"
+    : "home_funcionario.php";
+
 if (!in_array($tipoUsuario, ["gerente", "funcionario"], true)) {
     header("Location: login.php");
     exit();
 }
 
-$paginaHome = ($tipoUsuario === "gerente")
-    ? "home_gerente.php"
-    : "home_funcionario.php";
+include_once("../infra/conexao.php");
 
-$servidor = "localhost";
-$usuarioBanco = "root";
-$senhaBanco = "";
-$banco = "ferrorama_db";
+$mensagem = "";
+$tipoMensagem = "";
 
-$conexao = new mysqli(
-    $servidor,
-    $usuarioBanco,
-    $senhaBanco,
-    $banco
-);
 
-if ($conexao->connect_error) {
-    die("Erro na conexão com o banco: " . $conexao->connect_error);
-}
+// EXCLUIR ROTA
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["excluir"])) {
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["excluir"])
+) {
 
-    $id = (int) $_POST["id"];
+    $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
 
-    $stmt = $conexao->prepare(
-        "DELETE FROM sensores WHERE id = ?"
-    );
+    if (!$id || $id <= 0) {
 
-    if (!$stmt) {
-        die("Erro ao preparar exclusão: " . $conexao->error);
-    }
-
-    $stmt->bind_param("i", $id);
-
-    if (!$stmt->execute()) {
-        die("Erro ao excluir sensor: " . $stmt->error);
-    }
-
-    $stmt->close();
-
-    header("Location: visualizar_sensor.php");
-    exit();
-}
-
-// ATUALIZAR SENSOR
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["atualizar"])) {
-
-    $id = (int) $_POST["id"];
-    $nome = trim($_POST["nome"]);
-    $tipo = trim($_POST["tipo"]);
-
-    $rota_id = ($_POST["rota_id"] === "")
-        ? null
-        : (int) $_POST["rota_id"];
-
-    if ($rota_id === null) {
-
-        $stmt = $conexao->prepare(
-            "UPDATE sensores
-             SET nome = ?, tipo = ?, rota_id = NULL
-             WHERE id = ?"
-        );
-
-        if (!$stmt) {
-            die("Erro ao preparar atualização: " . $conexao->error);
-        }
-
-        $stmt->bind_param("ssi", $nome, $tipo, $id);
+        $mensagem = "ID da rota inválido.";
+        $tipoMensagem = "danger";
 
     } else {
 
         $stmt = $conexao->prepare(
-            "UPDATE sensores
-             SET nome = ?, tipo = ?, rota_id = ?
+            "DELETE FROM rotas WHERE id = ?"
+        );
+
+        if (!$stmt) {
+            die("Erro ao preparar exclusão: " . $conexao->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        try {
+
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+
+                header("Location: visualizar_rota.php?sucesso=excluir");
+                exit();
+
+            } else {
+
+                $mensagem = "Rota não encontrada.";
+                $tipoMensagem = "warning";
+
+            }
+
+        } catch (mysqli_sql_exception $e) {
+
+            if ($e->getCode() == 1451) {
+
+                $stmtSensores = $conexao->prepare(
+                    "SELECT id, nome, tipo
+                     FROM sensores
+                     WHERE rota_id = ?"
+                );
+
+                if (!$stmtSensores) {
+                    die("Erro ao consultar sensores: " . $conexao->error);
+                }
+
+                $stmtSensores->bind_param("i", $id);
+                $stmtSensores->execute();
+
+                $resultadoSensores = $stmtSensores->get_result();
+
+                $sensoresEncontrados = [];
+
+                while ($sensor = $resultadoSensores->fetch_assoc()) {
+
+                    $sensoresEncontrados[] =
+                        "ID " . $sensor["id"] .
+                        " - " . $sensor["nome"] .
+                        " (" . $sensor["tipo"] . ")";
+
+                }
+
+                $stmtSensores->close();
+
+                if (!empty($sensoresEncontrados)) {
+
+                    $mensagem =
+                        "Não foi possível excluir esta rota!\n\n" .
+                        "Ela possui os seguintes sensores vinculados:\n\n" .
+                        implode("\n", $sensoresEncontrados);
+
+                } else {
+
+                    $mensagem =
+                        "Não foi possível excluir esta rota, pois existem outros registros vinculados a ela.";
+
+                }
+
+                $tipoMensagem = "danger";
+
+            } else {
+
+                $mensagem = "Erro ao excluir a rota.";
+                $tipoMensagem = "danger";
+
+            }
+
+        } finally {
+
+            $stmt->close();
+
+        }
+
+    }
+
+}
+
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["atualizar"])
+) {
+
+    $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+
+    $nome = trim($_POST["nome"] ?? "");
+    $descricao = trim($_POST["descricao"] ?? "");
+    $distancia = $_POST["distancia"] ?? "";
+    $duracao = $_POST["duracao"] ?? "";
+    $dataCriacao = $_POST["data_criacao"] ?? "";
+
+    $tremId = filter_input(
+        INPUT_POST,
+        "trem_id",
+        FILTER_VALIDATE_INT
+    );
+
+    if (
+        !$id ||
+        $id <= 0 ||
+        $nome === "" ||
+        $distancia === "" ||
+        $duracao === "" ||
+        $dataCriacao === "" ||
+        !$tremId ||
+        $tremId <= 0
+    ) {
+
+        $mensagem = "Preencha todos os campos obrigatórios.";
+        $tipoMensagem = "warning";
+
+    } elseif (
+        strlen($nome) > 100 ||
+        !is_numeric($distancia) ||
+        !is_numeric($duracao) ||
+        (float) $distancia < 0 ||
+        (float) $duracao < 0
+    ) {
+
+        $mensagem = "Confira o nome, a distância e a duração informados.";
+        $tipoMensagem = "warning";
+
+    } elseif (
+        !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dataCriacao) ||
+        !checkdate(
+            (int) substr($dataCriacao, 5, 2),
+            (int) substr($dataCriacao, 8, 2),
+            (int) substr($dataCriacao, 0, 4)
+        )
+    ) {
+
+        $mensagem = "A data de criação informada é inválida.";
+        $tipoMensagem = "warning";
+
+    } else {
+
+        $stmtTrem = $conexao->prepare(
+            "SELECT id FROM trens WHERE id = ?"
+        );
+
+        if (!$stmtTrem) {
+            die("Erro ao consultar trem: " . $conexao->error);
+        }
+
+        $stmtTrem->bind_param("i", $tremId);
+        $stmtTrem->execute();
+
+        $resultadoTrem = $stmtTrem->get_result();
+
+        if ($resultadoTrem->num_rows === 0) {
+
+            $mensagem = "O trem selecionado não existe.";
+            $tipoMensagem = "warning";
+
+        } else {
+
+            $stmtRota = $conexao->prepare(
+                "SELECT id FROM rotas WHERE id = ?"
+            );
+
+            if (!$stmtRota) {
+                die("Erro ao consultar rota: " . $conexao->error);
+            }
+
+            $stmtRota->bind_param("i", $id);
+            $stmtRota->execute();
+
+            $resultadoRota = $stmtRota->get_result();
+
+            if ($resultadoRota->num_rows === 0) {
+
+                $mensagem = "Rota não encontrada.";
+                $tipoMensagem = "warning";
+
+            } else {
+
+                $sql = "UPDATE rotas
+                        SET nome = ?,
+                            descricao = ?,
+                            distancia = ?,
+                            duracao = ?,
+                            data_criacao = ?,
+                            trem_id = ?
+                        WHERE id = ?";
+
+                $stmt = $conexao->prepare($sql);
+
+                if (!$stmt) {
+                    die("Erro ao preparar atualização: " . $conexao->error);
+                }
+
+                $distancia = (float) $distancia;
+                $duracao = (float) $duracao;
+
+                $stmt->bind_param(
+                    "ssddsii",
+                    $nome,
+                    $descricao,
+                    $distancia,
+                    $duracao,
+                    $dataCriacao,
+                    $tremId,
+                    $id
+                );
+
+                if ($stmt->execute()) {
+
+                    $stmt->close();
+                    $stmtRota->close();
+                    $stmtTrem->close();
+
+                    header("Location: visualizar_rota.php?sucesso=atualizar");
+                    exit();
+
+                } else {
+
+                    $mensagem = "Erro ao atualizar a rota.";
+                    $tipoMensagem = "danger";
+
+                }
+
+                $stmt->close();
+
+            }
+
+            $stmtRota->close();
+
+        }
+
+        $stmtTrem->close();
+
+    }
+
+}
+
+
+// MENSAGENS DE SUCESSO
+
+$mensagemSucesso = "";
+
+if (isset($_GET["sucesso"])) {
+
+    if ($_GET["sucesso"] === "excluir") {
+
+        $mensagemSucesso = "Rota excluída com sucesso!";
+
+    } elseif ($_GET["sucesso"] === "atualizar") {
+
+        $mensagemSucesso = "Rota atualizada com sucesso!";
+
+    }
+
+}
+
+
+// BUSCAR ROTA PARA EDIÇÃO
+
+$rotaEditar = null;
+
+if (isset($_GET["editar"])) {
+
+    $idEditar = filter_input(
+        INPUT_GET,
+        "editar",
+        FILTER_VALIDATE_INT
+    );
+
+    if ($idEditar && $idEditar > 0) {
+
+        $stmt = $conexao->prepare(
+            "SELECT id, nome, descricao, distancia,
+                    duracao, data_criacao, trem_id
+             FROM rotas
              WHERE id = ?"
         );
 
         if (!$stmt) {
-            die("Erro ao preparar atualização: " . $conexao->error);
+            die("Erro ao preparar consulta: " . $conexao->error);
         }
 
-        $stmt->bind_param("ssii", $nome, $tipo, $rota_id, $id);
+        $stmt->bind_param("i", $idEditar);
+        $stmt->execute();
+
+        $resultadoEditar = $stmt->get_result();
+
+        if ($resultadoEditar->num_rows === 1) {
+            $rotaEditar = $resultadoEditar->fetch_assoc();
+        }
+
+        $stmt->close();
+
     }
 
-    if (!$stmt->execute()) {
-        die("Erro ao atualizar sensor: " . $stmt->error);
-    }
-
-    $stmt->close();
-
-    header("Location: visualizar_sensor.php");
-    exit();
 }
 
-// BUSCAR SENSOR PARA EDITAR
-$sensorEditar = null;
 
-if (isset($_GET["editar"])) {
+// BUSCAR TRENS
 
-    $id = (int) $_GET["editar"];
+$sqlTrens = "SELECT id, modelo FROM trens ORDER BY modelo";
 
-    $stmt = $conexao->prepare(
-        "SELECT id, nome, tipo, rota_id
-         FROM sensores
-         WHERE id = ?"
-    );
+$resultadoTrens = $conexao->query($sqlTrens);
 
-    if (!$stmt) {
-        die("Erro ao preparar consulta: " . $conexao->error);
-    }
+if (!$resultadoTrens) {
+    die("Erro ao buscar trens: " . $conexao->error);
+}
 
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+$trens = [];
 
-    $resultadoEditar = $stmt->get_result();
+while ($trem = $resultadoTrens->fetch_assoc()) {
+    $trens[] = $trem;
+}
 
-    if ($resultadoEditar->num_rows == 1) {
-        $sensorEditar = $resultadoEditar->fetch_assoc();
-    }
 
-    $stmt->close();
+// BUSCAR ROTAS
+
+$sql = "SELECT
+            rotas.id,
+            rotas.nome,
+            rotas.descricao,
+            rotas.distancia,
+            rotas.duracao,
+            rotas.data_criacao,
+            rotas.trem_id,
+            trens.modelo AS modelo_trem
+        FROM rotas
+        INNER JOIN trens
+            ON rotas.trem_id = trens.id
+        ORDER BY rotas.nome";
+
+$resultado = $conexao->query($sql);
+
+if (!$resultado) {
+    die("Erro ao buscar rotas: " . $conexao->error);
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -142,7 +394,6 @@ if (isset($_GET["editar"])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap PRIMEIRO, style.css DEPOIS (assim o style.css prevalece) -->
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -156,11 +407,36 @@ if (isset($_GET["editar"])) {
         type="image/x-icon"
     >
 
-    <title>Visualização de sensores</title>
+    <title>Visualização de rotas</title>
 
 </head>
 
 <body class="body_home">
+
+<?php if ($mensagem !== "") { ?>
+
+    <script>
+        alert(<?php echo json_encode($mensagem); ?>);
+    </script>
+
+<?php } ?>
+
+<?php if ($mensagemSucesso !== "") { ?>
+
+    <script>
+
+        alert(<?php echo json_encode($mensagemSucesso); ?>);
+
+        window.history.replaceState(
+            null,
+            "",
+            window.location.pathname
+        );
+
+    </script>
+
+<?php } ?>
+
 
 <header class="cabecalho">
 
@@ -186,12 +462,12 @@ if (isset($_GET["editar"])) {
 <main class="pagina-rotas">
 
 
-    <?php if ($sensorEditar != null) { ?>
+    <?php if ($rotaEditar !== null) { ?>
 
         <div class="container_editar_usuario">
 
             <div class="texto-editar-usuario">
-                <h2>Editar <?php echo htmlspecialchars($sensorEditar["tipo"]); ?></h2>
+                <h2>Editar rota</h2>
             </div>
 
             <form method="POST">
@@ -201,14 +477,14 @@ if (isset($_GET["editar"])) {
                     <input
                         type="hidden"
                         name="id"
-                        value="<?php echo (int) $sensorEditar["id"]; ?>"
+                        value="<?php echo (int) $rotaEditar["id"]; ?>"
                     >
 
                     <label
                         for="nome"
                         class="editar-rota"
                     >
-                        Nome
+                        Nome da rota
                     </label>
 
                     <input
@@ -216,40 +492,114 @@ if (isset($_GET["editar"])) {
                         type="text"
                         id="nome"
                         name="nome"
-                        value="<?php echo htmlspecialchars($sensorEditar["nome"]); ?>"
+                        value="<?php echo htmlspecialchars($rotaEditar["nome"]); ?>"
+                        maxlength="100"
                         required
                     >
 
                     <label
-                        for="tipo"
+                        for="descricao"
                         class="editar-rota"
                     >
-                        Tipo
+                        Descrição
                     </label>
 
-                    <input
+                    <textarea
                         class="input-editar-rota"
-                        type="text"
-                        id="tipo"
-                        name="tipo"
-                        value="<?php echo htmlspecialchars($sensorEditar["tipo"]); ?>"
-                        required
-                    >
+                        id="descricao"
+                        name="descricao"
+                        rows="3"
+                    ><?php echo htmlspecialchars($rotaEditar["descricao"] ?? ""); ?></textarea>
 
                     <label
-                        for="rota_id"
+                        for="distancia"
                         class="editar-rota"
                     >
-                        ID da rota
+                        Distância
                     </label>
 
                     <input
                         class="input-editar-rota"
                         type="number"
-                        id="rota_id"
-                        name="rota_id"
-                        value="<?php echo htmlspecialchars((string) ($sensorEditar["rota_id"] ?? "")); ?>"
+                        id="distancia"
+                        name="distancia"
+                        min="0"
+                        step="0.01"
+                        value="<?php echo htmlspecialchars($rotaEditar["distancia"]); ?>"
+                        required
                     >
+
+                    <label
+                        for="duracao"
+                        class="editar-rota"
+                    >
+                        Duração (horas)
+                    </label>
+
+                    <input
+                        class="input-editar-rota"
+                        type="number"
+                        id="duracao"
+                        name="duracao"
+                        min="0"
+                        step="0.01"
+                        value="<?php echo htmlspecialchars($rotaEditar["duracao"]); ?>"
+                        required
+                    >
+
+                    <label
+                        for="data_criacao"
+                        class="editar-rota"
+                    >
+                        Data de criação
+                    </label>
+
+                    <input
+                        class="input-editar-rota"
+                        type="date"
+                        id="data_criacao"
+                        name="data_criacao"
+                        value="<?php echo htmlspecialchars($rotaEditar["data_criacao"]); ?>"
+                        required
+                    >
+
+                    <label
+                        for="trem_id"
+                        class="editar-rota"
+                    >
+                        Trem associado
+                    </label>
+
+                    <select
+                        class="input-editar-rota"
+                        id="trem_id"
+                        name="trem_id"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione um trem
+                        </option>
+
+                        <?php foreach ($trens as $trem) { ?>
+
+                            <option
+                                value="<?php echo (int) $trem["id"]; ?>"
+                                <?php
+                                echo (
+                                    (int) $rotaEditar["trem_id"]
+                                    === (int) $trem["id"]
+                                ) ? "selected" : "";
+                                ?>
+                            >
+
+                                <?php echo htmlspecialchars($trem["modelo"]); ?>
+
+                            </option>
+
+                        <?php } ?>
+
+                    </select>
 
                     <div class="acoes-editar-rota">
 
@@ -262,7 +612,7 @@ if (isset($_GET["editar"])) {
                         </button>
 
                         <a
-                            href="visualizar_sensor.php"
+                            href="visualizar_rota.php"
                             class="button-cancelar"
                         >
                             CANCELAR
@@ -281,7 +631,7 @@ if (isset($_GET["editar"])) {
     <?php } ?>
 
 
-    <!-- TABELA DE SENSORES -->
+    <!-- TABELA DE ROTAS -->
 
     <div class="container_tabelas">
 
@@ -291,15 +641,19 @@ if (isset($_GET["editar"])) {
 
                 <tr>
 
-                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
 
-                    <th scope="col">Nome</th>
+                    <th scope="col">Nome da rota</th>
 
-                    <th scope="col">Tipo</th>
+                    <th scope="col">Descrição</th>
 
-                    <th scope="col">ID do sensor</th>
+                    <th scope="col">Distância</th>
 
-                    <th scope="col">ID da rota</th>
+                    <th scope="col">Duração (horas)</th>
+
+                    <th scope="col">Data de criação</th>
+
+                    <th scope="col">Trem associado</th>
 
                     <th scope="col">Ações</th>
 
@@ -309,49 +663,46 @@ if (isset($_GET["editar"])) {
 
             <tbody>
 
-                <?php
-
-                $sql = "
-                    SELECT nome, tipo, id, rota_id
-                    FROM sensores
-                    ORDER BY nome
-                ";
-
-                $resultado = $conexao->query($sql);
-
-                if (!$resultado) {
-                    die("Erro ao buscar sensores: " . $conexao->error);
-                }
-
-                while ($sensor = $resultado->fetch_assoc()) {
-
-                ?>
+                <?php while ($rota = $resultado->fetch_assoc()) { ?>
 
                     <tr class="visualizar_usuario_gerente">
 
                         <th scope="row">
-                            <?php echo htmlspecialchars($sensor["id"]); ?>
+                            <?php echo (int) $rota["id"]; ?>
                         </th>
 
                         <td>
-                            <?php echo htmlspecialchars($sensor["nome"]); ?>
+                            <?php echo htmlspecialchars($rota["nome"]); ?>
                         </td>
 
                         <td>
-                            <?php echo htmlspecialchars($sensor["tipo"]); ?>
+                            <?php echo htmlspecialchars($rota["descricao"] ?? ""); ?>
                         </td>
 
                         <td>
-                            <?php echo htmlspecialchars($sensor["id"]); ?>
+                            <?php echo htmlspecialchars($rota["distancia"]); ?>
                         </td>
 
                         <td>
-                            <?php echo htmlspecialchars((string) ($sensor["rota_id"] ?? "")); ?>
+                            <?php echo htmlspecialchars($rota["duracao"]); ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo date(
+                                "d/m/Y",
+                                strtotime($rota["data_criacao"])
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php echo htmlspecialchars($rota["modelo_trem"]); ?>
                         </td>
 
                         <td>
 
-                            <a href="visualizar_sensor.php?editar=<?php echo (int) $sensor["id"]; ?>">
+                            <a href="visualizar_rota.php?editar=<?php echo (int) $rota['id']; ?>">
                                 EDITAR
                             </a>
 
@@ -363,13 +714,13 @@ if (isset($_GET["editar"])) {
                                 <input
                                     type="hidden"
                                     name="id"
-                                    value="<?php echo (int) $sensor["id"]; ?>"
+                                    value="<?php echo (int) $rota["id"]; ?>"
                                 >
 
                                 <button
                                     type="submit"
                                     name="excluir"
-                                    onclick="return confirm('Tem certeza que deseja excluir este sensor?');"
+                                    onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
                                 >
                                     EXCLUIR
                                 </button>
@@ -394,6 +745,7 @@ if (isset($_GET["editar"])) {
 <?php
 
 $resultado->free();
+$resultadoTrens->free();
 
 $conexao->close();
 

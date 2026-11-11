@@ -92,7 +92,7 @@
 
 <footer class="hg-footer">
         <strong>Melhor ir DE-TRAIN!</strong>
-        <span><a href="public/landing_page.php" class="link-limpo">→ Conheça o projeto!</a></span>
+        <span><a href="public/landing_page.php" class="indexbutton">→ Conheça o projeto!</a></span>
 </footer>
 </body>
 

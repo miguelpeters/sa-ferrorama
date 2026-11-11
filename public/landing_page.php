@@ -16,9 +16,9 @@
 
     <header class="landing-header">
         <nav class="landing-nav">
-            <a href="landing_page.php" class="landing-logo">
+            <a href="../index.php" class="landing-logo">
                 <img src="../assets/imgs/LogoDeTrain.png" alt="Logo DE-TRAIN">
-                <span href="../index.php">DE-TRAIN</span>
+                <span>DE-TRAIN</span>
             </a>
 
             <div class="landing-menu">
